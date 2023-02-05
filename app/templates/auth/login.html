@@ -1,0 +1,11 @@
+{% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% block
+title %}Log In{% endblock title %} {% block navItem2 %}
+<a href="/signup">Sign Up</a>
+{% endblock navItem2 %} {% block main_content %}
+<h1 class="main-content__title">Login Form</h1>
+{{ wtf.quick_form(form) }}
+<p class="new-user__text">
+  New user?
+  <a href="{{ url_for('signup') }}" class="redden"> Click here to signup </a>
+</p>
+{% endblock main_content %}

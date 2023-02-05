@@ -1,0 +1,28 @@
+{% extends "base.html" %} {% block title %} Poems {% endblock title %} {% block
+main_content %} {% if current_user.is_admin %}
+<div class="create-poem-container">
+  <a href="/poems/new">Create Poem</a>
+</div>
+{% endif %}
+<h1 class="main-content__title">The Poems</h1>
+<div class="poems-container">
+    {% for poem in poems %}
+        <a href="/poems/{{poem.id}}">
+            <div class="poem-card">
+                <h4 class="poem-title">{{poem.title}}</h4>
+                <p class="poem-desc">
+                    {{poem.description[:60]|trim}}{{'...' if poem.description|length > 60 else ''}}
+                </p>
+                <p class="poem-metadata">
+                    <span class="poem-creation__date">{{poem.crafted_on.date()}}</span>
+                    <span class="poem-rating">{{poem.rating}}</span>
+                    <span class="poem-category">{{poem.categories.name}}</span>
+                </p>
+                <p class="poem-premium {{'is-premium' if poem.premium else 'not-premium'}}">
+                    {{'Premium' if poem.premium else 'Free'}}
+                </p>
+            </div>
+        </a>
+    {% endfor %}
+</div>
+{% endblock main_content %}

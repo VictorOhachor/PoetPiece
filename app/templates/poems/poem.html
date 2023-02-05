@@ -1,0 +1,37 @@
+{% extends "base.html" %} {% block title %} {{poem.title}} {% endblock title %}
+{% block main_content %}
+<h1 class="main-content__title">{{poem.title|upper}}</h1>
+<div class="poem-desc">
+  <h3 class="poem-desc__heading">Poem Description</h3>
+  <p class="poem-desc__content">{{poem.description|capitalize}}</p>
+</div>
+<hr />
+<div class="poem-stanzas">
+  <h3 class="poem-stanzas__heading">Stanzas</h3>
+  <div class="poem-stanzas__container">
+    {% if poem.stanzas.all()|length == 0 %}
+    <p class="no-stanza-text">This poem currently has no stanza.</p>
+    {% else %} {% for stanza in poem.stanzas.all() %}
+    <div class="poem-stanza__card">
+        <p class="poem-action__links">
+            <a href="/poems/{{poem.id}}/stanzas/{{stanza.id}}/delete">Delete</a> |
+            <a href="/poems/{{poem.id}}/stanzas/{{stanza.id}}/edit">Edit</a>
+        </p>
+      <p class="stanza-number">{{stanza.index}}</p>
+      <pre class="stanza-content">
+          {{stanza.content|trim}}
+      </pre>
+      <p class="stanza-metadata">
+        <span><strong>Added On:</strong> {{stanza.added_on}}</span>
+        <span><strong>Edited On:</strong> {{stanza.edited_on}}</span>
+      </p>
+    </div>
+    {% endfor %} {% endif %} {% if current_user.is_admin %}
+    <hr width="100%" />
+    <a href="/poems/{{poem.id}}/add_stanza" class="add-stanza"
+      >Add New Stanza</a
+    >
+    {% endif %}
+  </div>
+</div>
+{% endblock main_content %}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="shortcut icon"
+      href="{{ url_for('static', filename='assets/logo.png') }}"
+      type="image/x-icon"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/main.css') }}"
+      type="text/css"
+    />
+    {% block more_stylesheets %} {% endblock more_stylesheets %}
+    <title>PoeticMan | {% block title %}{% endblock title %}</title>
+  </head>
+  <body>
+    <div>
+      {% for message in get_flashed_messages() %}
+      <p class="toast-card">{{ message }}</p>
+      {% endfor %}
+    </div>
+    <header class="app-header">
+      <h3 class="app-logo">Poetic<span class="redden">Man</span></h3>
+      <nav class="app-navbar">
+        <a
+          href="/{{ 'poems' if current_user.is_authenticated else '' }}"
+          class="app-nav__item"
+        >
+          {{ 'Poems' if current_user.is_authenticated else 'Home' }}
+        </a>
+        <a href="/{{ 'logout' if current_user.is_authenticated else 'login' }}">
+          {{ 'Logout' if current_user.is_authenticated else 'Login' }}
+        </a>
+        {% block customNavItem %} {% endblock customNavItem %}
+      </nav>
+    </header>
+    <main class="app-main__content">
+      <p class="welcome-text">
+        Hello, {% if current_user.is_authenticated %}
+        <span class="redden">{{current_user.username|capitalize}}</span>
+        {% else %}
+        <span class="redden">Stranger</span>
+        {% endif %}
+      </p>
+      <hr class="black-liner" />
+      {% block main_content %} {% endblock main_content %}
+    </main>
+  </body>
+</html>

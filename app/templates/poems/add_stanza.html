@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}
+Add Stanza to "{{poem.title}}"
+{% endblock title %}
+{% block main_content %}
+<h1 class="main-content__title">Add New Stanza</h1>
+{{ wtf.quick_form(form) }}
+{% endblock main_content %}
