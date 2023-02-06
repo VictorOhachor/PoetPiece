@@ -3,3 +3,4 @@ Flask-SQLAlchemy
 Flask-Login
 Flask-Bootstrap
 email-validator
+gunicorn
