@@ -6,7 +6,7 @@ from .forms.login import LoginForm
 from .forms.signup import SignupForm
 from .forms.create_poem import CreatePoemForm
 from .forms.add_category import AddCategoryForm
-from .forms.add_stanza import AddStanzaForm
+from .forms.stanza import StanzaForm
 from .models import User, Admin, Poem, Category, Stanza
 
 # create new session
@@ -180,7 +180,7 @@ def add_stanza(poem_id):
         flash('Poem with given id does not exist.')
         return redirect(url_for('show_poems'))
     
-    form = AddStanzaForm()
+    form = StanzaForm()
 
     if form.validate_on_submit():
         stanza = Stanza.query.filter_by(index=form.index.data, poem_id=poem_id).first()
@@ -232,7 +232,7 @@ def edit_stanza(poem_id, stanza_id):
         flash('You are authorized to perform this operation.')
         return redirect(url_for('show_poem', poem_id=poem_id))
     
-    form = AddStanzaForm()
+    form = StanzaForm()
     stanza = Stanza.query.filter_by(id=stanza_id, poem_id=poem_id).first()
 
     if form.validate_on_submit():
@@ -250,6 +250,7 @@ def edit_stanza(poem_id, stanza_id):
         form.index.data = stanza.index
         form.content.data = stanza.content
         form.submit._value = 'Update Stanza'
+        print(form.data)
 
         # fetch poem data from the database
         poem = Poem.query.get(poem_id)
