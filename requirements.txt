@@ -1,5 +1,4 @@
-apturl==0.5.2
-autopep8==1.7.0
+apturl
 ayatana-settings==21.1.28
 bcrypt==3.2.0
 blinker==1.4
