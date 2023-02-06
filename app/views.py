@@ -249,6 +249,7 @@ def edit_stanza(poem_id, stanza_id):
     if stanza:
         form.index.data = stanza.index
         form.content.data = stanza.content
+        form.submit.data = 'Update Stanza'
 
         # fetch poem data from the database
         poem = Poem.query.get(poem_id)
