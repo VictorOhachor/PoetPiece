@@ -181,6 +181,7 @@ def add_stanza(poem_id):
         return redirect(url_for('show_poems'))
     
     form = StanzaForm()
+    form.index.data = poem.stanzas.count() + 1
 
     if form.validate_on_submit():
         stanza = Stanza.query.filter_by(index=form.index.data, poem_id=poem_id).first()
