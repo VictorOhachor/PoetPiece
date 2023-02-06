@@ -13,10 +13,12 @@
     <p class="no-stanza-text">This poem currently has no stanza.</p>
     {% else %} {% for stanza in poem.stanzas.all() %}
     <div class="poem-stanza__card">
-        <p class="poem-action__links">
+        {% if current_user.is_admin %}
+          <p class="poem-action__links">
             <a href="/poems/{{poem.id}}/stanzas/{{stanza.id}}/delete">Delete</a> |
             <a href="/poems/{{poem.id}}/stanzas/{{stanza.id}}/edit">Edit</a>
-        </p>
+          </p>
+        {% endif %}
       <p class="stanza-number">{{stanza.index}}</p>
       <pre class="stanza-content">
           {{stanza.content|trim}}

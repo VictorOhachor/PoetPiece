@@ -208,7 +208,7 @@ def add_stanza(poem_id):
 def delete_stanza(poem_id, stanza_id):
     """Delete a stanza from a poem."""
     if not current_user.is_admin:
-        flash('You are authorized to perform this operation.')
+        flash('You are not authorized to perform this operation.')
         return redirect(url_for('show_poem', poem_id=poem_id))
     
     stanza = Stanza.query.filter_by(
@@ -230,7 +230,7 @@ def delete_stanza(poem_id, stanza_id):
 def edit_stanza(poem_id, stanza_id):
     """Edit stanza of poem with given id."""
     if not current_user.is_admin:
-        flash('You are authorized to perform this operation.')
+        flash('You are not authorized to perform this operation.')
         return redirect(url_for('show_poem', poem_id=poem_id))
     
     form = StanzaForm()
