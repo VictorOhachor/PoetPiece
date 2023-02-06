@@ -4,3 +4,4 @@ Flask-Login
 Flask-Bootstrap
 email-validator
 gunicorn
+Flask-WTF
