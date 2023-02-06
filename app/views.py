@@ -249,9 +249,9 @@ def edit_stanza(poem_id, stanza_id):
     if stanza:
         form.index.data = stanza.index
         form.content.data = stanza.content
-        form.submit.data = 'Update Stanza'
+        form.submit._value = 'Update Stanza'
 
         # fetch poem data from the database
         poem = Poem.query.get(poem_id)
     
-    return render_template('poems/add_stanza.html', form=form, poem=poem)
+    return render_template('poems/add_stanza.html', form=form, poem=poem, update=True)
