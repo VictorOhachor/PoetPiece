@@ -7,7 +7,8 @@ from .forms.signup import SignupForm
 from .forms.create_poem import CreatePoemForm
 from .forms.add_category import AddCategoryForm
 from .forms.stanza import StanzaForm
-from .models import User, Admin, Poem, Category, Stanza
+from .forms.comment import CreateCommentForm
+from .models import User, Admin, Poem, Category, Stanza, Comment
 
 # create new session
 session = db.session
@@ -76,7 +77,7 @@ def signup():
             if Admin.reached_admin_count():
                 flash('Restricted: The number of registered admins has reached limit.')
                 return redirect(url_for('signup'))
-    
+
             models['admin'] = Admin(
                 email=email,
                 gender=gender,
@@ -132,8 +133,9 @@ def create_poem():
     form = CreatePoemForm()
     # add choices to category field dynamically
     categories = Category.query.all()
-    form.category.choices = [(category.name, category.name.upper()) for category in categories]
-    
+    form.category.choices = [(category.name, category.name.upper())
+                             for category in categories]
+
     if form.validate_on_submit():
         admin = Admin.query.filter_by(user_id=current_user.id).first()
         category = Category.query.filter_by(name=form.category.data).first()
@@ -148,7 +150,7 @@ def create_poem():
         # persist to database
         session.add(poem)
         session.commit()
-        
+
         # redirect to poems
         flash('New poem has been created successfully.')
         return redirect(url_for('show_poems'))
@@ -156,22 +158,37 @@ def create_poem():
 
 
 @app.route('/poems/<int:poem_id>', methods=['GET', 'POST'])
-@login_required
 def show_poem(poem_id):
     """Show details about poem with given id."""
     poem = Poem.query.get(poem_id)
+    comment_form = CreateCommentForm()
 
-    if not current_user.is_admin and poem.premium:
+    if comment_form.validate_on_submit():
+        comment = Comment(
+            user_id=current_user.id,
+            poem_id=poem_id,
+            comment=comment_form.comment.data
+        )
+
+        session.add(comment)
+        session.commit()
+
+        flash('Comment added to poem successfully; Not yet approved though.')
+        return redirect(url_for('show_poem', poem_id=poem_id))
+
+    if (current_user.is_anonymous or not current_user.is_admin) and poem.premium:
         flash('This poem is only available to premium users.')
         return redirect(url_for('show_poems'))
-    
-    return render_template('poems/poem.html', poem=poem)
+
+    return render_template('poems/poem.html', poem=poem, form=comment_form)
+
 
 @app.get('/poems/<int:poem_id>/delete')
 @login_required
 def delete_poem(poem_id):
     """Delete a poem and all the associated stanzas."""
     pass
+
 
 @app.route('/poems/<int:poem_id>/add_stanza', methods=['GET', 'POST'])
 @login_required
@@ -180,17 +197,18 @@ def add_stanza(poem_id):
     if not current_user.is_admin:
         flash('You are not authorized to access this page.')
         return redirect(url_for('show_poem'))
-    
+
     poem = Poem.query.get(poem_id)
     if not poem:
         flash('Poem with given id does not exist.')
         return redirect(url_for('show_poems'))
-    
+
     form = StanzaForm()
     form.index.data = poem.stanzas.count() + 1
 
     if form.validate_on_submit():
-        stanza = Stanza.query.filter_by(index=form.index.data, poem_id=poem_id).first()
+        stanza = Stanza.query.filter_by(
+            index=form.index.data, poem_id=poem_id).first()
 
         if not stanza:
             stanza = Stanza(
@@ -204,7 +222,7 @@ def add_stanza(poem_id):
             flash('New stanza has been added successfully.')
         else:
             flash('Poem with given stanza number already exists.')
-        
+
         return redirect(url_for('show_poem', poem_id=poem_id))
     return render_template('poems/add_stanza.html', poem=poem, form=form)
 
@@ -216,14 +234,14 @@ def delete_stanza(poem_id, stanza_id):
     if not current_user.is_admin:
         flash('You are not authorized to perform this operation.')
         return redirect(url_for('show_poem', poem_id=poem_id))
-    
+
     stanza = Stanza.query.filter_by(
         id=stanza_id, poem_id=poem_id).first()
-    
+
     if not stanza:
         flash('Stanza not found in poem with given id.')
         return redirect(url_for('show_poems'))
-    
+
     session.delete(stanza)
     session.commit()
 
@@ -238,7 +256,7 @@ def edit_stanza(poem_id, stanza_id):
     if not current_user.is_admin:
         flash('You are not authorized to perform this operation.')
         return redirect(url_for('show_poem', poem_id=poem_id))
-    
+
     form = StanzaForm()
     stanza = Stanza.query.filter_by(id=stanza_id, poem_id=poem_id).first()
 
@@ -252,7 +270,6 @@ def edit_stanza(poem_id, stanza_id):
         flash(f'Stanza number {stanza.index} has been updated successfully.')
         return redirect(url_for('show_poem', poem_id=poem_id))
 
-
     if stanza:
         form.index.data = stanza.index
         form.content.data = stanza.content
@@ -261,5 +278,23 @@ def edit_stanza(poem_id, stanza_id):
 
         # fetch poem data from the database
         poem = Poem.query.get(poem_id)
-    
+
     return render_template('poems/add_stanza.html', form=form, poem=poem, update=True)
+
+
+@app.get('/poems/<int:poem_id>/comments/<int:comment_id>/delete')
+@login_required
+def delete_comment(poem_id, comment_id):
+    """Delete a comment from a poem."""
+    comment = Comment.query.get(comment_id)
+
+    if current_user.id != comment.user_id:
+        flash('You cannot delete a comment you did not add.',
+              'error')
+    else:
+        session.delete(comment)
+        session.commit()
+
+        flash('Deleted comment successfully', 'info')
+    # return user to the poem page
+    return redirect(url_for('show_poem', poem_id=poem_id))
