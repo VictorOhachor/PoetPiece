@@ -167,6 +167,12 @@ def show_poem(poem_id):
     
     return render_template('poems/poem.html', poem=poem)
 
+@app.get('/poems/<int:poem_id>/delete')
+@login_required
+def delete_poem(poem_id):
+    """Delete a poem and all the associated stanzas."""
+    pass
+
 @app.route('/poems/<int:poem_id>/add_stanza', methods=['GET', 'POST'])
 @login_required
 def add_stanza(poem_id):

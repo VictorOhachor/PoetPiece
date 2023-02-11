@@ -3,6 +3,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_bootstrap import Bootstrap
+from flask_migrate import Migrate
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -17,6 +18,9 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 # initialize database object on app
 db = SQLAlchemy(app)
+# initialize flask-migrate
+migrate = Migrate(app, db)
+
 # initialize login manager
 login_manager = LoginManager()
 login_manager.setup_app(app)

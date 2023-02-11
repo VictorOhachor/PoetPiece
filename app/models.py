@@ -143,8 +143,8 @@ class Comment(db.Model):
     
     def __repr__(self):
         """Official string representation of a comment object."""
-        poem = Poem.query.filter_by(id=self.poem_id).first()
-        user = User.query.filter_by(id=self.user_id).first()
+        poem = Poem.query.get(self.poem_id)
+        user = User.query.get(self.user_id)
     
         return f'<{type(self).__name__}: {self.id} on {poem.title} by {user.username}>'
 
