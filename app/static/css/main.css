@@ -244,8 +244,6 @@ body {
 }
 
 .app-main__content .poems-container {
-  /* display: flex;
-    flex-wrap: wrap; */
   gap: 1rem;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -462,4 +460,119 @@ body {
     text-decoration: none;
     color: cyan;
     font-weight: 600;
+}
+
+.add-comment__form-container {
+  display: flex;
+  gap: 2rem;
+  flex-direction: column;
+}
+
+.comments-container {
+  margin-top: 1.5rem;
+}
+
+.comments-container .comments-title {
+  color: #911515;
+  font-size: 2rem;
+  text-transform: uppercase;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: .5rem;
+}
+
+.comments-title .comment-title__text {
+  margin: 0 .6rem;
+}
+
+.comments-container .comments-title .black-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #222;
+}
+
+.comments-container .poem-comments {
+  border: 1px solid #bbb;
+  border-bottom: 0;
+  border-radius: 5px;
+}
+
+.poem-comments .comment-card {
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+  padding: 1rem;
+  border-bottom: 1px solid #bbb;
+}
+
+.comment-card .comment-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.comment-card .comment-heading .commenter {
+  color: #911515;
+  text-transform: uppercase;
+}
+
+.comment-card .comment-heading .comment-date {
+  color: grey;
+  background-color: #eee;
+  padding: 0 .4rem;
+}
+
+.comment-card .comment-body {
+  font-size: 1.5rem;
+  color: #333121;
+  font-weight: 300;
+}
+
+.comment-card .comment-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.comment-card .comment-footer .comment-status {
+  color: green;
+  font-size: larger;
+  font-family: 'Space Mono', monospace;
+  text-transform: uppercase;
+}
+
+.comment-card .delete-btn {
+  padding: .3rem 1rem .5rem;
+  text-align: center;
+  background-color: #911515;
+  text-decoration: none;
+  color: #eee;
+  margin-left: auto;
+  border-radius: 20px;
+  font-size: 1.2rem;
+}
+
+.comments-restricted {
+  color: #911515;
+  text-align: center;
+  font-size: calc(2rem + 1.5vmin);
+  font-weight: 700;
+  text-transform: uppercase;
+  border: 1px solid #bbb;
+}
+
+.no-comment {
+  color: #222;
+  font-size: calc(1.5rem + 1vmin);
+  text-align: center;
+  border: 1px solid #bbb;
+  border-bottom: none;
+  padding: 1rem 0;
 }

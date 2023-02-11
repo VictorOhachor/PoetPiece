@@ -118,8 +118,7 @@ class Stanza(db.Model):
     content = db.Column(db.Text, unique=True, nullable=False)
     added_on = db.Column(db.DateTime(timezone=True),
                          server_default=func.now())
-    edited_on = db.Column(db.DateTime(timezone=True), server_default=func.now(),
-                          server_onupdate=func.now())
+    edited_on = db.Column(db.DateTime(timezone=True), onupdate=func.now())
     
     def __repr__(self):
         """Official string representation of a stanza object."""
@@ -138,8 +137,7 @@ class Comment(db.Model):
     poem_id = db.Column(db.Integer, db.ForeignKey('poems.id'))
     comment = db.Column(db.String(1000), default='I love this!')
     approved = db.Column(db.Boolean, default=False)
-    last_edit = db.Column(db.Date, server_default=func.now(),
-                          server_onupdate=func.now())
+    last_edit = db.Column(db.DateTime, server_default=func.now())
     
     def __repr__(self):
         """Official string representation of a comment object."""
