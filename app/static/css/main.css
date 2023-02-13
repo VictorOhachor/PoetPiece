@@ -433,7 +433,7 @@ body {
     align-items: center;
     background-color: #bbb;
     color: #222;
-    padding: .1rem .3rem;
+    padding: .5rem;
     line-height: 1rem;
     font-size: calc(.5rem + 1vmin);
 }
