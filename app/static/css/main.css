@@ -425,6 +425,7 @@ body {
   flex-basis: 300px;
   overflow-y: auto;
   white-space: pre-line;
+  word-spacing: -0.4rem;
   font-size: calc(1rem + 0.8vmin);
   max-height: 400px;
 }
