@@ -438,12 +438,7 @@ body {
     font-size: calc(.5rem + 1vmin);
 }
 
-.stanza-metadata > spasn:first-child {
-  margin-right: auto;
-}
-
-.stanza-metadata > span:last-child {
-    text-align: end;
+.stanza-metadata > span:nth-child(even) {
     margin-left: auto;
 }
 
