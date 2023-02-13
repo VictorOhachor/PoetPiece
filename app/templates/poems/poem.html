@@ -15,7 +15,7 @@ title %} {{poem.title}} {% endblock title %} {% block main_content %}
     <div class="poem-stanza__card">
       {% if current_user.is_admin %}
       <p class="poem-action__links">
-        <a href="/poems/{{poem.id}}/stanzas/{{stanza.id}}/delete">Delete</a> |
+        <a href="/poems/{{poem.id}}/stanzas/{{stanza.id}}/delete">Delete</a>
         <a href="/poems/{{poem.id}}/stanzas/{{stanza.id}}/edit">Edit</a>
       </p>
       {% endif %}
