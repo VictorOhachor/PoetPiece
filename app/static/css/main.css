@@ -444,6 +444,7 @@ body {
 
 .stanza-metadata > span:last-child {
     text-align: end;
+    margin-left: auto;
 }
 
 .poem-stanza__card .poem-action__links {
