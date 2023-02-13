@@ -27,7 +27,7 @@ title %} {{poem.title}} {% endblock title %} {% block main_content %}
         <span><strong>Added On:</strong> {{stanza.added_on}}</span>
         {% if stanza.edited_on %}
           <span><strong>Edited On:</strong> {{stanza.edited_on}}</span>
-        {% endfor %}
+        {% endif %}
       </p>
     </div>
     {% endfor %} {% endif %} {% if current_user.is_admin %}
