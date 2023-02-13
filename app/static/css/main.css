@@ -423,20 +423,23 @@ body {
     flex-basis: 300px;
     overflow-y: auto;
     white-space: pre-line;
-    font-size: calc(1.2rem + 1vmin);
+    font-size: calc(1rem + .8vmin);
     max-height: 400px;
 }
 
 .poem-stanza__card .stanza-metadata {
     display: flex;
     gap: 1rem;
-    justify-content: space-between;
     align-items: center;
-    background-color: #eee;
+    background-color: #bbb;
     color: #222;
     padding: .1rem .3rem;
     line-height: 1rem;
-    font-size: 1rem;
+    font-size: calc(.5rem + 1vmin);
+}
+
+.stanza-metadata > spasn:first-child {
+  margin-right: auto;
 }
 
 .stanza-metadata > span:last-child {
