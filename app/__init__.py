@@ -10,11 +10,12 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 # create app instance
 app = Flask(__name__)
 
-# configure app
+# app configurations
 app.config['SQLALCHEMY_DATABASE_URI'] = \
     f'sqlite:///{os.path.join(basedir, "application.sqlite")}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['FLASK_POEMS_PER_PAGE'] = 12
 
 # initialize database object on app
 db = SQLAlchemy(app)

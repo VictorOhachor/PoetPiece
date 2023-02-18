@@ -1,6 +1,11 @@
 {% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% block
 title %} {{poem.title}} {% endblock title %} {% block main_content %}
 <h1 class="main-content__title">{{poem.title|upper}}</h1>
+<p class="poem-metadata">
+  <span class="poem-creation__date">{{poem.crafted_on.date()}}</span>
+  <span class="poem-rating">{{poem.rating}}</span>
+  <span class="poem-category">{{poem.categories.name}}</span>
+</p>
 <div class="poem-desc">
   <h3 class="poem-desc__heading">Poem Description</h3>
   <p class="poem-desc__content">{{poem.description|capitalize}}</p>
@@ -14,7 +19,7 @@ title %} {{poem.title}} {% endblock title %} {% block main_content %}
     {% else %} {% for stanza in poem.stanzas.all() %}
     <div class="poem-stanza__card">
       {% if current_user.is_admin %}
-      <p class="poem-action__links">
+      <p class="stanza-action__links">
         <a href="/poems/{{poem.id}}/stanzas/{{stanza.id}}/delete">Delete</a>
         <a href="/poems/{{poem.id}}/stanzas/{{stanza.id}}/edit">Edit</a>
       </p>
@@ -26,7 +31,7 @@ title %} {{poem.title}} {% endblock title %} {% block main_content %}
       <p class="stanza-metadata">
         <span><strong>Added On:</strong> {{stanza.added_on}}</span>
         {% if stanza.edited_on %}
-          <span><strong>Edited On:</strong> {{stanza.edited_on}}</span>
+        <span><strong>Edited On:</strong> {{stanza.edited_on}}</span>
         {% endif %}
       </p>
     </div>
@@ -38,11 +43,13 @@ title %} {{poem.title}} {% endblock title %} {% block main_content %}
     {% endif %}
   </div>
 </div>
-{% if not current_user.is_anonymous %}
-<div class="add-comment__form-container">
-  {{ wtf.quick_form(form) }}
-  <hr />
-</div>
+{% if current_user.is_admin %}
+<p class="poem-action__links">
+  <a href="/poems/{{poem.id}}/delete">Delete Poem</a>
+  <a href="/poems/{{poem.id}}/edit">Edit Poem</a>
+</p>
+{% endif %} {% if not current_user.is_anonymous %}
+<div class="add-comment__form-container">{{ wtf.quick_form(form) }}</div>
 <div class="comments-container">
   <h2 class="comments-title">
     <span class="black-dot"></span>
@@ -54,7 +61,7 @@ title %} {{poem.title}} {% endblock title %} {% block main_content %}
     <span class="black-dot"></span>
   </h2>
   {% if poem.comments.all()|length == 0 %}
-    <p class="no-comment">Be the first to add comment</p>
+  <p class="no-comment">Be the first to add comment</p>
   {% endif %}
   <div class="poem-comments">
     {% for comment in poem.comments.all() %}
@@ -81,5 +88,5 @@ title %} {{poem.title}} {% endblock title %} {% block main_content %}
   </div>
 </div>
 {% else %}
-  <p class="comments-restricted">Log in to comment</p>
+<p class="comments-restricted">Log in to comment</p>
 {% endif %} {% endblock main_content %}

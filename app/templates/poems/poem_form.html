@@ -2,10 +2,10 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% block title %}Create Poem{% endblock title %}
 {% block main_content %}
-    <h1 class='main-content__title'>Create Poem</h1>
+    <h1 class='main-content__title'>{{'Update' if update else 'Create'}} Poem</h1>
     {{ wtf.quick_form(form) }}
     <div class="create-category-link">
         <span>Category does not exist?</span>
-        <a href="/categories/new" class="redden">Create a new category</a>
+        <a href="/categories/new" class="redden" target="_blank" referrerpolicy="no-referrer">Create a new category</a>
     </div>
 {% endblock main_content %}

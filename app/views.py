@@ -1,14 +1,16 @@
 """Contains the app views."""
 from flask import render_template, redirect, request, flash, url_for
-from . import db, app
 from flask_login import login_required, login_user, logout_user, current_user
+
+from . import db, app
 from .forms.login import LoginForm
 from .forms.signup import SignupForm
-from .forms.create_poem import CreatePoemForm
+from .forms.poem import CreatePoemForm
 from .forms.add_category import AddCategoryForm
 from .forms.stanza import StanzaForm
 from .forms.comment import CreateCommentForm
 from .models import User, Admin, Poem, Category, Stanza, Comment
+from .utils import is_admin
 
 # create new session
 session = db.session
@@ -92,20 +94,47 @@ def signup():
 
 
 @app.get('/poems')
-@login_required
 def show_poems():
-    """Fetch all the poems from the database and send to authenticated user."""
-    poems = Poem.query.all()
-    return render_template('poems/poems.html', poems=poems)
+    """Fetch all the poems from the database and send to user."""
+    # get query params
+    category = request.args.get('category', '', type=str)
+    page = request.args.get('page', 1, type=int)
+
+    # get all categories names
+    category_names = session.query(Category.name).all()
+
+    # data to be passed to template
+    context = {
+        'all_category_names': [c[0] for c in category_names],
+        'pagination': None,
+        'poems': None,
+        'categories': None,
+    }
+
+    # create pagination object from poems
+    query_poems = session.query(Poem).join(
+        Category, Category.id == Poem.category_id
+    )
+    if category:
+        query_poems = query_poems.filter(Category.name == category)
+
+    context['pagination'] = query_poems.order_by(
+        Poem.crafted_on.desc()).paginate(
+        page=page, per_page=app.config['FLASK_POEMS_PER_PAGE'],
+        error_out=False
+    )
+
+    # get poems from pagination object and update context
+    context['poems'] = context['pagination'].items
+
+    return render_template('poems/poems.html', **context)
 
 
 @app.route('/categories/new', methods=['GET', 'POST'])
 @login_required
+@is_admin
 def add_category():
     """Add new category."""
-    if not current_user.is_admin:
-        flash('You are not authorized to access this page.')
-        return redirect(url_for('create_poem'))
     form = AddCategoryForm()
 
     if form.validate_on_submit():
@@ -124,17 +153,14 @@ def add_category():
 
 @app.route('/poems/new', methods=['GET', 'POST'])
 @login_required
+@is_admin
 def create_poem():
     """Create a new poem."""
-    if not current_user.is_admin:
-        flash('You are not unauthorized to access this page.')
-        return redirect(url_for('show_poems'))
     # initialize create poem form
     form = CreatePoemForm()
     # add choices to category field dynamically
-    categories = Category.query.all()
-    form.category.choices = [(category.name, category.name.upper())
-                             for category in categories]
+    form.category.choices = [(category[0], category[0].upper())
+                             for category in session.query(Category.name).all()]
 
     if form.validate_on_submit():
         admin = Admin.query.filter_by(user_id=current_user.id).first()
@@ -154,13 +180,13 @@ def create_poem():
         # redirect to poems
         flash('New poem has been created successfully.')
         return redirect(url_for('show_poems'))
-    return render_template('poems/create.html', form=form)
+    return render_template('poems/poem_form.html', form=form)
 
 
 @app.route('/poems/<int:poem_id>', methods=['GET', 'POST'])
 def show_poem(poem_id):
     """Show details about poem with given id."""
-    poem = Poem.query.get(poem_id)
+    poem = Poem.query.get_or_404(poem_id, 'Poem with given id was not found.')
     comment_form = CreateCommentForm()
 
     if comment_form.validate_on_submit():
@@ -183,21 +209,51 @@ def show_poem(poem_id):
     return render_template('poems/poem.html', poem=poem, form=comment_form)
 
 
+@app.route('/poems/<int:poem_id>/edit', methods=['GET', 'POST'])
+@is_admin
+def edit_poem(poem_id):
+    """Edit poem (with given id) title and description."""
+    poem = Poem.query.get(poem_id)
+    # redirect to /poems if poem id is invalid
+    if (not poem):
+        flash('Poem with given id was not found.', 'error')
+        return redirect(url_for('show_poems'))
+
+    # initialize form
+    form = CreatePoemForm(obj=poem)
+    # add choices to category field dynamically
+    form.category.choices = [(category[0], category[0].upper())
+                             for category in session.query(Category.name).all()]
+
+    if form.validate_on_submit():
+        # update poem
+        form.populate_obj(poem)
+        # persist to database
+        session.add(poem)
+        session.commit()
+
+        # redirect to poems
+        flash('Poem has been updated successfully.')
+        return redirect(url_for('show_poems'))
+    return render_template('poems/poem_form.html', form=form, update=True)
+
+
 @app.get('/poems/<int:poem_id>/delete')
 @login_required
 def delete_poem(poem_id):
     """Delete a poem and all the associated stanzas."""
-    pass
+    poem = Poem.query.get_or_404(poem_id, 'Poem with given id not found.')
+    session.delete(poem)
+    session.commit()
+
+    return redirect(url_for('show_poems'))
 
 
 @app.route('/poems/<int:poem_id>/add_stanza', methods=['GET', 'POST'])
 @login_required
+@is_admin
 def add_stanza(poem_id):
     """Add new stanza to poem with given id."""
-    if not current_user.is_admin:
-        flash('You are not authorized to access this page.')
-        return redirect(url_for('show_poem'))
-
     poem = Poem.query.get(poem_id)
     if not poem:
         flash('Poem with given id does not exist.')
@@ -224,17 +280,14 @@ def add_stanza(poem_id):
             flash('Poem with given stanza number already exists.')
 
         return redirect(url_for('show_poem', poem_id=poem_id))
-    return render_template('poems/add_stanza.html', poem=poem, form=form)
+    return render_template('poems/stanza_form.html', form=form)
 
 
 @app.get('/poems/<int:poem_id>/stanzas/<int:stanza_id>/delete')
 @login_required
+@is_admin
 def delete_stanza(poem_id, stanza_id):
     """Delete a stanza from a poem."""
-    if not current_user.is_admin:
-        flash('You are not authorized to perform this operation.')
-        return redirect(url_for('show_poem', poem_id=poem_id))
-
     stanza = Stanza.query.filter_by(
         id=stanza_id, poem_id=poem_id).first()
 
@@ -251,12 +304,9 @@ def delete_stanza(poem_id, stanza_id):
 
 @app.route('/poems/<int:poem_id>/stanzas/<int:stanza_id>/edit', methods=['GET', 'POST'])
 @login_required
+@is_admin
 def edit_stanza(poem_id, stanza_id):
     """Edit stanza of poem with given id."""
-    if not current_user.is_admin:
-        flash('You are not authorized to perform this operation.')
-        return redirect(url_for('show_poem', poem_id=poem_id))
-
     form = StanzaForm()
     stanza = Stanza.query.filter_by(id=stanza_id, poem_id=poem_id).first()
 
@@ -273,13 +323,8 @@ def edit_stanza(poem_id, stanza_id):
     if stanza:
         form.index.data = stanza.index
         form.content.data = stanza.content
-        form.submit._value = 'Update Stanza'
-        print(form.data)
 
-        # fetch poem data from the database
-        poem = Poem.query.get(poem_id)
-
-    return render_template('poems/add_stanza.html', form=form, poem=poem, update=True)
+    return render_template('poems/stanza_form.html', form=form, update=True)
 
 
 @app.get('/poems/<int:poem_id>/comments/<int:comment_id>/delete')

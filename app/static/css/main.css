@@ -94,7 +94,33 @@ body {
 
 .app-main__content .main-content__title {
   text-align: center;
-  font-size: calc(3rem + 1vmin);
+  font-size: calc(2rem + 1vmin);
+}
+
+.all-categories__name {
+  display: flex;
+  overflow: auto hidden;
+  margin: 1rem 0;
+  border-bottom: 2px solid #bbb; 
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.all-categories__name::-webkit-scrollbar{
+  display: none;
+}
+
+.all-categories__name .category-name {
+  padding: .5rem 1.5rem;
+  color: #666356;
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+}
+
+.all-categories__name .category-name:hover {
+  background-color: #eee;
 }
 
 .app-main__content .form,
@@ -246,8 +272,7 @@ body {
 .app-main__content .poems-container {
   gap: 1rem;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  border-top: 1px solid #eee;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
 
   padding: 1rem 0;
 }
@@ -292,24 +317,33 @@ body {
 }
 
 .poem-card .poem-metadata {
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+}
+
+.poem-metadata {
   display: flex;
   gap: 0.4rem;
   font-weight: 700;
   align-items: center;
   margin: 0.5rem 0;
+  background-color: #000;
+  padding: .2rem .8rem;
+  border-radius: 20px;
 }
 
-.poem-card .poem-metadata .poem-creation__date {
+.poem-metadata .poem-creation__date {
   color: grey;
   margin-right: auto;
 }
 
-.poem-card .poem-metadata .poem-rating {
+.poem-metadata .poem-rating {
   color: yellow;
   margin-right: 1rem;
 }
 
-.poem-card .poem-metadata .poem-category {
+.poem-metadata .poem-category {
   text-transform: uppercase;
   color: orange;
   font-family: "Space Mono";
@@ -350,7 +384,7 @@ body {
   text-transform: uppercase;
   color: #911515;
   padding: 0.5rem 1rem;
-  font-size: calc(2rem + 1vmin);
+  font-size: calc(1.5rem + 1vmin);
   background-color: #eee;
 }
 
@@ -367,7 +401,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding: 1rem !important;
+  padding: 1.5rem 1rem !important;
   flex-basis: 400px;
   justify-content: center;
   align-items: flex-start;
@@ -411,7 +445,7 @@ body {
   padding: 0.4rem 1.2rem 0.4rem 1rem;
   border-radius: 50%;
   position: absolute;
-  top: 0;
+  top: -15px;
   left: -15px;
 }
 
@@ -446,18 +480,28 @@ body {
   text-align: end;
 }
 
-.poem-stanza__card .poem-action__links {
-  align-self: center;
-  margin-bottom: -1.8rem;
+.poem-stanza__card .stanza-action__links {
   z-index: 1;
+  margin-bottom: -1.8rem;
+  align-self: center;
   border: 1px solid rgb(241, 184, 163);
   border-radius: 20px;
+}
+
+.poem-action__links {
+  margin: 2rem 0;
+  justify-content: center;
+}
+
+.poem-action__links,
+.stanza-action__links {
   display: flex;
   align-items: center;
   font-size: calc(0.5rem + 1vmin);
 }
 
-.poem-action__links > a {
+.poem-action__links > a,
+.stanza-action__links > a {
   text-decoration: none;
   font-weight: 700;
   padding: 0 0.5rem;
@@ -466,23 +510,31 @@ body {
   color: #eee;
 }
 
-.poem-action__links > a:first-child {
+.poem-action__links > a:first-child,
+.stanza-action__links > a:first-child {
   background-color: #911515;
   color: #eee;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
 }
 
-.poem-action__links > a:last-child {
+.poem-action__links > a:last-child,
+.stanza-action__links > a:last-child {
   padding: 0 0.8rem;
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
+}
+
+.poem-action__links > a {
+  padding: .5rem 1rem !important;
 }
 
 .add-comment__form-container {
   display: flex;
   gap: 2rem;
   flex-direction: column;
+  border: 1px solid #eee;
+  padding: .5rem;
 }
 
 .comments-container {
@@ -512,7 +564,7 @@ body {
 }
 
 .comments-container .poem-comments {
-  border: 1px solid #bbb;
+  border: 1px solid #eee;
   border-bottom: 0;
   border-radius: 5px;
 }
@@ -522,7 +574,7 @@ body {
   flex-direction: column;
   gap: 0.2rem;
   padding: 1rem;
-  border-bottom: 1px solid #bbb;
+  border-bottom: 1px solid #eee;
 }
 
 .comment-card .comment-heading {
@@ -589,7 +641,64 @@ body {
   color: #222;
   font-size: calc(1.5rem + 1vmin);
   text-align: center;
-  border: 1px solid #bbb;
+  border: 1px solid #eee;
   border-bottom: none;
   padding: 1rem 0;
+}
+
+
+/* Pagination Widget style */
+.pagination-container {
+  margin: 2rem 0;
+  padding: 2rem 0;
+  display: flex;
+  gap: .1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-container .disabled {
+  opacity: .4;
+}
+
+.pagination-container a {
+  text-decoration: none;
+  font-weight: 700;
+  color: #000;
+}
+
+.pagination-container .pagination {
+  display: flex;
+  align-items: center;
+  list-style: none;
+}
+
+.pagination li {
+  font-family: 'Space Mono', monospace;
+  padding: .3rem 1rem;
+}
+
+.pagination > .active {
+  border: solid 3px #911515;
+  font-size: larger;
+}
+
+.pagination-container .prev-page,
+.pagination-container .next-page {
+  background-color: #911515;
+  color: orange;
+  height: 40px;
+  width: 40px;
+  text-align: center;
+  padding: .3rem 0 0;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  margin: auto;
+}
+
+.no-poem {
+  font-size: 2rem;
+  color: gray;
+  margin: auto;
+  padding: 2rem;
 }

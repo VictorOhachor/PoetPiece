@@ -2,6 +2,7 @@ from . import db, login_manager
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from sqlalchemy.sql import func
+from uuid import uuid4
 
 
 class User(UserMixin, db.Model):
@@ -9,7 +10,7 @@ class User(UserMixin, db.Model):
 
     __tablename__ = 'users'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(255), primary_key=True, default=uuid4().hex)
     username = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(128), unique=True)
     password_hash = db.Column(db.String(255))
@@ -43,8 +44,8 @@ class Admin(db.Model):
 
     __tablename__ = 'admins'
 
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True)
+    id = db.Column(db.String(255), primary_key=True, default=uuid4().hex)
+    user_id = db.Column(db.String, db.ForeignKey('users.id'), unique=True)
     email = db.Column(db.String(255), unique=True, index=True)
     gender = db.Column(db.String(10), nullable=False)
 
@@ -70,7 +71,7 @@ class Category(db.Model):
 
     __tablename__ = 'categories'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(255), primary_key=True, default=uuid4().hex)
     name = db.Column(db.String(100), unique=True)
     description = db.Column(db.String(1000), unique=True)
 
@@ -87,18 +88,18 @@ class Poem(db.Model):
 
     __tablename__ = 'poems'
 
-    id = db.Column(db.Integer, primary_key=True)
-    author_id = db.Column(db.Integer, db.ForeignKey('admins.id'))
+    id = db.Column(db.String(255), primary_key=True, default=uuid4().hex)
+    author_id = db.Column(db.String, db.ForeignKey('admins.id'))
     title = db.Column(db.String(255), nullable=False, unique=True)
     description = db.Column(db.Text, unique=True)
-    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
+    category_id = db.Column(db.String, db.ForeignKey('categories.id'))
     rating = db.Column(db.Float, default=0.0)
     premium = db.Column(db.Boolean, default=False)
     crafted_on = db.Column(db.DateTime(timezone=True),
                            server_default=func.now())
 
     # foreign keys
-    stanzas = db.relationship('Stanza', backref='poems', lazy='dynamic')
+    stanzas = db.relationship('Stanza', backref='poems', lazy='dynamic', cascade='all,delete')
     comments = db.relationship('Comment', backref='poems', lazy='dynamic')
 
     def __repr__(self):
@@ -112,8 +113,8 @@ class Stanza(db.Model):
 
     __tablename__ = 'stanzas'
 
-    id = db.Column(db.Integer, primary_key=True)
-    poem_id = db.Column(db.Integer, db.ForeignKey('poems.id'))
+    id = db.Column(db.String(255), primary_key=True, default=uuid4().hex)
+    poem_id = db.Column(db.String, db.ForeignKey('poems.id'))
     index = db.Column(db.Integer, nullable=False)
     content = db.Column(db.Text, unique=True, nullable=False)
     added_on = db.Column(db.DateTime(timezone=True),
@@ -132,9 +133,9 @@ class Comment(db.Model):
 
     __tablename__ = 'comments'
 
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    poem_id = db.Column(db.Integer, db.ForeignKey('poems.id'))
+    id = db.Column(db.String(255), primary_key=True, default=uuid4().hex)
+    user_id = db.Column(db.String, db.ForeignKey('users.id'))
+    poem_id = db.Column(db.String, db.ForeignKey('poems.id'))
     comment = db.Column(db.String(1000), default='I love this!')
     approved = db.Column(db.Boolean, default=False)
     last_edit = db.Column(db.DateTime, server_default=func.now())

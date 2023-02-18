@@ -3,7 +3,7 @@ from wtforms import (StringField, PasswordField,
                      BooleanField, SubmitField,
                      DateField, SelectField)
 from wtforms.validators import (DataRequired, Length, Optional,
-                                InputRequired, Regexp, EqualTo, Email, AnyOf)
+                                Regexp, EqualTo, Email, AnyOf)
 from wtforms import ValidationError
 from ..models import User, Admin
 

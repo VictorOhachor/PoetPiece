@@ -1,11 +1,24 @@
-{% extends "base.html" %} {% block title %} Poems {% endblock title %} {% block
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+ {% block title %} Poems {% endblock title %} {% block
 main_content %} {% if current_user.is_admin %}
 <div class="create-poem-container">
   <a href="/poems/new">Create Poem</a>
 </div>
 {% endif %}
 <h1 class="main-content__title">The Poems</h1>
+<p class="all-categories__name">
+    <a href="/poems" class="category-name">All</a>
+    {% for category_name in all_category_names %}
+        <a href="/poems?category={{category_name}}" class="category-name">
+        {{ category_name|capitalize }}
+        </a>
+    {% endfor %}
+</p>
 <div class="poems-container">
+    {% if not poems %}
+        <p class="no-poem">Empty List</p>
+    {% endif %}
     {% for poem in poems %}
         <a href="/poems/{{poem.id}}">
             <div class="poem-card">
@@ -25,4 +38,6 @@ main_content %} {% if current_user.is_admin %}
         </a>
     {% endfor %}
 </div>
+{{ macros.pagination_widget(pagination, 'show_poems') }}
+<script src="{{url_for('static', filename='js/active_category.js')}}"></script>
 {% endblock main_content %}

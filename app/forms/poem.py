@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import (StringField,
                      BooleanField, SubmitField,
                      SelectField, TextAreaField)
-from wtforms.validators import (DataRequired, Length, Email)
+from wtforms.validators import DataRequired, Length
 
 
 class CreatePoemForm(FlaskForm):
@@ -14,4 +14,4 @@ class CreatePoemForm(FlaskForm):
         DataRequired(), Length(1, 600), ])
     category = SelectField('Select Poem Category', coerce=str, validators=[DataRequired()])
     is_premium = BooleanField('Is this a premium poem?')
-    submit = SubmitField('Create Poem')
+    submit = SubmitField('Create/Update Poem')
