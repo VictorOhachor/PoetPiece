@@ -10,7 +10,7 @@ class User(UserMixin, db.Model):
 
     __tablename__ = 'users'
 
-    id = db.Column(db.String(255), primary_key=True, default=uuid4().hex)
+    id = db.Column(db.String(255), primary_key=True)
     username = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(128), unique=True)
     password_hash = db.Column(db.String(255))
@@ -29,6 +29,12 @@ class User(UserMixin, db.Model):
     def verify_password(self, password):
         """Verify that password is correct."""
         return check_password_hash(self.password_hash, password)
+    
+    @staticmethod
+    def generate_id():
+        """Generate id."""
+        uid = uuid4()
+        return uid.hex
 
     # foreign keys
     admin = db.relationship('Admin', backref='users', uselist=False)

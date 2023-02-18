@@ -64,9 +64,12 @@ def signup():
         if form.validate_on_submit():
             is_admin = form.is_admin.data
 
-            user = User(username=form.username.data,
-                                password=form.password.data,
-                                birth_date=form.birth_date.data)
+            # generate id
+            user_id = User.generate_id()
+            user = User(id=user_id,
+                        username=form.username.data,
+                        password=form.password.data,
+                        birth_date=form.birth_date.data)
             records.append(user)
 
             if is_admin:
@@ -75,7 +78,8 @@ def signup():
                 gender = form.gender.data
 
                 if Admin.reached_admin_count():
-                    flash('Restricted: The number of registered admins has reached limit.')
+                    flash(
+                        'Restricted: The number of registered admins has reached limit.')
                     return redirect(url_for('signup'))
 
                 if not (email and gender):
@@ -84,10 +88,10 @@ def signup():
 
                 records.append(
                     Admin(
-                    email=email,
-                    gender=gender,
-                    users=user
-                ))
+                        email=email,
+                        gender=gender,
+                        users=user
+                    ))
                 user.is_admin = True
 
             # persist to database
