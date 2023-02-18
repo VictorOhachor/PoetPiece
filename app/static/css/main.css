@@ -400,6 +400,11 @@ body {
   padding: 0.5rem 1rem;
 }
 
+.app-main__content > .poem-desc .poem-desc__content {
+    overflow-y: auto;
+    white-space: pre-line;
+}
+
 .poem-stanzas > .poem-stanzas__container {
   display: flex;
   flex-direction: column;
