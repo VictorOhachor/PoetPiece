@@ -58,38 +58,45 @@ def logout():
 def signup():
     """Implement Sign up View."""
     form = SignupForm()
-    models = {}  # contains the User (and perhaps Admin) instance(s)
+    records = []  # contains the User (and perhaps Admin) instance(s)
 
     if form.validate_on_submit():
         is_admin = form.is_admin.data
 
-        models['user'] = User(username=form.username.data,
+        user = User(username=form.username.data,
                               password=form.password.data,
                               birth_date=form.birth_date.data)
+        records.append(user)
 
         if is_admin:
             # retrieve email and gender date
             email = form.email.data
             gender = form.gender.data
 
-            if not (email and gender):
-                flash('Email and gender are required for an admin account.')
-                return redirect(url_for('signup'))
-
             if Admin.reached_admin_count():
                 flash('Restricted: The number of registered admins has reached limit.')
                 return redirect(url_for('signup'))
 
-            models['admin'] = Admin(
+            if not (email and gender):
+                flash('Email and gender are required for an admin account.')
+                return redirect(url_for('signup'))
+
+            records.append(
+                Admin(
                 email=email,
                 gender=gender,
-                users=models['user']
-            )
-            models['user'].is_admin = True
-        db.session.add_all(models.values())
+                users=user
+            ))
+            user.is_admin = True
+
+        # persist to database
+        db.session.add_all(records)
         db.session.commit()
+
+        # redirect to login page
         flash('You can now login.')
         return redirect(url_for('login'))
+
     return render_template('auth/signup.html', form=form)
 
 

@@ -151,4 +151,4 @@ class Comment(db.Model):
 @login_manager.user_loader
 def load_user(user_id):
     """Get user data from database."""
-    return User.query.get(int(user_id))
+    return User.query.get(user_id)
