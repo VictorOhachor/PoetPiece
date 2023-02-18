@@ -288,7 +288,6 @@ body {
   padding: 0.5rem;
   color: #eee;
   height: 100%;
-  position: relative;
 }
 
 .poems-container > a {
@@ -312,8 +311,7 @@ body {
 }
 
 .app-main__content > .poem-desc .poem-desc__heading {
-  position: sticky;
-  top: 0;
+  height: 100%;
 }
 
 .poem-card .poem-desc {
