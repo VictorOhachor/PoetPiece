@@ -304,12 +304,15 @@ body {
 
 .poem-card .poem-title {
   text-transform: uppercase;
-  position: sticky;
-  top: 0;
   font-size: 1.5rem;
   text-align: center;
   font-weight: 800;
   border-bottom: 1px solid #bbb;
+}
+
+.app-main__content > .poem-desc .poem-desc__heading {
+  position: sticky;
+  top: 0;
 }
 
 .poem-card .poem-desc {
