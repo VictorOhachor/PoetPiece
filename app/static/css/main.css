@@ -406,7 +406,7 @@ body {
 }
 
 .poems-container .poem-card .poem-title {
-  overflow-x: auto;
+  overflow-x: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
