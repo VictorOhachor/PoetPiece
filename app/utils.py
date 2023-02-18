@@ -3,6 +3,7 @@
 from functools import wraps
 from flask import flash, redirect, url_for
 from flask_login import current_user
+from uuid import uuid4
 
 
 def is_admin(func):
@@ -18,3 +19,9 @@ def is_admin(func):
         return func(**kwargs)
 
     return wrapper
+
+
+def generate_id():
+    """Generate id."""
+    uid = uuid4()
+    return uid.hex

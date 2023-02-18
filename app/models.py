@@ -2,7 +2,8 @@ from . import db, login_manager
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from sqlalchemy.sql import func
-from uuid import uuid4
+
+from .utils import generate_id
 
 
 class User(UserMixin, db.Model):
@@ -10,7 +11,7 @@ class User(UserMixin, db.Model):
 
     __tablename__ = 'users'
 
-    id = db.Column(db.String(255), primary_key=True)
+    id = db.Column(db.String(255), primary_key=True, default=generate_id)
     username = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(128), unique=True)
     password_hash = db.Column(db.String(255))
@@ -29,12 +30,6 @@ class User(UserMixin, db.Model):
     def verify_password(self, password):
         """Verify that password is correct."""
         return check_password_hash(self.password_hash, password)
-    
-    @staticmethod
-    def generate_id():
-        """Generate id."""
-        uid = uuid4()
-        return uid.hex
 
     # foreign keys
     admin = db.relationship('Admin', backref='users', uselist=False)
@@ -50,7 +45,7 @@ class Admin(db.Model):
 
     __tablename__ = 'admins'
 
-    id = db.Column(db.String(255), primary_key=True, default=uuid4().hex)
+    id = db.Column(db.String(255), primary_key=True, default=generate_id)
     user_id = db.Column(db.String(255), db.ForeignKey('users.id'), unique=True)
     email = db.Column(db.String(255), unique=True, index=True)
     gender = db.Column(db.String(10), nullable=False)
@@ -77,7 +72,7 @@ class Category(db.Model):
 
     __tablename__ = 'categories'
 
-    id = db.Column(db.String(255), primary_key=True, default=uuid4().hex)
+    id = db.Column(db.String(255), primary_key=True, default=generate_id)
     name = db.Column(db.String(100), unique=True)
     description = db.Column(db.String(1000), unique=True)
 
@@ -94,7 +89,7 @@ class Poem(db.Model):
 
     __tablename__ = 'poems'
 
-    id = db.Column(db.String(255), primary_key=True, default=uuid4().hex)
+    id = db.Column(db.String(255), primary_key=True, default=generate_id)
     author_id = db.Column(db.String, db.ForeignKey('admins.id'))
     title = db.Column(db.String(255), nullable=False, unique=True)
     description = db.Column(db.Text, unique=True)
@@ -119,7 +114,7 @@ class Stanza(db.Model):
 
     __tablename__ = 'stanzas'
 
-    id = db.Column(db.String(255), primary_key=True, default=uuid4().hex)
+    id = db.Column(db.String(255), primary_key=True, default=generate_id)
     poem_id = db.Column(db.String, db.ForeignKey('poems.id'))
     index = db.Column(db.Integer, nullable=False)
     content = db.Column(db.Text, unique=True, nullable=False)
@@ -139,7 +134,7 @@ class Comment(db.Model):
 
     __tablename__ = 'comments'
 
-    id = db.Column(db.String(255), primary_key=True, default=uuid4().hex)
+    id = db.Column(db.String(255), primary_key=True, default=generate_id)
     user_id = db.Column(db.String, db.ForeignKey('users.id'))
     poem_id = db.Column(db.String, db.ForeignKey('poems.id'))
     comment = db.Column(db.String(1000), default='I love this!')
