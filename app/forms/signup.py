@@ -1,3 +1,4 @@
+from flask import flash
 from flask_wtf import FlaskForm
 from wtforms import (StringField, PasswordField,
                      BooleanField, SubmitField,
@@ -42,10 +43,12 @@ class SignupForm(FlaskForm):
         """Ensure the email passed does not already exists."""
         admin = Admin.query.filter_by(email=field.data).first()
         if admin:
+            flash('Email already registered.', 'error')
             raise ValidationError('Email already registered.')
 
     def validate_username(self, field):
         """Ensure that the username passed does not already exists."""
         user = User.query.filter_by(username=field.data).first()
         if user:
+            flash('Username already in use.')
             raise ValidationError('Username already in use.')

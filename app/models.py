@@ -45,7 +45,7 @@ class Admin(db.Model):
     __tablename__ = 'admins'
 
     id = db.Column(db.String(255), primary_key=True, default=uuid4().hex)
-    user_id = db.Column(db.String, db.ForeignKey('users.id'), unique=True)
+    user_id = db.Column(db.String(255), db.ForeignKey('users.id'), unique=True)
     email = db.Column(db.String(255), unique=True, index=True)
     gender = db.Column(db.String(10), nullable=False)
 

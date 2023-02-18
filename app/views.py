@@ -60,42 +60,46 @@ def signup():
     form = SignupForm()
     records = []  # contains the User (and perhaps Admin) instance(s)
 
-    if form.validate_on_submit():
-        is_admin = form.is_admin.data
+    try:
+        if form.validate_on_submit():
+            is_admin = form.is_admin.data
 
-        user = User(username=form.username.data,
-                              password=form.password.data,
-                              birth_date=form.birth_date.data)
-        records.append(user)
+            user = User(username=form.username.data,
+                                password=form.password.data,
+                                birth_date=form.birth_date.data)
+            records.append(user)
 
-        if is_admin:
-            # retrieve email and gender date
-            email = form.email.data
-            gender = form.gender.data
+            if is_admin:
+                # retrieve email and gender date
+                email = form.email.data
+                gender = form.gender.data
 
-            if Admin.reached_admin_count():
-                flash('Restricted: The number of registered admins has reached limit.')
-                return redirect(url_for('signup'))
+                if Admin.reached_admin_count():
+                    flash('Restricted: The number of registered admins has reached limit.')
+                    return redirect(url_for('signup'))
 
-            if not (email and gender):
-                flash('Email and gender are required for an admin account.')
-                return redirect(url_for('signup'))
+                if not (email and gender):
+                    flash('Email and gender are required for an admin account.')
+                    return redirect(url_for('signup'))
 
-            records.append(
-                Admin(
-                email=email,
-                gender=gender,
-                users=user
-            ))
-            user.is_admin = True
+                records.append(
+                    Admin(
+                    email=email,
+                    gender=gender,
+                    users=user
+                ))
+                user.is_admin = True
 
-        # persist to database
-        db.session.add_all(records)
-        db.session.commit()
+            # persist to database
+            db.session.add_all(records)
+            db.session.commit()
 
-        # redirect to login page
-        flash('You can now login.')
-        return redirect(url_for('login'))
+            # redirect to login page
+            flash('You can now login.')
+            return redirect(url_for('login'))
+    except Exception as e:
+        flash(e, 'error')
+        return redirect(url_for('signup'))
 
     return render_template('auth/signup.html', form=form)
 
