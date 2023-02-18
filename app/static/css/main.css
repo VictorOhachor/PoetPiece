@@ -378,6 +378,10 @@ body {
   flex-wrap: wrap;
 }
 
+.app-main__content > .poem-desc {
+  max-height: 350px;
+}
+
 .app-main__content > .poem-desc .poem-desc__heading,
 .app-main__content > .poem-stanzas .poem-stanzas__heading {
   display: flex;
