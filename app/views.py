@@ -183,7 +183,7 @@ def create_poem():
     return render_template('poems/poem_form.html', form=form)
 
 
-@app.route('/poems/<int:poem_id>', methods=['GET', 'POST'])
+@app.route('/poems/<str:poem_id>', methods=['GET', 'POST'])
 def show_poem(poem_id):
     """Show details about poem with given id."""
     poem = Poem.query.get_or_404(poem_id, 'Poem with given id was not found.')
@@ -209,7 +209,7 @@ def show_poem(poem_id):
     return render_template('poems/poem.html', poem=poem, form=comment_form)
 
 
-@app.route('/poems/<int:poem_id>/edit', methods=['GET', 'POST'])
+@app.route('/poems/<str:poem_id>/edit', methods=['GET', 'POST'])
 @is_admin
 def edit_poem(poem_id):
     """Edit poem (with given id) title and description."""
@@ -238,7 +238,7 @@ def edit_poem(poem_id):
     return render_template('poems/poem_form.html', form=form, update=True)
 
 
-@app.get('/poems/<int:poem_id>/delete')
+@app.get('/poems/<str:poem_id>/delete')
 @login_required
 def delete_poem(poem_id):
     """Delete a poem and all the associated stanzas."""
@@ -249,7 +249,7 @@ def delete_poem(poem_id):
     return redirect(url_for('show_poems'))
 
 
-@app.route('/poems/<int:poem_id>/add_stanza', methods=['GET', 'POST'])
+@app.route('/poems/<str:poem_id>/add_stanza', methods=['GET', 'POST'])
 @login_required
 @is_admin
 def add_stanza(poem_id):
@@ -283,7 +283,7 @@ def add_stanza(poem_id):
     return render_template('poems/stanza_form.html', form=form)
 
 
-@app.get('/poems/<int:poem_id>/stanzas/<int:stanza_id>/delete')
+@app.get('/poems/<str:poem_id>/stanzas/<str:stanza_id>/delete')
 @login_required
 @is_admin
 def delete_stanza(poem_id, stanza_id):
@@ -302,7 +302,7 @@ def delete_stanza(poem_id, stanza_id):
     return redirect(url_for('show_poem', poem_id=poem_id))
 
 
-@app.route('/poems/<int:poem_id>/stanzas/<int:stanza_id>/edit', methods=['GET', 'POST'])
+@app.route('/poems/<str:poem_id>/stanzas/<str:stanza_id>/edit', methods=['GET', 'POST'])
 @login_required
 @is_admin
 def edit_stanza(poem_id, stanza_id):
@@ -327,7 +327,7 @@ def edit_stanza(poem_id, stanza_id):
     return render_template('poems/stanza_form.html', form=form, update=True)
 
 
-@app.get('/poems/<int:poem_id>/comments/<int:comment_id>/delete')
+@app.get('/poems/<str:poem_id>/comments/<str:comment_id>/delete')
 @login_required
 def delete_comment(poem_id, comment_id):
     """Delete a comment from a poem."""
