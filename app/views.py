@@ -64,10 +64,7 @@ def signup():
         if form.validate_on_submit():
             is_admin = form.is_admin.data
 
-            # generate id
-            user_id = User.generate_id()
-            user = User(id=user_id,
-                        username=form.username.data,
+            user = User(username=form.username.data,
                         password=form.password.data,
                         birth_date=form.birth_date.data)
             records.append(user)
