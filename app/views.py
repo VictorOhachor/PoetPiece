@@ -98,7 +98,7 @@ def signup():
             flash('You can now login.')
             return redirect(url_for('login'))
     except Exception as e:
-        flash(e, 'error')
+        flash(str(e), 'error')
         return redirect(url_for('signup'))
 
     return render_template('auth/signup.html', form=form)
