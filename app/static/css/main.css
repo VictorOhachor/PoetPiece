@@ -400,7 +400,8 @@ body {
   padding: 0.5rem 1rem;
 }
 
-.app-main__content > .poem-desc .poem-desc__content {
+.app-main__content > .poem-desc .poem-desc__content,
+.poems-container .poem-card .poem-title {
     overflow-y: auto;
     white-space: pre-line;
 }
