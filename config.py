@@ -32,7 +32,7 @@ class TestingConfig(Config):
 class ProductionConfig(Config):
     """Contain extra configurations for production environment."""
     SQLALCHEMY_DATABASE_URI = \
-        f'sqlite:///{os.path.join(basedir, "app/application.sqlite")}'
+        f'sqlite:///{os.path.join(basedir, "application.sqlite")}'
 
 
 config = {
