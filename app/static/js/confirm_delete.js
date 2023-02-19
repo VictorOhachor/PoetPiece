@@ -5,9 +5,9 @@ const actionLinksGroup = document.querySelectorAll('[class$="action__links"]')
 actionLinksGroup.forEach(actionLinks => {
     for (const actionLink of actionLinks.children) {
         actionLink.addEventListener('click', (e) => {
-            e.preventDefault()
-
             if (actionLink.textContent.toLowerCase().startsWith('delete')) {
+                e.preventDefault()
+
                 const href = e.currentTarget.href
                 const answer = prompt("Enter 'yes' to confirm action:", 'no')
                 
@@ -20,4 +20,5 @@ actionLinksGroup.forEach(actionLinks => {
 })
 
 // TODO: A function that generate a form for the user to confirm deletion
+// Form must be positioned fixed and must request that user enters 'yes' to confirm delete
 const generateConfirmForm = (href) => {}
