@@ -89,4 +89,6 @@ title %} {{poem.title}} {% endblock title %} {% block main_content %}
 </div>
 {% else %}
 <p class="comments-restricted">Log in to comment</p>
-{% endif %} {% endblock main_content %}
+{% endif %}
+<script src="{{ url_for('static', filename='js/confirm_delete.js') }}"></script>
+{% endblock main_content %}
