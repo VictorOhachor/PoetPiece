@@ -727,3 +727,28 @@ body {
   margin: auto;
   padding: 2rem;
 }
+
+.http-error-msg {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  height: 50vh;
+  text-align: center;
+  align-items: center;
+  color: #911515;
+}
+
+.http-error-msg .error-code {
+  font-size: calc(4rem + 2vmin);
+  font-family: 'Space Mono', monospace;
+  padding: 3rem;
+  border-radius: 50%;
+  border: 1px solid #911515;
+}
+
+.http-error-msg .error-msg {
+  font-size: calc(1.5rem + 1vmin);
+  line-height: 1.2;
+  margin: 0 .5rem;
+}

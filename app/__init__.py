@@ -16,6 +16,9 @@ def create_app(config_name):
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
 
+    with app.app_context():
+        from . import errors
+
     # Initialize Flask extensions
     bootstrap.init_app(app)
     login_manager.init_app(app)
@@ -27,5 +30,5 @@ def create_app(config_name):
 
     from .poems import poems as poems_blueprint
     app.register_blueprint(poems_blueprint)
-
+    
     return app

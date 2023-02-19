@@ -6,6 +6,10 @@ from flask_migrate import Migrate
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 migrate = Migrate(app, db)
 
+@app.context_processor
+
+
+
 @app.shell_context_processor
 def make_shell_context():
     return {
@@ -13,6 +17,7 @@ def make_shell_context():
         'Poem': Poem, 'Category': Category,
         'Stanza': Stanza, 'Comment': Comment
     }
+
 
 @app.cli.command()
 def test():
