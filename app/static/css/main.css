@@ -13,14 +13,25 @@ body {
   min-height: 100vh;
 }
 
+.help-block {
+  color: #911515;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
 .toast-card {
-  color: rgb(145, 21, 21);
-  background-color: rgb(241, 184, 163);
   padding: 0.2rem 1rem;
   font-size: 1.5rem;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
+}
+
+.error-toast {
+  color: rgb(145, 21, 21);
+  background-color: rgb(245, 168, 168);
+}
+
+.msg-toast {
+  color: #1c521c;
+  background-color: #80fc80;
 }
 
 .new-user__text {

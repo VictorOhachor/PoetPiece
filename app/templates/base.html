@@ -18,11 +18,14 @@
     <title>PoeticMan | {% block title %}{% endblock title %}</title>
   </head>
   <body>
-    <div>
-      {% for message in get_flashed_messages() %}
-      <p class="toast-card">{{ message }}</p>
-      {% endfor %}
-    </div>
+    {% for category, message in get_flashed_messages(with_categories=true) %}
+    <p
+      class="toast-card {{ 'error-toast' if category == 'error' else 'msg-toast' }}"
+    >
+      {% if category == 'error' %} <strong>Error:</strong> {% endif %} {{
+      message }}
+    </p>
+    {% endfor %}
     <header class="app-header">
       <h3 class="app-logo">Poetic<span class="redden">Man</span></h3>
       <nav class="app-navbar">

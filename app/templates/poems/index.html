@@ -38,6 +38,6 @@ main_content %} {% if current_user.is_admin %}
         </a>
     {% endfor %}
 </div>
-{{ macros.pagination_widget(pagination, 'show_poems') }}
+{{ macros.pagination_widget(pagination, 'poems.index') }}
 <script src="{{url_for('static', filename='js/active_category.js')}}"></script>
 {% endblock main_content %}

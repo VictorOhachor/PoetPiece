@@ -22,11 +22,11 @@ class User(UserMixin, db.Model):
     def password(self):
         """Restrict read access on plain text password."""
         raise AttributeError('Password is not a readable attribute.')
-    
+
     @password.setter
     def password(self, password):
         self.password_hash = generate_password_hash(password)
-    
+
     def verify_password(self, password):
         """Verify that password is correct."""
         return check_password_hash(self.password_hash, password)
@@ -56,12 +56,12 @@ class Admin(db.Model):
     def __repr__(self):
         """Official string representation of an admin object."""
         return f'<{type(self).__name__}: User {self.user_id} ({self.gender})>'
-    
+
     @staticmethod
     def reached_admin_count(limit=1):
         """Limit the number of admins that can be registered."""
         admins = Admin.query.all()
-        
+
         if len(admins) == limit:
             return True
         return False
@@ -90,18 +90,24 @@ class Poem(db.Model):
     __tablename__ = 'poems'
 
     id = db.Column(db.String(255), primary_key=True, default=generate_id)
-    author_id = db.Column(db.String, db.ForeignKey('admins.id'))
+    author_id = db.Column(db.String, db.ForeignKey('admins.id',
+                                                   ondelete='SET NULL'), nullable=True)
     title = db.Column(db.String(255), nullable=False, unique=True)
     description = db.Column(db.Text, unique=True)
-    category_id = db.Column(db.String, db.ForeignKey('categories.id'))
+    category_id = db.Column(db.String, db.ForeignKey('categories.id',
+    ondelete='SET NULL'), nullable=True)
     rating = db.Column(db.Float, default=0.0)
     premium = db.Column(db.Boolean, default=False)
+    completed = db.Column(db.Boolean, default=False)
+    published = db.Column(db.Boolean, default=False)
     crafted_on = db.Column(db.DateTime(timezone=True),
                            server_default=func.now())
 
     # foreign keys
-    stanzas = db.relationship('Stanza', backref='poems', lazy='dynamic', cascade='all,delete')
-    comments = db.relationship('Comment', backref='poems', lazy='dynamic')
+    stanzas = db.relationship(
+        'Stanza', backref='poems', lazy='dynamic', cascade='all,delete')
+    comments = db.relationship('Comment', backref='poems', lazy='dynamic',
+    cascade='all,delete')
 
     def __repr__(self):
         """Official string representation of a poem object."""
@@ -115,13 +121,13 @@ class Stanza(db.Model):
     __tablename__ = 'stanzas'
 
     id = db.Column(db.String(255), primary_key=True, default=generate_id)
-    poem_id = db.Column(db.String, db.ForeignKey('poems.id'))
+    poem_id = db.Column(db.String, db.ForeignKey('poems.id', ondelete='CASCADE'))
     index = db.Column(db.Integer, nullable=False)
     content = db.Column(db.Text, unique=True, nullable=False)
     added_on = db.Column(db.DateTime(timezone=True),
                          server_default=func.now())
     edited_on = db.Column(db.DateTime(timezone=True), onupdate=func.now())
-    
+
     def __repr__(self):
         """Official string representation of a stanza object."""
         poem = Poem.query.get(self.poem_id)
@@ -135,18 +141,38 @@ class Comment(db.Model):
     __tablename__ = 'comments'
 
     id = db.Column(db.String(255), primary_key=True, default=generate_id)
-    user_id = db.Column(db.String, db.ForeignKey('users.id'))
-    poem_id = db.Column(db.String, db.ForeignKey('poems.id'))
+    user_id = db.Column(db.String, db.ForeignKey('users.id', ondelete='CASCADE'))
+    poem_id = db.Column(db.String, db.ForeignKey('poems.id', ondelete='CASCADE'))
     comment = db.Column(db.String(1000), default='I love this!')
     approved = db.Column(db.Boolean, default=False)
-    last_edit = db.Column(db.DateTime, server_default=func.now())
-    
+    last_edit = db.Column(db.DateTime, server_default=func.now(),
+                          onupdate=func.now())
+
     def __repr__(self):
         """Official string representation of a comment object."""
         poem = Poem.query.get(self.poem_id)
         user = User.query.get(self.user_id)
-    
+
         return f'<{type(self).__name__}: {self.id} on {poem.title} by {user.username}>'
+
+
+class PoemRating(db.Model):
+    """Model representing rating given by a user to a poem."""
+
+    __tablename__ = 'poem_ratings'
+
+    id = db.Column(db.String(255), primary_key=True, default=generate_id)
+    user_id = db.Column(db.String(255), db.ForeignKey('users.id', ondelete='CASCADE'))
+    poem_id = db.Column(db.String(255), db.ForeignKey('poems.id', ondelete='CASCADE'))
+    rating = db.Column(db.Float, default=0.0)
+    rated_on = db.Column(db.DateTime, server_default=func.now())
+
+    def __repr__(self):
+        """Official string representation of a PoemRating object."""
+        poem = Poem.query.get(self.poem_id)
+        user = User.query.get(self.user_id)
+
+        return f'<{type(self).__name__}: {self.id} on {poem.title} by {user.username} ({self.rating})'
 
 
 @login_manager.user_loader

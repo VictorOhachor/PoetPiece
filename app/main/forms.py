@@ -4,9 +4,24 @@ from wtforms import (StringField, PasswordField,
                      BooleanField, SubmitField,
                      DateField, SelectField)
 from wtforms.validators import (DataRequired, Length, Optional,
-                                Regexp, EqualTo, Email, AnyOf)
+                                Regexp, EqualTo, Email, AnyOf,
+                                InputRequired)
 from wtforms import ValidationError
 from ..models import User, Admin
+
+
+class LoginForm(FlaskForm):
+    """Represents the login form for users/admins."""
+
+    username = StringField('Remind Me Your Username', validators=[
+        InputRequired('Username Required!'), DataRequired(), Length(3, 100)
+    ])
+    password = PasswordField('How About Your Password?', validators=[
+        InputRequired('Password Required!'), DataRequired(),
+        Length(8, 128, 'Number of characters must be between 8 and 128')
+    ])
+    remember_me = BooleanField('Keep me logged in')
+    submit = SubmitField('Log In')
 
 
 class SignupForm(FlaskForm):
@@ -43,12 +58,10 @@ class SignupForm(FlaskForm):
         """Ensure the email passed does not already exists."""
         admin = Admin.query.filter_by(email=field.data).first()
         if admin:
-            flash('Email already registered.', 'error')
             raise ValidationError('Email already registered.')
 
     def validate_username(self, field):
         """Ensure that the username passed does not already exists."""
         user = User.query.filter_by(username=field.data).first()
         if user:
-            flash('Username already in use.')
             raise ValidationError('Username already in use.')
