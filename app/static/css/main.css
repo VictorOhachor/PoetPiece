@@ -782,13 +782,13 @@ body {
   border-radius: 5px;
 }
 
-.more-actions__box > .generate-pdf {
+.more-actions__box > .more-action__btn {
   border: none;
   background-color: transparent;
 }
 
 .more-actions__box > a,
-.more-actions__box > .generate-pdf {
+.more-actions__box > .more-action__btn {
   color: #eee;
   text-decoration: none;
   font-size: 1.1rem;

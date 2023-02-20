@@ -18,6 +18,7 @@
 </div>
 <hr />
 <div class="poem-stanzas">
+  <h3 class="poem-stanzas__heading">Stanzas</h3>
   <div class="poem-stanzas__container">
     {% if poem.stanzas.all()|length == 0 %}
     <p class="no-stanza-text">This poem currently has no stanza.</p>
@@ -47,7 +48,6 @@
     >
     {% endif %}
   </div>
-  <h3 class="poem-stanzas__heading">Stanzas</h3>
 </div>
 {% if current_user.is_admin %}
 <p class="poem-action__links">

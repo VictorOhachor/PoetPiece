@@ -1,5 +1,6 @@
 const moreActionToggler = document.querySelector('#more-action__toggler')
-const generateBtn = document.querySelector('.generate-pdf')
+const generateBtn = document.querySelector('#generate-btn')
+const copyBtn = document.querySelector('#copy-btn')
 
 moreActionToggler.addEventListener('click', (e) => {
     const moreActionsBox = e.currentTarget.nextElementSibling
@@ -30,4 +31,21 @@ const generatePDF = () => {
     html2pdf().set(opt).from(poemPage).toPdf().save()
 }
 
+const copyPoemLink = (e) => {
+    const poemLink = location.href
+    const btn = e.currentTarget
+    const btnText = btn.textContent
+
+    // copy text to clipboard
+    navigator.clipboard.writeText(poemLink)
+    // change button text to 'copied'
+    e.currentTarget.textContent = 'Copied!'
+    // return button text to former
+    setTimeout(() => {
+        console.log(btnText)
+        btn.innerText = btnText
+    }, 2000)
+}
+
 generateBtn && generateBtn.addEventListener('click', generatePDF)
+copyBtn && copyBtn.addEventListener('click', copyPoemLink)
