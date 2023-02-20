@@ -1,6 +1,12 @@
-{% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% block
-title %} {{poem.title}} {% endblock title %} {% block main_content %}
+{% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% import
+"_macros.html" as macros %} {% block title %} {{poem.title}} {% endblock title
+%} {% block main_content %} {{ macros.more_actions_widget(poem, current_user) }}
 <h1 class="main-content__title">{{poem.title|upper}}</h1>
+<span
+  class="poem-completion poem-{{ 'completed' if poem.completed else 'progress' }}"
+  >{{'Completed' if poem.completed else 'In Progress'}}</span
+>
+
 <p class="poem-metadata">
   <span class="poem-creation__date">{{poem.crafted_on.date()}}</span>
   <span class="poem-rating">{{poem.rating}}</span>
@@ -91,4 +97,5 @@ title %} {{poem.title}} {% endblock title %} {% block main_content %}
 <p class="comments-restricted">Log in to comment</p>
 {% endif %}
 <script src="{{ url_for('static', filename='js/confirm_delete.js') }}"></script>
+<script src="{{url_for('static', filename='js/toggle_more_actions.js')}}"></script>
 {% endblock main_content %}

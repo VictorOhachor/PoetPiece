@@ -25,13 +25,13 @@ body {
 }
 
 .error-toast {
-  color: rgb(145, 21, 21);
-  background-color: rgb(245, 168, 168);
+  color: #911515;
+  background-color: rgba(255, 166, 0, 0.534);
 }
 
 .msg-toast {
+  background-color: rgba(0, 128, 0, 0.335);
   color: #1c521c;
-  background-color: #80fc80;
 }
 
 .new-user__text {
@@ -90,6 +90,7 @@ body {
 .app-main__content {
   margin: auto;
   max-width: 900px;
+  position: relative;
   padding: 2rem 0.5rem;
 }
 
@@ -733,7 +734,7 @@ body {
   flex-direction: column;
   gap: 1rem;
   justify-content: center;
-  height: 50vh;
+  margin-top: 2rem;
   text-align: center;
   align-items: center;
   color: #911515;
@@ -751,4 +752,68 @@ body {
   font-size: calc(1.5rem + 1vmin);
   line-height: 1.2;
   margin: 0 .5rem;
+}
+
+.more-actions__container {
+  position: absolute;
+  top: 42px;
+  right: 8px;
+  color: #eee;
+}
+
+.more-actions__container #more-action__toggler {
+  font-size: 1.5rem;
+  padding: .3rem .7rem;
+  background-color: #911515;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.more-actions__container .more-actions__box {
+  position: absolute;
+  right: 0;
+  z-index: 2;
+  width: max-content;
+  display: flex;
+  flex-direction: column;
+  background-color: #911515;
+  border: 1px solid #eee;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.more-actions__box > a {
+  color: #eee;
+  text-decoration: none;
+  padding: .4rem 1rem;
+  border-bottom: 1px solid #730606;
+}
+
+.more-actions__box > a:last-child {
+  border-bottom: none;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.poem-completion {
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  text-align: center;
+  padding: .1rem 1rem .2rem;
+  position: absolute;
+  top: 0;
+  left: 40%;
+  right: 40%;
+}
+
+.poem-completed {
+  color: #eee;
+  background-color: #1c521c;
+}
+
+.poem-progress {
+  color: #000;
+  background-color: rgb(241, 184, 163);
 }

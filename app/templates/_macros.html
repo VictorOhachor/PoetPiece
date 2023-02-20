@@ -24,6 +24,20 @@ page = pagination.page + 1, **kwargs) }}{% else %}#{% endif %}"
     &rArr;
   </a>
 </div>
+{% endmacro %} {% macro more_actions_widget(record, user, name='poem') %}
+<div class="more-actions__container">
+  <i class="fa-solid fa-ellipsis-vertical" id="more-action__toggler"></i>
+  <div class="more-actions__box hidden">
+    <a href="/poems/{{record.id}}/share">Share {{name|title}}</a>
+    <a href="/poems/{{record.id}}/generate-pdf">Generate PDF</a>
+    {% if user.is_admin %}
+    <a href="/poems/{{record.id}}/publish">
+    {{ 'Unp' if record.published else 'P' }}ublish {{name|title}}
+    </a>
+    <a href="/poems/{{record.id}}/complete">
+      Mark as {{ 'Inc' if record.completed else 'C' }}omplete
+    </a>
+    {% endif %}
+  </div>
+</div>
 {% endmacro %}
-
-{# {% macro action_menu_widget(poem, ) %} #}

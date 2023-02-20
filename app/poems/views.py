@@ -30,6 +30,10 @@ def index():
     query_poems = db.session.query(Poem).join(
         Category, Category.id == Poem.category_id
     )
+
+    if current_user.is_anonymous or not current_user.is_admin:
+        query_poems = query_poems.filter(Poem.published == True)
+
     if category:
         query_poems = query_poems.filter(Category.name == category)
 
@@ -96,6 +100,11 @@ def create_poem():
 def poem(poem_id):
     """Show details about poem with given id."""
     poem = Poem.query.get_or_404(poem_id, 'Poem with such id not found.')
+
+    if not poem.published:
+        if current_user.is_anonymous or not current_user.is_admin:
+            flash('This poem has not been published yet.', 'error')
+            return redirect(url_for('.index'))
 
     comment_form = CreateCommentForm()
 
@@ -245,4 +254,39 @@ def delete_comment(poem_id, comment_id):
 
         flash('Deleted comment successfully', 'info')
     # return user to the poem page
+    return redirect(url_for('.poem', poem_id=poem_id))
+
+
+@poems.get('/poems/<string:poem_id>/publish')
+@is_admin
+def publish_poem(poem_id):
+    """Publish or unpublish the poem with given id."""
+    poem = Poem.query.get_or_404(poem_id, 'Poem with such id was not found')
+
+    if poem.published:
+        poem.published = False
+        flash('Poem has been unpublished')
+    else:
+        poem.published = True
+        flash('Successfully published poem for the world to see!')
+    
+    db.session.add(poem)
+    db.session.commit()
+
+    return redirect(url_for('.poem', poem_id=poem_id))
+
+@poems.get('/poems/<string:poem_id>/complete')
+@is_admin
+def complete_poem(poem_id):
+    """Publish or unpublish the poem with given id."""
+    poem = Poem.query.get_or_404(poem_id, 'Poem with such id was not found')
+
+    # toggle completed attribute and persist to db
+    poem.completed = False if poem.completed else True
+    db.session.add(poem)
+    db.session.commit()
+    # Set flash message
+    flash_msg_type = 'complete' if poem.completed else 'incomplete'
+    flash(f'Poem has been marked as {flash_msg_type}.')
+
     return redirect(url_for('.poem', poem_id=poem_id))
