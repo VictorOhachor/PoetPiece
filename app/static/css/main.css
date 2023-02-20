@@ -482,13 +482,10 @@ body {
   border-top: 5px solid rgb(241, 184, 163);
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
-  flex-basis: 300px;
   width: 100%;
-  overflow-y: auto;
   white-space: pre-line;
   word-spacing: -0.4rem;
   font-size: calc(1rem + 0.8vmin);
-  max-height: 400px;
 }
 
 .poem-stanza__card .stanza-metadata {
