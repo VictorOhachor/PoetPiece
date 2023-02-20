@@ -782,9 +782,18 @@ body {
   border-radius: 5px;
 }
 
-.more-actions__box > a {
+.more-actions__box > .generate-pdf {
+  border: none;
+  background-color: transparent;
+}
+
+.more-actions__box > a,
+.more-actions__box > .generate-pdf {
   color: #eee;
   text-decoration: none;
+  font-size: 1.1rem;
+  font-family: "Titillium Web", sans-serif;
+  cursor: pointer;
   padding: .4rem 1rem;
   border-bottom: 1px solid #730606;
 }
