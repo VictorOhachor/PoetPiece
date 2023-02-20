@@ -394,7 +394,7 @@ body {
 .app-main__content > .poem-stanzas .poem-stanzas__heading {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   flex-grow: 1;
   text-transform: uppercase;
   color: #911515;
