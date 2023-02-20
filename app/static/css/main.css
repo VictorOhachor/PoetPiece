@@ -49,9 +49,6 @@ body {
   gap: 2.5rem;
   flex-wrap: wrap;
   background-color: #eee;
-  position: sticky;
-  top: 0;
-  z-index: 2;
 }
 
 .app-logo {
@@ -813,8 +810,9 @@ body {
   padding: .1rem 1rem .2rem;
   position: absolute;
   top: 0;
-  left: 40%;
-  right: 40%;
+  left: 50%;
+  margin-left: -70px;
+  width: 140px;
 }
 
 .poem-completed {
