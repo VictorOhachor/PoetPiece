@@ -8,20 +8,26 @@ moreActionToggler.addEventListener('click', (e) => {
 })
 
 const generatePDF = () => {
-    const poemPage = document.querySelector('.app-main__content')
+    const poemTitle = document.querySelector('.main-content__title')
+    const poemDesc = document.querySelector('.poem-desc')
+    const poemStanzas = document.querySelector('.poem-stanzas')
+
+    // create a new div element
+    const poemPage = document.createElement('div')
+
+    // append the title, desc, and stanzas to div
+    poemPage.appendChild(poemTitle)
+    poemPage.appendChild(poemDesc)
+    poemPage.appendChild(poemStanzas)
+
     const opt = {
-        filename: document.querySelector('.main-content__title')
-            .textContent + '.pdf',
+        filename: poemTitle.textContent + '.pdf',
         html2canvas: {scale: 1}
     }
     // toggle the toggler
     moreActionToggler.click()
-
-    if (poemPage) {
-        html2pdf().set(opt).from(poemPage).toPdf().save()
-    } else {
-        alert('Something went wrong!')
-    }
+    // save to pdf and download
+    html2pdf().set(opt).from(poemPage).toPdf().save()
 }
 
 generateBtn && generateBtn.addEventListener('click', generatePDF)
