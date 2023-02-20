@@ -395,6 +395,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  align-self: flex-start;
   flex-grow: 1;
   text-transform: uppercase;
   color: #911515;
