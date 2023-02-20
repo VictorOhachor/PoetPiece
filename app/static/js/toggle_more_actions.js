@@ -16,9 +16,9 @@ const generatePDF = () => {
     const poemPage = document.createElement('div')
 
     // append the title, desc, and stanzas to div
-    poemPage.appendChild(poemTitle)
-    poemPage.appendChild(poemDesc)
-    poemPage.appendChild(poemStanzas)
+    poemPage.appendChild(poemTitle.cloneNode(deep=true))
+    poemPage.appendChild(poemDesc.cloneNode(deep=true))
+    poemPage.appendChild(poemStanzas.cloneNode(deep=true))
 
     const opt = {
         filename: poemTitle.textContent + '.pdf',
