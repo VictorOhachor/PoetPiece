@@ -121,7 +121,7 @@ class Stanza(db.Model):
     __tablename__ = 'stanzas'
 
     id = db.Column(db.String(255), primary_key=True, default=generate_id)
-    poem_id = db.Column(db.String, db.ForeignKey('poems.id', ondelete='CASCADE'))
+    poem_id = db.Column(db.String(255), db.ForeignKey('poems.id', ondelete='CASCADE'))
     index = db.Column(db.Integer, nullable=False)
     content = db.Column(db.Text, nullable=False)
     added_on = db.Column(db.DateTime(timezone=True),
