@@ -99,20 +99,26 @@ def create_poem():
 @poems.route('/poems/<string:poem_id>', methods=['GET', 'POST'])
 def poem(poem_id):
     """Show details about poem with given id."""
-    poem = Poem.query.get_or_404(poem_id, 'Poem with such id not found.')
+    context = {
+        'poem': Poem.query.get_or_404(poem_id,
+                                      'Poem with such id not found.'),
+    }
 
-    if not poem.published:
+    # Get poem stanzas order by stanza index
+    context['stanzas'] = context['poem'].stanzas.order_by(Stanza.index).all()
+
+    if not context['poem'].published:
         if current_user.is_anonymous or not current_user.is_admin:
             flash('This poem has not been published yet.', 'error')
             return redirect(url_for('.index'))
 
-    comment_form = CreateCommentForm()
+    context['form'] = CreateCommentForm()
 
-    if comment_form.validate_on_submit():
+    if context['form'].validate_on_submit():
         comment = Comment(
             user_id=current_user.id,
             poem_id=poem_id,
-            comment=comment_form.comment.data
+            comment=context['form'].comment.data
         )
 
         db.session.add(comment)
@@ -122,11 +128,12 @@ def poem(poem_id):
               'info')
         return redirect(url_for('.poem', poem_id=poem_id))
 
-    if (current_user.is_anonymous or not current_user.is_admin) and poem.premium:
+    if (current_user.is_anonymous or not current_user.is_admin) \
+            and context['poem'].premium:
         flash('Sorry, this poem is only available to premium users.', 'error')
         return redirect(url_for('.index'))
 
-    return render_template('poems/poem.html', poem=poem, form=comment_form)
+    return render_template('poems/poem.html', **context)
 
 
 @poems.route('/poems/<string:poem_id>/edit', methods=['GET', 'POST'])
@@ -269,11 +276,12 @@ def publish_poem(poem_id):
     else:
         poem.published = True
         flash('Successfully published poem for the world to see!')
-    
+
     db.session.add(poem)
     db.session.commit()
 
     return redirect(url_for('.poem', poem_id=poem_id))
+
 
 @poems.get('/poems/<string:poem_id>/complete')
 @is_admin

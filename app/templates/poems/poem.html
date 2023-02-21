@@ -20,7 +20,7 @@
 <div class="poem-stanzas">
   <h3 class="poem-stanzas__heading">Stanzas</h3>
   <div class="poem-stanzas__container">
-    {% if poem.stanzas.all()|length == 0 %}
+    {% if stanzas|length == 0 %}
     <p class="no-stanza-text">This poem currently has no stanza.</p>
     {% else %} {% for stanza in poem.stanzas.all() %}
     <div class="poem-stanza__card hidden">
