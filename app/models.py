@@ -93,7 +93,7 @@ class Poem(db.Model):
     author_id = db.Column(db.String(255), db.ForeignKey('admins.id',
                                                    ondelete='SET NULL'), nullable=True)
     title = db.Column(db.String(255), nullable=False, unique=True)
-    description = db.Column(db.Text, unique=True)
+    description = db.Column(db.Text, nullable=False)
     category_id = db.Column(db.String(255), db.ForeignKey('categories.id',
     ondelete='SET NULL'), nullable=True)
     rating = db.Column(db.Float, default=0.0)
@@ -123,7 +123,7 @@ class Stanza(db.Model):
     id = db.Column(db.String(255), primary_key=True, default=generate_id)
     poem_id = db.Column(db.String, db.ForeignKey('poems.id', ondelete='CASCADE'))
     index = db.Column(db.Integer, nullable=False)
-    content = db.Column(db.Text, unique=True, nullable=False)
+    content = db.Column(db.Text, nullable=False)
     added_on = db.Column(db.DateTime(timezone=True),
                          server_default=func.now())
     edited_on = db.Column(db.DateTime(timezone=True), onupdate=func.now())
