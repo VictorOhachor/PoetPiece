@@ -23,7 +23,7 @@
     {% if poem.stanzas.all()|length == 0 %}
     <p class="no-stanza-text">This poem currently has no stanza.</p>
     {% else %} {% for stanza in poem.stanzas.all() %}
-    <div class="poem-stanza__card">
+    <div class="poem-stanza__card hidden">
       {% if current_user.is_admin %}
       <p class="stanza-action__links">
         <a href="/poems/{{poem.id}}/stanzas/{{stanza.id}}/delete">Delete</a>
@@ -41,7 +41,15 @@
         {% endif %}
       </p>
     </div>
-    {% endfor %} {% endif %} {% if current_user.is_admin %}
+    {% endfor %} {% endif %}
+    <div class="slider-btns">
+      <button id="slide-backward__btn">&lAarr;</button>
+      <p class="what-stanza__number">
+        <span id="what-number">1</span>/{{poem.stanzas.all()|length}}
+      </p>
+      <button id="slide-forward__btn">&rAarr;</button>
+    </div>
+    {% if current_user.is_admin %}
     <hr width="100%" />
     <a href="/poems/{{poem.id}}/add_stanza" class="add-stanza"
       >Add New Stanza</a
@@ -98,4 +106,5 @@
 {% endif %}
 <script src="{{ url_for('static', filename='js/confirm_delete.js') }}"></script>
 <script src="{{url_for('static', filename='js/toggle_more_actions.js')}}"></script>
+<script src="{{ url_for('static', filename='js/stanzas_slider.js') }}"></script>
 {% endblock main_content %}

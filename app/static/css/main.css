@@ -453,9 +453,8 @@ body {
   flex-direction: column;
   gap: 0.3rem;
   border-radius: 10px;
-  max-width: 95%;
   position: relative;
-  margin: auto;
+  margin: 1rem;
   margin-bottom: 1rem;
 }
 
@@ -480,11 +479,36 @@ body {
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
   width: 100%;
-  overflow-y: auto;
   white-space: pre-line;
   word-spacing: -0.4rem;
   font-size: calc(1rem + 0.8vmin);
-  max-height: 400px;
+}
+
+.poem-stanzas__container .slider-btns {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
+.slider-btns button {
+  font-size: 1.5rem;
+  color: #eee;
+  background-color: #911515;
+  border: none;
+  padding: .3rem .6rem;
+  cursor: pointer;
+  box-shadow: 2px 2px 2px 2px #666356; 
+}
+
+.slider-btns .what-stanza__number {
+  color: #eee;
+  font-family: 'Space Mono', monospace;
+}
+
+.what-stanza__number #what-number {
+  font-weight: 700;
 }
 
 .poem-stanza__card .stanza-metadata {
