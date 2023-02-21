@@ -454,7 +454,7 @@ body {
   gap: 0.3rem;
   border-radius: 10px;
   position: relative;
-  margin: 1rem;
+  width: 100%;
   margin-bottom: 1rem;
 }
 
@@ -464,11 +464,11 @@ body {
   background-color: #911515;
   color: #eee;
   align-self: flex-start;
-  padding: 0.4rem 1.2rem 0.4rem 1rem;
+  padding: 0.5rem 1.2rem 0.5rem 1rem;
   border-radius: 50%;
   position: absolute;
-  top: -15px;
-  left: -15px;
+  top: -10px;
+  left: -10px;
 }
 
 .poem-stanza__card .stanza-content {
@@ -478,7 +478,6 @@ body {
   border-top: 5px solid rgb(241, 184, 163);
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
-  width: 100%;
   white-space: pre-line;
   word-spacing: -0.4rem;
   font-size: calc(1rem + 0.8vmin);
