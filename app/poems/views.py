@@ -102,11 +102,8 @@ def poem(poem_id):
     context = {
         'poem': Poem.query.get_or_404(poem_id,
                                       'Poem with such id not found.'),
+        'stanzas': context['poem'].stanzas.order_by(Stanza.index).all()
     }
-
-    # Get poem stanzas order by stanza index
-    context['stanzas'] = (Stanza.query.filter_by(poem_id=poem_id)
-                          .order_by(Stanza.index).all())
 
     if not context['poem'].published:
         if current_user.is_anonymous or not current_user.is_admin:
