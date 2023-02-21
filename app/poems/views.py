@@ -153,7 +153,7 @@ def edit_poem(poem_id):
 
 
 @poems.get('/poems/<string:poem_id>/delete')
-@login_required
+@is_admin
 def delete_poem(poem_id):
     """Delete a poem and all the associated stanzas."""
     poem = Poem.query.get_or_404(poem_id, 'Poem with such id not found.')

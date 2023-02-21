@@ -9,4 +9,4 @@ def page_not_found(e):
 @current_app.errorhandler(500)
 def internal_server_error(e):
     err_desc = e.description
-    return render_template('errors/500,html', err_desc=err_desc), 500
+    return render_template('errors/500.html', err_desc=err_desc), 500
