@@ -90,11 +90,11 @@ class Poem(db.Model):
     __tablename__ = 'poems'
 
     id = db.Column(db.String(255), primary_key=True, default=generate_id)
-    author_id = db.Column(db.String, db.ForeignKey('admins.id',
+    author_id = db.Column(db.String(255), db.ForeignKey('admins.id',
                                                    ondelete='SET NULL'), nullable=True)
     title = db.Column(db.String(255), nullable=False, unique=True)
     description = db.Column(db.Text, unique=True)
-    category_id = db.Column(db.String, db.ForeignKey('categories.id',
+    category_id = db.Column(db.String(255), db.ForeignKey('categories.id',
     ondelete='SET NULL'), nullable=True)
     rating = db.Column(db.Float, default=0.0)
     premium = db.Column(db.Boolean, default=False)
@@ -141,8 +141,8 @@ class Comment(db.Model):
     __tablename__ = 'comments'
 
     id = db.Column(db.String(255), primary_key=True, default=generate_id)
-    user_id = db.Column(db.String, db.ForeignKey('users.id', ondelete='CASCADE'))
-    poem_id = db.Column(db.String, db.ForeignKey('poems.id', ondelete='CASCADE'))
+    user_id = db.Column(db.String(255), db.ForeignKey('users.id', ondelete='CASCADE'))
+    poem_id = db.Column(db.String(255), db.ForeignKey('poems.id', ondelete='CASCADE'))
     comment = db.Column(db.String(1000), default='I love this!')
     approved = db.Column(db.Boolean, default=False)
     last_edit = db.Column(db.DateTime, server_default=func.now(),
