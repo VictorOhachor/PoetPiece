@@ -8,7 +8,7 @@ from .forms import AddCategoryForm
 from .forms import StanzaForm
 from .forms import CreateCommentForm
 from ..models import Admin, Poem, Category, Stanza, Comment
-from ..utils import is_admin, get_category_choices
+from ..utils import is_admin, get_category_choices, get_category_id
 
 
 @poems.get('/poems')
@@ -149,6 +149,7 @@ def edit_poem(poem_id):
     if form.validate_on_submit():
         # update poem
         form.populate_obj(poem)
+        poem.category_id = get_category_id(Category, form.category.data)
         # persist to database
         db.session.add(poem)
         db.session.commit()

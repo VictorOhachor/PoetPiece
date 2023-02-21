@@ -12,7 +12,8 @@ class CreatePoemForm(FlaskForm):
     title = StringField('New Poem Title',
                         validators=[DataRequired(), Length(1, 255)])
     description = TextAreaField('Describe the New Poem',
-                                validators=[Length(0, 600), ])
+                                validators=[Length(0, 600), ],
+                                render_kw={'rows': '10'})
     category = SelectField('Select Poem Category',
                            coerce=str, validators=[DataRequired()])
     is_premium = BooleanField('Is this a premium poem?')
@@ -25,7 +26,7 @@ class StanzaForm(FlaskForm):
     index = IntegerField('Enter New Stanza Number (relative to the poem)',
                          validators=[DataRequired(), NumberRange(1, 20)], default=1)
     content = TextAreaField('Enter the Stanza Content', validators=[
-        DataRequired(), Length(1, 3000)])
+        DataRequired(), Length(1, 3000)], render_kw={'rows': '20'})
     submit = SubmitField('Add/Update Stanza')
 
 
@@ -37,7 +38,7 @@ class AddCategoryForm(FlaskForm):
                                    Regexp('^[A-Za-z][A-Za-z0-9_]*$', 0,
                                           'Category name must have only letters, numbers, or underscores')])
     description = TextAreaField('Describe Briefly the New Category', validators=[
-        DataRequired(), Length(1, 1000)])
+        DataRequired(), Length(1, 1000)], render_kw={'rows': '5'})
     submit = SubmitField('Add Category')
 
 
