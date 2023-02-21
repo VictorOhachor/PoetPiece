@@ -133,7 +133,7 @@ def poem(poem_id):
 @is_admin
 def edit_poem(poem_id):
     """Edit poem (with given id) title and description."""
-    poem = Poem.query.get(poem_id, 'Poem with such id was not found.')
+    poem = Poem.query.get_or_404(poem_id, 'Poem with such id was not found.')
     # initialize form
     form = CreatePoemForm(obj=poem)
     # add choices to category field dynamically
@@ -161,7 +161,7 @@ def delete_poem(poem_id):
     db.session.commit()
 
     flash('Deletion successfully; what a courage!', 'info')
-    return redirect(url_for('show_poems'))
+    return redirect(url_for('.index'))
 
 
 @poems.route('/poems/<string:poem_id>/add_stanza', methods=['GET', 'POST'])
