@@ -1,42 +1,44 @@
-{% extends "base.html" %}
-{% import "_macros.html" as macros %}
- {% block title %} Poems {% endblock title %} {% block
-main_content %} {% if current_user.is_admin %}
+{% extends "base.html" %} {% import "_macros.html" as macros %} {% block title
+%} Poems {% endblock title %} {% block main_content %} {% if
+current_user.is_admin %}
 <div class="create-poem-container">
   <a href="/poems/new">Create Poem</a>
 </div>
 {% endif %}
 <h1 class="main-content__title">The Poems</h1>
 <p class="all-categories__name">
-    <a href="/poems" class="category-name">All</a>
-    {% for category_name in all_category_names %}
-        <a href="/poems?category={{category_name}}" class="category-name">
-        {{ category_name|capitalize }}
-        </a>
-    {% endfor %}
+  <a href="/poems" class="category-name">All</a>
+  {% for category_name in all_category_names %}
+  <a href="/poems?category={{category_name}}" class="category-name">
+    {{ category_name|capitalize }}
+  </a>
+  {% endfor %}
 </p>
 <div class="poems-container">
-    {% if not poems %}
-        <p class="no-poem">Empty List</p>
-    {% endif %}
-    {% for poem in poems %}
-        <a href="/poems/{{poem.id}}">
-            <div class="poem-card">
-                <h4 class="poem-title">{{poem.title}}</h4>
-                <p class="poem-desc">
-                    {{poem.description[:60]|trim}}{{'...' if poem.description|length > 60 else ''}}
-                </p>
-                <p class="poem-metadata">
-                    <span class="poem-creation__date">{{poem.crafted_on.date()}}</span>
-                    <span class="poem-rating">{{poem.rating}}</span>
-                    <span class="poem-category">{{poem.categories.name}}</span>
-                </p>
-                <p class="poem-premium {{'is-premium' if poem.premium else 'not-premium'}}">
-                    {{'Premium' if poem.premium else 'Free'}}
-                </p>
-            </div>
-        </a>
-    {% endfor %}
+  {% if not poems %}
+  <p class="no-poem">Empty List</p>
+  {% endif %} {% for poem in poems %}
+  <a href="/poems/{{poem.id}}">
+    <div class="poem-card">
+      <h4 class="poem-title">{{poem.title}}</h4>
+      <p class="poem-desc">
+        {% if poem.description %} {{poem.description[:60]|trim}}{{'...' if
+        poem.description|length > 60 else ''}} {% else %} No Poem Description.
+        {%endif%}
+      </p>
+      <p class="poem-metadata">
+        <span class="poem-creation__date">{{poem.crafted_on.date()}}</span>
+        <span class="poem-rating">{{poem.rating}}</span>
+        <span class="poem-category">{{poem.categories.name}}</span>
+      </p>
+      <p
+        class="poem-premium {{'is-premium' if poem.premium else 'not-premium'}}"
+      >
+        {{'Premium' if poem.premium else 'Free'}}
+      </p>
+    </div>
+  </a>
+  {% endfor %}
 </div>
 {{ macros.pagination_widget(pagination, 'poems.index') }}
 <script src="{{url_for('static', filename='js/active_category.js')}}"></script>
