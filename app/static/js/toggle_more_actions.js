@@ -8,27 +8,76 @@ moreActionToggler.addEventListener('click', (e) => {
     moreActionsBox.classList.toggle('hidden')
 })
 
-const generatePDF = () => {
-    const poemTitle = document.querySelector('.main-content__title')
-    const poemDesc = document.querySelector('.poem-desc')
-    const poemStanzas = document.querySelector('.poem-stanzas')
+const css = (element, style) => {
+    for (const property in style) {
+        element.style[property] = style[property];
+    }
+}
 
+const generatePDF = () => {
     // create a new div element
     const poemPage = document.createElement('div')
 
-    // append the title, desc, and stanzas to div
-    poemPage.appendChild(poemTitle.cloneNode(deep=true))
-    poemPage.appendChild(poemDesc.cloneNode(deep=true))
-    poemPage.appendChild(poemStanzas.cloneNode(deep=true))
+    const poemTitle = document.querySelector('.main-content__title')
+    const poemDesc = document.querySelector('.poem-desc__content')
+    const poemStanzas = document.querySelectorAll('.poem-stanzas__container .poem-stanza__card')
+    const appLogo = document.querySelector('.app-logo')
+
+    // append the title, desc, to div
+    const clonedLogo = appLogo.cloneNode(deep=true)
+    css(clonedLogo, {
+        color: '#222',
+        fontFamily: '"Monoton", cursive',
+        fontSize: 'calc(1.5rem + 1.5vmin)',
+        padding: '1rem',
+        fontWeight: 700
+    })
+    poemPage.appendChild(clonedLogo)
+    poemPage.appendChild(poemTitle.cloneNode(deep = true))
+    poemPage.appendChild(poemDesc.cloneNode(deep = true))
+    poemPage.appendChild(document.createElement('hr'))
+
+    // extract the stanza content from poemStanzas
+    const stanzaContainer = document.createElement('div')
+    const stanzaContainerStyle = {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1rem',
+        margin: '1rem .3rem',
+        fontSize: '1.5rem',
+        color: '#222',
+        margin: 'auto',
+        maxWidth: '700px'
+    }
+
+    css(stanzaContainer, stanzaContainerStyle)
+
+    for (const stanza of poemStanzas) {
+        const clonedStanza = stanza.cloneNode(deep=true)
+
+        if (clonedStanza.classList.contains('hidden')) {
+            clonedStanza.classList.remove('hidden')
+        }
+        const stanzaContent = clonedStanza.querySelector('.stanza-content')
+        // set stanza content style
+        css(stanzaContent, {
+            whiteSpace: 'pre-line',
+            border: '1px solid #bbb',
+            padding: '.5rem 1rem',
+        })
+        // append to stanza container
+        stanzaContainer.appendChild(stanzaContent)
+    }
+
+    poemPage.appendChild(stanzaContainer)
 
     const opt = {
         filename: poemTitle.textContent + '.pdf',
-        html2canvas: {scale: 1}
     }
     // toggle the toggler
     moreActionToggler.click()
     // save to pdf and download
-    html2pdf().set(opt).from(poemPage).toPdf().save()
+    html2pdf().set(opt).from(poemPage).save()
 }
 
 const copyPoemLink = (e) => {
@@ -42,8 +91,9 @@ const copyPoemLink = (e) => {
     e.currentTarget.textContent = 'Copied!'
     // return button text to former
     setTimeout(() => {
-        console.log(btnText)
         btn.innerText = btnText
+        // toggle the toggler
+        moreActionToggler.click()
     }, 2000)
 }
 
