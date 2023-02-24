@@ -1,0 +1,15 @@
+{% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% block
+title %}Update My Profile{% endblock title %} {% block main_content %} {% if not
+current_user.is_admin %}
+<div class="create-admin__box">
+  <a href="{{url_for('main.create_admin')}}" class="create-admin__btn"
+    >Become a Poet</a
+  >
+</div>
+{% endif %}
+<h1 class="main-content__title">Update My Profile</h1>
+<div class="profile-form__container">{{ wtf.quick_form(profile_form) }}</div>
+<hr />
+<h2 class="update-password__title">Update Password</h2>
+<div class="password-form__container">{{ wtf.quick_form(password_form) }}</div>
+{% endblock main_content %}

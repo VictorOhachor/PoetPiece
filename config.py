@@ -8,6 +8,7 @@ class Config:
 
     SECRET_KEY = os.environ.get('SECRET_KEY')
     FLASK_POEMS_PER_PAGE = 6
+    NUMBER_OF_ADMINS_ALLOWED = int(os.environ.get('NUMBER_OF_ADMINS_ALLOWED')) or 1
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     @staticmethod

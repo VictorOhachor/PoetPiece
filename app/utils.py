@@ -15,8 +15,8 @@ def is_admin(func):
             flash('You are not authorized to access this page.', 'error')
             # redirect to different urls based on referrer
             if not kwargs:
-                return redirect(url_for('show_poems'))
-            return redirect(url_for('show_poem', **kwargs))
+                return redirect(url_for('poems.index'))
+            return redirect(url_for('poems.poem', **kwargs))
         return func(**kwargs)
 
     return wrapper

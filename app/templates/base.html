@@ -37,18 +37,18 @@
     </p>
     {% endfor %}
     <header class="app-header">
-      <h3 class="app-logo">Poetic<span class="redden">Man</span></h3>
-      <nav class="app-navbar">
-        <a
-          href="/{{ 'poems' if current_user.is_authenticated else '' }}"
-          class="app-nav__item"
+      <h3 class="app-logo">
+        <a href="/{{ 'poems' if current_user.is_authenticated else '' }}"
+          >Poetic<span class="redden">Man</span></a
         >
-          {{ 'Poems' if current_user.is_authenticated else 'Home' }}
-        </a>
+      </h3>
+      <nav class="app-navbar">
+        {% if not current_user.is_authenticated %}
+        <a href="{{url_for('main.signup')}}" class="app-nav__item">Sign Up</a>
+        {% endif %}
         <a href="/{{ 'logout' if current_user.is_authenticated else 'login' }}">
           {{ 'Logout' if current_user.is_authenticated else 'Login' }}
         </a>
-        {% block customNavItem %} {% endblock customNavItem %}
       </nav>
     </header>
     <main class="app-main__content">
@@ -61,6 +61,8 @@
       </p>
       <hr class="black-liner" />
       {% block main_content %} {% endblock main_content %}
+    {% include "shared/navigation.html" %}
     </main>
+    <script src="{{url_for('static', filename='js/active_navigation.js')}}"></script>
   </body>
 </html>

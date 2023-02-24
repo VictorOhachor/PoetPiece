@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Monoton&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,300;1,400;1,600;1,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Monoton&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,300;1,400;1,600;1,700&family=PT+Sans+Narrow:wght@400;700&display=swap");
 
 * {
   box-sizing: border-box;
@@ -11,6 +11,19 @@ body {
   color: #000;
   position: relative;
   min-height: 100vh;
+  margin-bottom: 3rem;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+hr {
+  width: 100%;
+  height: 2px;
+  background-color: #bbb;
+  margin: 1rem 0;
 }
 
 .help-block {
@@ -46,7 +59,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  gap: 2.5rem;
+  gap: 1rem;
   flex-wrap: wrap;
   background-color: #eee;
 }
@@ -60,7 +73,7 @@ body {
 }
 
 .redden {
-  color: rgb(145, 21, 21);
+  color: rgb(145, 21, 21) !important;
   font-weight: bolder;
 }
 
@@ -73,14 +86,17 @@ body {
 }
 
 .app-navbar a {
-  color: rgb(145, 21, 21);
+  color: #eee;
+  background-color: rgb(145, 21, 21);
+  box-shadow: 6px 6px 1px 1px #222;
+  padding: .1rem .5rem .2rem;
+  border-radius: 5px;
   transition: all 200ms ease-in-out;
 }
 
 .app-navbar a:hover {
-  color: #222;
-  font-weight: 600;
-  text-decoration: underline dashed 2px rgb(145, 21, 21);
+  background-color: #222;
+  box-shadow: 6px 6px 2px 1px #bbb;
   transition: all 200ms ease-in-out;
 }
 
@@ -106,7 +122,8 @@ body {
 
 .app-main__content .main-content__title {
   text-align: center;
-  font-size: calc(2rem + 1vmin);
+  font-size: calc(1.5rem + 1vmin);
+  margin-bottom: .8rem;
 }
 
 .all-categories__name {
@@ -183,6 +200,17 @@ body {
   font-size: 1.5rem;
   line-height: 2.2rem;
   padding: 2rem 0;
+}
+
+.app-about .join-me {
+  width: max-content;
+  padding: .5rem 1rem;
+  align-self: center;
+  background-color: #222;
+  color: #eee;
+  text-align: center;
+  margin: 1rem 0 0;
+  border-radius: 10px;
 }
 
 .app-about .heading {
@@ -846,4 +874,103 @@ body {
 .poem-progress {
   color: #000;
   background-color: rgb(241, 184, 163);
+}
+
+.app-navigation__container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  background-color: #eee;
+  overflow: auto hidden;
+}
+
+.app-navigation__container .app-nav-items {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: auto;
+  max-width: 900px;
+  font-family: 'PT Sans Narrow', sans-serif;
+  overflow: auto hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.app-navigation__container
+.app-nav-items::-webkit-scrollbar{
+  display: none;
+}
+
+.app-nav-items .nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .2rem;
+  font-weight: 700;
+  width: max-content;
+  font-size: calc(.5rem + 1vmin);
+  flex-grow: 1;
+  padding: .6rem;
+  text-align: center;
+}
+
+.app-nav-items .nav-item > i {
+  font-size: calc(1rem + 1vmin);
+}
+
+.app-nav-items .nav-item__active {
+  border-top: 3px solid #911515;
+  color: #911515;
+}
+
+.app-nav-items .nav-item__active-parent {
+  display: flex;
+  align-items: center;
+}
+
+.nav-item__active-parent::before,
+.nav-item__active-parent::after {
+  color: #911515;
+  font-family: 'Space Mono', monospace;
+  font-size: 1.1rem;
+  font-weight: bolder;
+}
+
+.nav-item__active-parent::before {
+  content: '[';
+}
+
+.nav-item__active-parent::after {
+  content: ']';
+}
+
+.update-password__title {
+  font-size: 1.8rem;
+  text-align: center;
+  color: #911515;
+  padding: .1rem 0 .5rem;
+}
+
+.profile-form__container input[type='submit'] {
+  background-color: #222;
+}
+
+.profile-form__container input[type='submit'],
+.password-form__container input[type='submit'] {
+  border: none;
+  
+}
+
+.create-admin__box {
+  display: flex;
+  margin: .5rem 0 1rem;
+  justify-content: flex-end;
+}
+
+.create-admin__btn {
+  background-color: #000;
+  color: #eee;
+  padding: .5rem 1rem;
 }

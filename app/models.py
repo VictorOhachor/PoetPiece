@@ -1,4 +1,5 @@
 from . import db, login_manager
+from flask import current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from sqlalchemy.sql import func
@@ -49,6 +50,7 @@ class Admin(db.Model):
     user_id = db.Column(db.String(255), db.ForeignKey('users.id'), unique=True)
     email = db.Column(db.String(255), unique=True, index=True)
     gender = db.Column(db.String(10), nullable=False)
+    verified = db.Column(db.Boolean, default=False)
 
     # foreign keys
     poems = db.relationship('Poem', backref='admin', lazy='dynamic')
@@ -58,11 +60,11 @@ class Admin(db.Model):
         return f'<{type(self).__name__}: User {self.user_id} ({self.gender})>'
 
     @staticmethod
-    def reached_admin_count(limit=1):
+    def reached_admin_count():
         """Limit the number of admins that can be registered."""
         admins = Admin.query.all()
 
-        if len(admins) == limit:
+        if len(admins) == current_app.config['NUMBER_OF_ADMINS_ALLOWED']:
             return True
         return False
 

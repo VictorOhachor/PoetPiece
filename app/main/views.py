@@ -2,7 +2,8 @@ from flask import render_template, redirect, request, flash, url_for
 from flask_login import login_required, login_user, logout_user, current_user
 from . import main
 from .. import db
-from .forms import LoginForm, SignupForm
+from .forms import (LoginForm, SignupForm, AdminSignupForm,
+                    UpdatePasswordForm, EditProfileForm)
 from ..models import User, Admin
 
 
@@ -48,49 +49,102 @@ def logout():
 def signup():
     """Implement Sign up View."""
     form = SignupForm()
-    records = []  # contains the User (and perhaps Admin) instance(s)
 
-    try:
-        if form.validate_on_submit():
-            is_admin = form.is_admin.data
-
-            user = User(username=form.username.data,
-                        password=form.password.data,
-                        birth_date=form.birth_date.data)
-            records.append(user)
-
-            if is_admin:
-                # retrieve email and gender date
-                email = form.email.data
-                gender = form.gender.data
-
-                if Admin.reached_admin_count():
-                    flash(
-                        'Restricted: The number of registered admins has reached limit.',
-                        'error')
-                    return redirect(url_for('.signup'))
-
-                if not (email and gender):
-                    flash('Email and gender are required for an admin account.', 'error')
-                    return redirect(url_for('.signup'))
-
-                records.append(
-                    Admin(
-                        email=email,
-                        gender=gender,
-                        users=user
-                    ))
-                user.is_admin = True
-
-            # persist to database
-            db.session.add_all(records)
-            db.session.commit()
-
-            # redirect to login page
-            flash('You can now login.')
-            return redirect(url_for('.login'))
-    except Exception as e:
-        flash(str(e), 'error')
-        return redirect(url_for('.signup'))
+    if form.validate_on_submit():
+        user = User(username=form.username.data,
+                    password=form.password.data,
+                    birth_date=form.birth_date.data)
+        # persist to database
+        db.session.add(user)
+        db.session.commit()
+        # redirect to login page
+        flash('You can now login.')
+        return redirect(url_for('.login'))
 
     return render_template('main/signup.html', form=form)
+
+
+@main.route('/create-admin', methods=['GET', 'POST'])
+@login_required
+def create_admin():
+    """Create an admin account for a registered user."""
+    form = AdminSignupForm()
+
+    if Admin.reached_admin_count():
+        flash('Number of registered admins has reached maximum.', 'error')
+        return redirect(url_for('.me'))
+
+    if form.validate_on_submit():
+        admin = Admin(
+            email=form.email.data,
+            gender=form.gender.data,
+            user_id=current_user.id
+        )
+        # Add to session
+        db.session.add(admin)
+        User.query.filter_by(id=current_user.id) \
+            .update({'is_admin': True})
+        # persist to database
+        db.session.commit()
+
+        # redirect to verification page
+        flash('Check your email to verify your account.')
+        return redirect(url_for('main.verify_admin', admin_id=admin.id))
+
+    return render_template('main/create_admin.html', form=form)
+
+
+@main.route('/verify-admin/<string:admin_id>', methods=['GET', 'POST'])
+@login_required
+def verify_admin(admin_id):
+    """Verify an admin account by sending verification mail to given address."""
+    # update user is_admin field
+    # db.session.query(User).filter_by(id=current_user.id) \
+    #     .update({'is_admin': True})
+    pass
+
+
+@main.get('/features-updates')
+@login_required
+def new_updates():
+    """Get all feature/app updates."""
+    pass
+
+
+@main.route('/me', methods=['GET', 'POST'])
+@login_required
+def me():
+    """Display and update user/admin information."""
+    context = {
+        'user': User.query.join(Admin, User.id == Admin.user_id, isouter=True)
+        .filter(User.id == current_user.id).first(),
+        'password_form': UpdatePasswordForm(prefix='password_form')
+    }
+    context['profile_form'] = EditProfileForm(
+        obj=context['user'], prefix='profile_form')
+
+    if context['password_form'].validate_on_submit():
+        context['password_form'].populate_obj(context['user'])
+        # persist to db
+        db.session.add(context['user'])
+        db.session.commit()
+        # send flash message
+        flash('Successfully updated your password.')
+        return redirect(url_for('.me'))
+
+    if context['profile_form'].validate_on_submit():
+        context['profile_form'].populate_obj(context['user'])
+        # persist to db
+        db.session.add(context['user'])
+        db.session.commit()
+        # send flash message
+        flash('Your information has been updated successfully.')
+        return redirect(url_for('.me'))
+
+    return render_template('main/me.html', **context)
+
+
+@main.route('/search', methods=['GET', 'POST'])
+@login_required
+def search():
+    """Search for poems or notifications."""
