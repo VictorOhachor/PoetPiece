@@ -18,7 +18,6 @@ def is_admin(func):
                 return redirect(url_for('poems.index'))
             return redirect(url_for('poems.poem', **kwargs))
         return func(**kwargs)
-
     return wrapper
 
 
@@ -33,6 +32,7 @@ def get_category_choices(c, db):
     return [(category[0], category[0].upper())
             for category in db.session.query(
         c.name).all()]
+
 
 def get_category_id(c, name):
     """Get category id from categories by name."""

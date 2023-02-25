@@ -1,10 +1,11 @@
-from flask import render_template, redirect, request, flash, url_for
+from flask import render_template, redirect, request, flash, url_for, current_app
 from flask_login import login_required, login_user, logout_user, current_user
 from . import main
 from .. import db
 from .forms import (LoginForm, SignupForm, AdminSignupForm,
                     UpdatePasswordForm, EditProfileForm)
 from ..models import User, Admin
+from ..email import send_email
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -57,6 +58,9 @@ def signup():
         # persist to database
         db.session.add(user)
         db.session.commit()
+        # send an email notification to app admin
+        send_email(current_app.config['POETICMAN_ADMIN'],
+                   'New User', 'mail/new_user', user=user)
         # redirect to login page
         flash('You can now login.')
         return redirect(url_for('.login'))
@@ -82,31 +86,33 @@ def create_admin():
         )
         # Add to session
         db.session.add(admin)
-        User.query.filter_by(id=current_user.id) \
-            .update({'is_admin': True})
         # persist to database
         db.session.commit()
 
-        # redirect to verification page
-        flash('Check your email to verify your account.')
-        return redirect(url_for('main.verify_admin', admin_id=admin.id))
+        token = admin.generate_verification_token()
+        send_email(admin.email, 'Verify your poet account',
+                   'mail/verify_admin', token=token, admin=admin)
+        return redirect(url_for('poems.index'))
 
     return render_template('main/create_admin.html', form=form)
 
 
-@main.route('/verify-admin/<string:admin_id>', methods=['GET', 'POST'])
+@main.route('/verify-admin/<token>', methods=['GET', 'POST'])
 @login_required
-def verify_admin(admin_id):
+def verify_admin(token):
     """Verify an admin account by sending verification mail to given address."""
-    # update user is_admin field
-    # db.session.query(User).filter_by(id=current_user.id) \
-    #     .update({'is_admin': True})
-    pass
+    admin = Admin.query.filter_by(user_id=current_user.id).first()
+
+    if admin.verify_account(token):
+        db.session.commit()
+    else:
+        flash('The confirmation link is invalid or has expired.')
+    return redirect(url_for('main.me'))
 
 
-@main.get('/features-updates')
+@main.get('/notifications')
 @login_required
-def new_updates():
+def notifications():
     """Get all feature/app updates."""
     pass
 
@@ -148,3 +154,5 @@ def me():
 @login_required
 def search():
     """Search for poems or notifications."""
+    pass
+

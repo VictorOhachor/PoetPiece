@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PoeticMan | A New User Has Signed Up</title>
+  </head>
+  <body>
+    <h2>Dear Admin,</h2>
+    <h3>A new user has signed up to PoeticMan!</h3>
+    <p>User's Details</p>
+    <ul>
+        <li><strong>Username:</strong> {{ user.username }}</li>
+        <li><strong>Date of Birth:</strong> {{ user.birth_date }}</li>
+    </ul>
+    <p>Sincerely,</p>
+    <p><strong>The PoeticMan Team</strong></p>
+
+    <p><em>Note: replies to this email address are not monitored.</em></p>
+  </body>
+</html>

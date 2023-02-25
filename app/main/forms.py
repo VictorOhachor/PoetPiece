@@ -51,7 +51,7 @@ class SignupForm(FlaskForm):
 
 
 class AdminSignupForm(FlaskForm):
-    """Represent the signup form for admins."""
+    """Represent the form for users to become a poet."""
 
     email = StringField('Register Your Email with Us',
                         validators=[DataRequired(), Length(1, 255), Email()])
@@ -62,10 +62,10 @@ class AdminSignupForm(FlaskForm):
                              DataRequired(), AnyOf(
                                  ['female', 'male', 'others'])
                          ])
-    password = PasswordField('Enter a New Password', validators=[
-        DataRequired(), Length(8, 128, 'Number of characters must be between 8 and 128'),
+    password = PasswordField('Enter Your Password to Confirm your Identity', validators=[
+        DataRequired(),
     ])
-    submit = SubmitField('Sign Up')
+    submit = SubmitField('Create Poet Account')
 
     def validate_email(self, field):
         """Ensure the email passed does not already exists."""

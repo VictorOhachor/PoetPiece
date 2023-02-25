@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PoeticMan | Verify your email</title>
+  </head>
+  <body>
+    <h2>
+      Dear {% if admin['gender'] == 'male' %}Sir{% elif admin['gender'] == 'female'
+      %}Ma{% else %}User{% endif %},
+    </h2>
+    <h3>Welcome to PoeticMan once again!</h3>
+    <p>To confirm your account please click on the following link:</p>
+    <a href="{{ url_for('main.verify_admin', token=token, _external=True) }}">
+      Verify your account
+    </a>
+
+    <p>Sincerely,</p>
+    <p><strong>The PoeticMan Team</strong></p>
+
+    <p><em>Note: replies to this email address are not monitored.</em></p>
+  </body>
+</html>

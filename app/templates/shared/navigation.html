@@ -1,39 +1,26 @@
+{% if current_user.is_authenticated %}
 <div class="app-navigation__container">
   <div class="app-nav-items">
-    <a
-      href="{{url_for('poems.index')}}"
-      class="nav-item"
-    >
+    <a href="{{url_for('poems.index')}}" class="nav-item">
       <i class="fa-solid fa-igloo"></i>
       <span>Poems</span>
     </a>
-    <a
-      href="{{url_for('main.search')}}"
-      class="nav-item"
-    >
+    <a href="{{url_for('main.search')}}" class="nav-item">
       <i class="fa-brands fa-searchengin"></i>
       <span>Search</span>
     </a>
-    <a
-      href="{{url_for('poems.create_poem')}}"
-      class="nav-item"
-    >
+    <a href="{{url_for('poems.create_poem')}}" class="nav-item">
       <i class="fa-solid fa-file-circle-plus"></i>
       <span>Compose</span>
     </a>
-    <a
-      href="{{url_for('main.new_updates')}}"
-      class="nav-item"
-    >
+    <a href="{{url_for('main.notifications')}}" class="nav-item">
       <i class="fa-solid fa-bell"></i>
       <span>Notifications</span>
     </a>
-    <a
-      href="{{url_for('main.me')}}"
-      class="nav-item"
-    >
+    <a href="{{url_for('main.me')}}" class="nav-item">
       <i class="fa-solid fa-user"></i>
       <span>Me</span>
     </a>
   </div>
 </div>
+{% endif %}

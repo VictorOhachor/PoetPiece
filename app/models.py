@@ -1,10 +1,11 @@
 from . import db, login_manager
-from flask import current_app
+from flask import current_app, flash
+import json
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from sqlalchemy.sql import func
-
 from .utils import generate_id
+from itsdangerous import URLSafeTimedSerializer as Serializer
 
 
 class User(UserMixin, db.Model):
@@ -62,11 +63,46 @@ class Admin(db.Model):
     @staticmethod
     def reached_admin_count():
         """Limit the number of admins that can be registered."""
-        admins = Admin.query.all()
+        admins = Admin.query.filter_by(verified=True).all()
 
         if len(admins) == current_app.config['NUMBER_OF_ADMINS_ALLOWED']:
             return True
         return False
+
+    def generate_verification_token(self):
+        """Generate verification token to verify admins."""
+        serializer = Serializer(
+            secret_key=current_app.config['SECRET_KEY'])
+        return serializer.dumps({
+            'email': self.email,
+            'id': self.id
+        }, salt=current_app.config['SECURITY_PASSWORD_SALT'])
+
+    def verify_account(self, token, expiration=3600):
+        """Verify admin account."""
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(
+                token,
+                salt=current_app.config['SECURITY_PASSWORD_SALT'],
+                max_age=expiration)
+        except:
+            return False
+
+        if data.email != self.email or data.id != self.id:
+            return False
+
+        if self.verified:
+            flash('Account already verified!')
+        else:
+            # update user is_admin field
+            db.session.query(User).filter_by(id=self.user_id) \
+                .update({'is_admin': True})
+            self.verified = True
+            # send flash message
+            flash('You have verified your account. Thanks!')
+        db.session.add(self)
+        return True
 
 
 class Category(db.Model):
@@ -93,11 +129,11 @@ class Poem(db.Model):
 
     id = db.Column(db.String(255), primary_key=True, default=generate_id)
     author_id = db.Column(db.String(255), db.ForeignKey('admins.id',
-                                                   ondelete='SET NULL'), nullable=True)
+                                                        ondelete='SET NULL'), nullable=True)
     title = db.Column(db.String(255), nullable=False, unique=True)
     description = db.Column(db.Text, nullable=False)
     category_id = db.Column(db.String(255), db.ForeignKey('categories.id',
-    ondelete='SET NULL'), nullable=True)
+                                                          ondelete='SET NULL'), nullable=True)
     rating = db.Column(db.Float, default=0.0)
     premium = db.Column(db.Boolean, default=False)
     completed = db.Column(db.Boolean, default=False)
@@ -109,7 +145,7 @@ class Poem(db.Model):
     stanzas = db.relationship(
         'Stanza', backref='poems', lazy='dynamic', cascade='all,delete')
     comments = db.relationship('Comment', backref='poems', lazy='dynamic',
-    cascade='all,delete')
+                               cascade='all,delete')
 
     def __repr__(self):
         """Official string representation of a poem object."""
@@ -123,7 +159,8 @@ class Stanza(db.Model):
     __tablename__ = 'stanzas'
 
     id = db.Column(db.String(255), primary_key=True, default=generate_id)
-    poem_id = db.Column(db.String(255), db.ForeignKey('poems.id', ondelete='CASCADE'))
+    poem_id = db.Column(db.String(255), db.ForeignKey(
+        'poems.id', ondelete='CASCADE'))
     index = db.Column(db.Integer, nullable=False)
     content = db.Column(db.Text, nullable=False)
     added_on = db.Column(db.DateTime(timezone=True),
@@ -143,8 +180,10 @@ class Comment(db.Model):
     __tablename__ = 'comments'
 
     id = db.Column(db.String(255), primary_key=True, default=generate_id)
-    user_id = db.Column(db.String(255), db.ForeignKey('users.id', ondelete='CASCADE'))
-    poem_id = db.Column(db.String(255), db.ForeignKey('poems.id', ondelete='CASCADE'))
+    user_id = db.Column(db.String(255), db.ForeignKey(
+        'users.id', ondelete='CASCADE'))
+    poem_id = db.Column(db.String(255), db.ForeignKey(
+        'poems.id', ondelete='CASCADE'))
     comment = db.Column(db.String(1000), default='I love this!')
     approved = db.Column(db.Boolean, default=False)
     last_edit = db.Column(db.DateTime, server_default=func.now(),
@@ -164,8 +203,10 @@ class PoemRating(db.Model):
     __tablename__ = 'poem_ratings'
 
     id = db.Column(db.String(255), primary_key=True, default=generate_id)
-    user_id = db.Column(db.String(255), db.ForeignKey('users.id', ondelete='CASCADE'))
-    poem_id = db.Column(db.String(255), db.ForeignKey('poems.id', ondelete='CASCADE'))
+    user_id = db.Column(db.String(255), db.ForeignKey(
+        'users.id', ondelete='CASCADE'))
+    poem_id = db.Column(db.String(255), db.ForeignKey(
+        'poems.id', ondelete='CASCADE'))
     rating = db.Column(db.Float, default=0.0)
     rated_on = db.Column(db.DateTime, server_default=func.now())
 
