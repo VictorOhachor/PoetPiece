@@ -128,9 +128,10 @@ hr {
 
 .app-main__content .main-content__title {
   text-align: center;
-  font-size: calc(1rem + 1.5vmin);
+  font-size: calc(1.5rem + 1.5vmin);
   margin-bottom: .5rem;
-  color: rgb(145, 21, 21);
+  color: #000;
+  text-transform: capitalize;
 }
 
 .all-categories__name {
