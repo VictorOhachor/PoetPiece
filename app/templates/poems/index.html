@@ -5,7 +5,9 @@ current_user.is_admin %}
   <a href="/poems/new">Create Poem</a>
 </div>
 {% endif %}
-<h1 class="main-content__title">The Poems</h1>
+<h1 class="main-content__title">
+  The Poems <sup class="redden">{{ poems.length }}</span>
+</h1>
 <p class="all-categories__name">
   <a href="/poems" class="category-name">All</a>
   {% for category_name in all_category_names %}
@@ -31,9 +33,7 @@ current_user.is_admin %}
         <span class="poem-rating">{{poem.rating}}</span>
         <span class="poem-category">{{poem.categories.name}}</span>
       </p>
-      <p
-        class="poem-premium {{'is-premium' if poem.premium else 'not-premium'}}"
-      >
+      <p class="poem-premium {{'is-premium' if poem.premium else 'not-premium'}}">
         {{'Premium' if poem.premium else 'Free'}}
       </p>
     </div>
