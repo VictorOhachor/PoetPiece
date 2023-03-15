@@ -34,7 +34,7 @@ hr {
 
 .toast-card {
   padding: 0.2rem 1rem;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
 }
 
 .error-toast {
@@ -411,7 +411,7 @@ hr {
   font-size: calc(1.5rem + 0.6vmin);
   line-height: 2.5rem;
   display: flex;
-  margin: 2rem 0;
+  margin: 1rem 0;
   flex-wrap: wrap;
 }
 
