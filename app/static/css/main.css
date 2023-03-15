@@ -109,6 +109,7 @@ hr {
 
 .app-main__content .welcome-box {
   margin: 1.2rem 0 0;
+  position: relative;
 }
 
 .app-main__content .welcome-text {
@@ -127,8 +128,8 @@ hr {
 
 .app-main__content .main-content__title {
   text-align: center;
-  font-size: calc(1.5rem + 1vmin);
-  margin-bottom: .8rem;
+  font-size: calc(1.2rem + 1vmin);
+  margin-bottom: 1rem;
 }
 
 .all-categories__name {
@@ -809,8 +810,8 @@ hr {
 
 .more-actions__container {
   position: absolute;
-  top: 42px;
-  right: 8px;
+  bottom: 5px;
+  right: 0;
   color: #eee;
 }
 
