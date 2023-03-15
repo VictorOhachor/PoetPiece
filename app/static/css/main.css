@@ -34,7 +34,7 @@ hr {
 
 .toast-card {
   padding: 0.2rem 1rem;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 
 .error-toast {
@@ -107,9 +107,13 @@ hr {
   padding: 2rem 0.5rem;
 }
 
+.app-main__content .welcome-box {
+  margin: 1.2rem 0 0;
+}
+
 .app-main__content .welcome-text {
   font-size: 1.5rem;
-  padding: 0.3rem 0;
+  padding: .3rem 0 0;
 }
 
 .black-liner {
@@ -118,6 +122,7 @@ hr {
   background-color: black;
   border: none;
   border-radius: 50%;
+  margin: 0 0 1rem;
 }
 
 .app-main__content .main-content__title {
@@ -368,7 +373,7 @@ hr {
   font-weight: 700;
   align-items: center;
   margin: 0.5rem 0;
-  background-color: #000;
+  background-color: #222;
   padding: .2rem .8rem;
   border-radius: 20px;
 }
@@ -422,23 +427,22 @@ hr {
   align-items: center;
   flex-grow: 1;
   text-transform: uppercase;
-  color: #911515;
+  color: #222;
   padding: 0.5rem 1rem;
   font-size: calc(1.5rem + 1vmin);
-  background-color: #eee;
+  background-color: #bbb;
 }
 
 .app-main__content > .poem-desc .poem-desc__content,
 .app-main__content > .poem-stanzas .poem-stanzas__container {
   width: 60%;
   flex-grow: 1;
-  background-color: #000;
-  color: #fff;
+  background-color: #222;
+  color: #eee;
   padding: 0.5rem 1rem;
 }
 
 .app-main__content > .poem-desc .poem-desc__content {
-    overflow-y: auto;
     white-space: pre-line;
 }
 

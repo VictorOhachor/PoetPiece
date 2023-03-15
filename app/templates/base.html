@@ -53,14 +53,16 @@
       </nav>
     </header>
     <main class="app-main__content">
-      <p class="welcome-text">
-        Hello, {% if current_user.is_authenticated %}
-        <span class="redden">{{current_user.username|capitalize}}</span>
-        {% else %}
-        <span class="redden">Stranger</span>
-        {% endif %}
-      </p>
-      <hr class="black-liner" />
+      <div class="welcome-box">
+        <p class="welcome-text">
+          Hello, {% if current_user.is_authenticated %}
+          <span class="redden">{{current_user.username|capitalize}}</span>
+          {% else %}
+          <span class="redden">Stranger</span>
+          {% endif %}
+        </p>
+        <hr class="black-liner" />
+      </div>
       {% block main_content %} {% endblock main_content %} {% include
       "shared/navigation.html" %}
     </main>
