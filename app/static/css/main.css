@@ -123,15 +123,14 @@ hr {
   background-color: black;
   border: none;
   border-radius: 50%;
-  margin: 0 0 1rem;
+  margin: 0 0 1.5rem;
 }
 
 .app-main__content .main-content__title {
   text-align: center;
-  font-size: calc(1.2rem + 1vmin);
-  margin-bottom: 1rem;
-  color: #911515;
-  font-family: 'Space Mono', monospace;
+  font-size: calc(1rem + 1.5vmin);
+  margin-bottom: .5rem;
+  color: rgb(145, 21, 21);
 }
 
 .all-categories__name {
