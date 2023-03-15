@@ -1,9 +1,8 @@
 {% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% import
 "_macros.html" as macros %} {% block title %} {{poem.title}} {% endblock title
-%} {% block main_content %}
-{% block more_actions_widget %}
-  {{ macros.more_actions_widget(poem, current_user) }}
-{% endblock more_actions_widget %}
+%} {% block menu_toggler %}
+{{ macros.more_actions_widget(poem, current_user) }}
+{% endblock menu_toggler %} {% block main_content %}
 <h1 class="main-content__title">{{poem.title|upper}}</h1>
 <span
   class="poem-completion poem-{{ 'completed' if poem.completed else 'progress' }}"
