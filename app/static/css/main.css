@@ -499,11 +499,11 @@ hr {
   background-color: #911515;
   color: #eee;
   align-self: flex-start;
-  padding: 0.5rem 1.2rem 0.5rem 1rem;
+  padding: 0 1rem 0 .8rem;
   border-radius: 50%;
   position: absolute;
-  top: -10px;
-  left: -10px;
+  top: 0;
+  left: -12px;
 }
 
 .poem-stanza__card .stanza-content {
