@@ -59,8 +59,8 @@ def signup():
         db.session.add(user)
         db.session.commit()
         # send an email notification to app admin
-        send_email(current_app.config['POETICMAN_ADMIN'],
-                   'New User', 'mail/new_user', user=user)
+        # send_email(current_app.config['POETICMAN_ADMIN'],
+        #            'New User', 'mail/new_user', user=user)
         # redirect to login page
         flash('You can now login.')
         return redirect(url_for('.login'))
