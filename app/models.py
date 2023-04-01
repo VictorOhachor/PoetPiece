@@ -131,7 +131,7 @@ class Poem(db.Model):
     author_id = db.Column(db.String(255), db.ForeignKey('admins.id',
                                                         ondelete='SET NULL'), nullable=True)
     title = db.Column(db.String(255), nullable=False, unique=True)
-    description = db.Column(db.Text, nullable=False)
+    description = db.Column(db.String(3000))
     category_id = db.Column(db.String(255), db.ForeignKey('categories.id',
                                                           ondelete='SET NULL'), nullable=True)
     rating = db.Column(db.Float, default=0.0)
