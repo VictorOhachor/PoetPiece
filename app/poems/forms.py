@@ -12,7 +12,7 @@ class CreatePoemForm(FlaskForm):
     title = StringField('New Poem Title',
                         validators=[DataRequired(), Length(1, 255)])
     description = TextAreaField('Describe the New Poem',
-                                validators=[Length(0, 600), ],
+                                validators=[Length(0, 3000), ],
                                 render_kw={'rows': '10'})
     category = SelectField('Select Poem Category',
                            coerce=str, validators=[DataRequired()])
