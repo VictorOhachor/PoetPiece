@@ -4,47 +4,53 @@ from wtforms import (StringField, IntegerField,
                      SelectField, TextAreaField)
 from wtforms.validators import (DataRequired, Length,
                                 NumberRange, Regexp)
+from ..models import Category
 
 
-class CreatePoemForm(FlaskForm):
-    """Represents the login form for users/admins."""
+class PoemForm(FlaskForm):
+    """Represents the form for creating or editing poems."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # set the category choices
+        self.category.choices = Category.get_choices()
 
     title = StringField('New Poem Title',
                         validators=[DataRequired(), Length(1, 255)])
     description = TextAreaField('Describe the New Poem',
-                                validators=[Length(0, 3000), ],
-                                render_kw={'rows': '10'})
-    category = SelectField('Select Poem Category',
-                           coerce=str, validators=[DataRequired()])
+                                validators=[Length(0, 3000),],
+                                render_kw={'rows': '5'})
+    category = SelectField('Select Poem Category', coerce=str,
+                           validators=[DataRequired()],)
     is_premium = BooleanField('Is this a premium poem?')
     submit = SubmitField('Create/Update Poem')
 
 
 class StanzaForm(FlaskForm):
-    """Represents the login form for users/admins."""
+    """Represents the form for creating or editing stanzas."""
 
     index = IntegerField('Enter New Stanza Number (relative to the poem)',
                          validators=[DataRequired(), NumberRange(1, 20)], default=1)
     content = TextAreaField('Enter the Stanza Content', validators=[
-        DataRequired(), Length(1, 3000)], render_kw={'rows': '12'})
+        DataRequired(), Length(1, 3000)], render_kw={'rows': '10'})
     submit = SubmitField('Add/Update Stanza')
 
 
-class AddCategoryForm(FlaskForm):
-    """Represents the login form for users/admins."""
+class CategoryForm(FlaskForm):
+    """Represents the form for creating or editing categories."""
 
     name = StringField('New Category Name',
                        validators=[DataRequired(), Length(1, 100),
                                    Regexp('^[A-Za-z][A-Za-z0-9_]*$', 0,
                                           'Category name must have only letters, numbers, or underscores')])
-    description = TextAreaField('Describe Briefly the New Category', validators=[
-        DataRequired(), Length(1, 1000)], render_kw={'rows': '5'})
+    description = TextAreaField('Describe Briefly the New Category',
+                                validators=[Length(0, 1000)], render_kw={'rows': '3'})
     submit = SubmitField('Add Category')
 
 
-class CreateCommentForm(FlaskForm):
-    """Represents the login form for users/admins."""
+class CommentForm(FlaskForm):
+    """Represents the form for creating or editing comments."""
 
     comment = TextAreaField('What is your feedback on the poem?', validators=[
-        DataRequired(), Length(1, 1000), ])
+        DataRequired(), Length(1, 1000), ], render_kw={'rows': '2'})
     submit = SubmitField('Post Comment')

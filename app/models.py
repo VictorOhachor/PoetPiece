@@ -1,24 +1,93 @@
 from . import db, login_manager
-from flask import current_app, flash
-import json
+from flask import current_app
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user
 from sqlalchemy.sql import func
-from .utils import generate_id
-from itsdangerous import URLSafeTimedSerializer as Serializer
+from uuid import uuid4
 
 
-class User(UserMixin, db.Model):
+class BaseModel(db.Model):
+    """Serves as the base for every model in this application."""
+
+    __abstract__ = True
+
+    def _id():
+        """Generate a uuid and return the 32-char string."""
+        return uuid4().hex
+
+    id = db.Column(db.String(255), primary_key=True, default=_id)
+    created_at = db.Column(db.DateTime(timezone=True),
+                           server_default=func.now())
+    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
+
+    def save(self):
+        """Save instance to database."""
+        db.session.add(self)
+        db.session.commit()
+    
+    @classmethod
+    def create(cls, **kwargs):
+        """Create a new record in the table."""
+        record = cls(**kwargs)
+        record.save()
+    
+    def delete(self):
+        """Remove instance from database."""
+        db.session.delete(self)
+        db.session.commit()
+    
+    def __repr__(self):
+        """String representation of a model's instance."""
+        return f'[{type(self).__name__} {self.id}] -- Created on {self.created_at}'
+    
+    def to_dict(self):
+        ins_d = {}
+
+        for key, value in self.__dict__.items():
+            if not key.startswith('_'):
+                ins_d[key] = value
+        
+        return ins_d
+    
+    @classmethod
+    def find_all(cls):
+        """Fetch all stanza from the database."""
+        return cls.query.all()
+    
+    @classmethod
+    def find_by(cls, **kwargs):
+        """Fetch users from db based on fields passed."""
+        fetch_one = kwargs.pop('one', False)
+        query = cls.query.filter_by(**kwargs)
+
+        if fetch_one:
+            return query.first()
+        return query.all()
+
+
+class User(UserMixin, BaseModel):
     """Model representing a user instance."""
 
     __tablename__ = 'users'
 
-    id = db.Column(db.String(255), primary_key=True, default=generate_id)
     username = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(128), unique=True)
     password_hash = db.Column(db.String(255))
     birth_date = db.Column(db.Date)
-    is_admin = db.Column(db.Boolean, default=False)
+
+    # foreign keys
+    poet = db.relationship('Poet', backref='users', uselist=False)
+    comments = db.relationship('Comment', backref='users', lazy='dynamic')
+
+    @property
+    def last_login(self):
+        return self.updated_at
+
+    @property
+    def is_poet(self):
+        """Check that user is an poet."""
+        poet_exists = Poet.query.filter_by(user_id=self.id).first()
+        return bool(poet_exists)
 
     @property
     def password(self):
@@ -33,189 +102,151 @@ class User(UserMixin, db.Model):
         """Verify that password is correct."""
         return check_password_hash(self.password_hash, password)
 
-    # foreign keys
-    admin = db.relationship('Admin', backref='users', uselist=False)
-    comments = db.relationship('Comment', backref='users', lazy='dynamic')
 
-    def __repr__(self):
-        """Official string representation of a user object."""
-        return f'<{type(self).__name__}: {self.username}>'
+class Poet(BaseModel):
+    """Model representing an poet instance."""
 
+    __tablename__ = 'poets'
 
-class Admin(db.Model):
-    """Model representing an admin instance; Inherit from User class."""
-
-    __tablename__ = 'admins'
-
-    id = db.Column(db.String(255), primary_key=True, default=generate_id)
     user_id = db.Column(db.String(255), db.ForeignKey('users.id'), unique=True)
     email = db.Column(db.String(255), unique=True, index=True)
     gender = db.Column(db.String(10), nullable=False)
     verified = db.Column(db.Boolean, default=False)
 
     # foreign keys
-    poems = db.relationship('Poem', backref='admin', lazy='dynamic')
+    poems = db.relationship('Poem', backref='poets', lazy='dynamic')
 
-    def __repr__(self):
-        """Official string representation of an admin object."""
-        return f'<{type(self).__name__}: User {self.user_id} ({self.gender})>'
+    @property
+    def became_poet_on(self):
+        """Return the date that user became a poet."""
+        return self.created_at
 
-    @staticmethod
-    def reached_admin_count():
-        """Limit the number of admins that can be registered."""
-        admins = Admin.query.filter_by(verified=True).all()
+    @classmethod
+    def reached_limit(cls):
+        """Limit the number of registered poets that can be verified."""
+        poets_count = cls.query.filter_by(verified=True).count()
+        max_poets_count = current_app.config['MAXIMUM_POET_COUNT']
 
-        if len(admins) == current_app.config['NUMBER_OF_ADMINS_ALLOWED']:
-            return True
-        return False
-
-    def generate_verification_token(self):
-        """Generate verification token to verify admins."""
-        serializer = Serializer(
-            secret_key=current_app.config['SECRET_KEY'])
-        return serializer.dumps({
-            'email': self.email,
-            'id': self.id
-        }, salt=current_app.config['SECURITY_PASSWORD_SALT'])
-
-    def verify_account(self, token, expiration=3600):
-        """Verify admin account."""
-        s = Serializer(current_app.config['SECRET_KEY'])
-        try:
-            data = s.loads(
-                token,
-                salt=current_app.config['SECURITY_PASSWORD_SALT'],
-                max_age=expiration)
-        except:
-            return False
-
-        if data.email != self.email or data.id != self.id:
-            return False
-
-        if self.verified:
-            flash('Account already verified!')
-        else:
-            # update user is_admin field
-            db.session.query(User).filter_by(id=self.user_id) \
-                .update({'is_admin': True})
-            self.verified = True
-            # send flash message
-            flash('You have verified your account. Thanks!')
-        db.session.add(self)
-        return True
+        return True if poets_count >= max_poets_count else False
 
 
-class Category(db.Model):
+class Category(BaseModel):
     """Model representing a category instance."""
 
     __tablename__ = 'categories'
 
-    id = db.Column(db.String(255), primary_key=True, default=generate_id)
     name = db.Column(db.String(100), unique=True)
-    description = db.Column(db.String(1000), unique=True)
+    description = db.Column(db.String(1000))
 
     # foreign keys
     poems = db.relationship('Poem', backref='categories', lazy='dynamic')
+    
+    @classmethod
+    def get_id(cls, name):
+        category = cls.query.filter_by(name=name).first()
 
-    def __repr__(self):
-        """Official string representation of a category object."""
-        return f'<{type(self).__name__}: {self.name}>'
+        if category:
+            return category.id
+    
+    @classmethod
+    def get_choices(cls):
+        """Get all category as WTForms select field choices."""
+        return [(category[0], category[0].upper())
+            for category in db.session.query(
+        cls.name).all()]
 
 
-class Poem(db.Model):
+class Poem(BaseModel):
     """Model representing a poem instance."""
 
     __tablename__ = 'poems'
 
-    id = db.Column(db.String(255), primary_key=True, default=generate_id)
-    author_id = db.Column(db.String(255), db.ForeignKey('admins.id',
+    author_id = db.Column(db.String(255), db.ForeignKey('poets.id',
                                                         ondelete='SET NULL'), nullable=True)
     title = db.Column(db.String(255), nullable=False, unique=True)
-    description = db.Column(db.String(3000))
+    description = db.Column(db.String(3000), nullable=True)
     category_id = db.Column(db.String(255), db.ForeignKey('categories.id',
                                                           ondelete='SET NULL'), nullable=True)
     rating = db.Column(db.Float, default=0.0)
     premium = db.Column(db.Boolean, default=False)
     completed = db.Column(db.Boolean, default=False)
     published = db.Column(db.Boolean, default=False)
-    crafted_on = db.Column(db.DateTime(timezone=True),
-                           server_default=func.now())
 
     # foreign keys
     stanzas = db.relationship(
         'Stanza', backref='poems', lazy='dynamic', cascade='all,delete')
     comments = db.relationship('Comment', backref='poems', lazy='dynamic',
                                cascade='all,delete')
+    
+    @property
+    def crafted_on(self):
+        return self.created_at
+    
+    @property
+    def is_accessible(self):
+        """Check if current user is authorized to view or manipulate poem."""
+        if current_user.is_poet:
+            poet = Poet.find_by(user_id=current_user.id, one=True)
+            if self.author_id == poet.id:
+                return True
+        return False
+    
+    def publish(self):
+        """Publish or unpublish a poem."""
+        self.published = not self.published
+        self.save()
 
-    def __repr__(self):
-        """Official string representation of a poem object."""
-        poem_type = 'Premium' if self.premium else 'Free'
-        return f'<{type(self).__name__}: {self.title} ({poem_type})>'
 
-
-class Stanza(db.Model):
+class Stanza(BaseModel):
     """Model representing a stanza of a poem."""
 
     __tablename__ = 'stanzas'
 
-    id = db.Column(db.String(255), primary_key=True, default=generate_id)
     poem_id = db.Column(db.String(255), db.ForeignKey(
         'poems.id', ondelete='CASCADE'))
     index = db.Column(db.Integer, nullable=False)
     content = db.Column(db.Text, nullable=False)
-    added_on = db.Column(db.DateTime(timezone=True),
-                         server_default=func.now())
-    edited_on = db.Column(db.DateTime(timezone=True), onupdate=func.now())
 
-    def __repr__(self):
-        """Official string representation of a stanza object."""
-        poem = Poem.query.get(self.poem_id)
-        poem_title = poem.title if poem else ''
-        return f'<{type(self).__name__}: {self.index} (of {poem_title})>'
+    @property
+    def added_on(self):
+        return self.created_at
+    
+    @property
+    def edited_on(self):
+        return self.updated_at
 
 
-class Comment(db.Model):
+class Comment(BaseModel):
     """Model representing a comment made by a user on a poem."""
 
     __tablename__ = 'comments'
 
-    id = db.Column(db.String(255), primary_key=True, default=generate_id)
     user_id = db.Column(db.String(255), db.ForeignKey(
         'users.id', ondelete='CASCADE'))
     poem_id = db.Column(db.String(255), db.ForeignKey(
         'poems.id', ondelete='CASCADE'))
     comment = db.Column(db.String(1000), default='I love this!')
     approved = db.Column(db.Boolean, default=False)
-    last_edit = db.Column(db.DateTime, server_default=func.now(),
-                          onupdate=func.now())
-
-    def __repr__(self):
-        """Official string representation of a comment object."""
-        poem = Poem.query.get(self.poem_id)
-        user = User.query.get(self.user_id)
-
-        return f'<{type(self).__name__}: {self.id} on {poem.title} by {user.username}>'
+    
+    @property
+    def last_edit(self):
+        return self.updated_at
 
 
-class PoemRating(db.Model):
+class PoemRating(BaseModel):
     """Model representing rating given by a user to a poem."""
 
     __tablename__ = 'poem_ratings'
 
-    id = db.Column(db.String(255), primary_key=True, default=generate_id)
     user_id = db.Column(db.String(255), db.ForeignKey(
         'users.id', ondelete='CASCADE'))
     poem_id = db.Column(db.String(255), db.ForeignKey(
         'poems.id', ondelete='CASCADE'))
     rating = db.Column(db.Float, default=0.0)
-    rated_on = db.Column(db.DateTime, server_default=func.now())
-
-    def __repr__(self):
-        """Official string representation of a PoemRating object."""
-        poem = Poem.query.get(self.poem_id)
-        user = User.query.get(self.user_id)
-
-        return f'<{type(self).__name__}: {self.id} on {poem.title} by {user.username} ({self.rating})'
+    
+    @property
+    def rated_on(self):
+        return self.created_at
 
 
 @login_manager.user_loader

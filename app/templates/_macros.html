@@ -30,7 +30,7 @@ page = pagination.page + 1, **kwargs) }}{% else %}#{% endif %}"
   <div class="more-actions__box hidden">
     <button class="more-action__btn" id="copy-btn">Copy {{name|title}} Link</button>
     <button class="more-action__btn" id="generate-btn">Download as PDF</button>
-    {% if user.is_admin %}
+    {% if record.is_accessible %}
     <a href="/poems/{{record.id}}/publish">
     {{ 'Unp' if record.published else 'P' }}ublish {{name|title}}
     </a>

@@ -2,10 +2,10 @@ from flask import render_template, redirect, request, flash, url_for, current_ap
 from flask_login import login_required, login_user, logout_user, current_user
 from . import main
 from .. import db
-from .forms import (LoginForm, SignupForm, AdminSignupForm,
+from .forms import (LoginForm, SignupForm, PoetForm,
                     UpdatePasswordForm, EditProfileForm)
-from ..models import User, Admin
-from ..email import send_email
+from ..models import User, Poet
+from ..utils import _perform_post
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -56,58 +56,36 @@ def signup():
                     password=form.password.data,
                     birth_date=form.birth_date.data)
         # persist to database
-        db.session.add(user)
-        db.session.commit()
-        # send an email notification to app admin
-        # send_email(current_app.config['POETICMAN_ADMIN'],
-        #            'New User', 'mail/new_user', user=user)
-        # redirect to login page
+        user.save()
+
         flash('You can now login.')
         return redirect(url_for('.login'))
 
     return render_template('main/signup.html', form=form)
 
 
-@main.route('/create-admin', methods=['GET', 'POST'])
+@main.route('/become-poet', methods=['GET', 'POST'])
 @login_required
-def create_admin():
-    """Create an admin account for a registered user."""
-    form = AdminSignupForm()
+def become_poet():
+    """Create an poet account for a registered user."""
+    form = PoetForm()
 
-    if Admin.reached_admin_count():
-        flash('Number of registered admins has reached maximum.', 'error')
+    if Poet.reached_limit():
+        flash('Maximum number of poets reached.', 'error')
         return redirect(url_for('.me'))
 
     if form.validate_on_submit():
-        admin = Admin(
+        poet = Poet(
             email=form.email.data,
             gender=form.gender.data,
             user_id=current_user.id
         )
-        # Add to session
-        db.session.add(admin)
-        # persist to database
-        db.session.commit()
+        # save to database
+        poet.save()
+        # redirect to the profile view
+        return redirect(url_for('.me'))
 
-        token = admin.generate_verification_token()
-        send_email(admin.email, 'Verify your poet account',
-                   'mail/verify_admin', token=token, admin=admin)
-        return redirect(url_for('poems.index'))
-
-    return render_template('main/create_admin.html', form=form)
-
-
-@main.route('/verify-admin/<token>', methods=['GET', 'POST'])
-@login_required
-def verify_admin(token):
-    """Verify an admin account by sending verification mail to given address."""
-    admin = Admin.query.filter_by(user_id=current_user.id).first()
-
-    if admin.verify_account(token):
-        db.session.commit()
-    else:
-        flash('The confirmation link is invalid or has expired.')
-    return redirect(url_for('main.me'))
+    return render_template('main/poet_form.html', form=form)
 
 
 @main.get('/notifications')
@@ -120,32 +98,31 @@ def notifications():
 @main.route('/me', methods=['GET', 'POST'])
 @login_required
 def me():
-    """Display and update user/admin information."""
+    """Display and update user information."""
+    poetic_user = db.session.query(User, Poet).filter(
+        User.id == Poet.user_id, User.id == current_user.id
+    ).first()
+
+    if not poetic_user:
+        poetic_user = [User.find_by(id=current_user.id, one=True), ]
+    
+    form_data = {}
+
+    for instance in poetic_user:
+        form_data.update(**instance.to_dict())
+
     context = {
-        'user': User.query.join(Admin, User.id == Admin.user_id, isouter=True)
-        .filter(User.id == current_user.id).first(),
-        'password_form': UpdatePasswordForm(prefix='password_form')
+        'form_data': form_data,
+        'password_form': UpdatePasswordForm(prefix='password_form'),
+        '_poetic_user': poetic_user
     }
+
     context['profile_form'] = EditProfileForm(
-        obj=context['user'], prefix='profile_form')
+        **context['form_data'], prefix='profile_form')
 
-    if context['password_form'].validate_on_submit():
-        context['password_form'].populate_obj(context['user'])
-        # persist to db
-        db.session.add(context['user'])
-        db.session.commit()
-        # send flash message
-        flash('Successfully updated your password.')
-        return redirect(url_for('.me'))
-
-    if context['profile_form'].validate_on_submit():
-        context['profile_form'].populate_obj(context['user'])
-        # persist to db
-        db.session.add(context['user'])
-        db.session.commit()
-        # send flash message
-        flash('Your information has been updated successfully.')
-        return redirect(url_for('.me'))
+    # perform post operations
+    _perform_post(context, 'password_form')
+    _perform_post(context, 'profile_form')
 
     return render_template('main/me.html', **context)
 
@@ -155,4 +132,3 @@ def me():
 def search():
     """Search for poems or notifications."""
     pass
-

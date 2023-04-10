@@ -9,10 +9,12 @@
       <i class="fa-brands fa-searchengin"></i>
       <span>Search</span>
     </a>
-    <a href="{{url_for('poems.create_poem')}}" class="nav-item">
-      <i class="fa-solid fa-file-circle-plus"></i>
-      <span>Compose</span>
-    </a>
+    {% if current_user.is_poet %}
+      <a href="{{url_for('poems.create_poem')}}" class="nav-item">
+        <i class="fa-solid fa-file-circle-plus"></i>
+        <span>Compose</span>
+      </a>
+    {% endif %}
     <a href="{{url_for('main.notifications')}}" class="nav-item">
       <i class="fa-solid fa-bell"></i>
       <span>Notifications</span>

@@ -1,8 +1,8 @@
 {% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% block
 title %}Update My Profile{% endblock title %} {% block main_content %} {% if not
-current_user.is_admin %}
-<div class="create-admin__box">
-  <a href="{{url_for('main.create_admin')}}" class="create-admin__btn"
+current_user.is_poet %}
+<div class="create-poet__box">
+  <a href="{{url_for('main.become_poet')}}" class="create-poet__btn"
     >Become a Poet</a
   >
 </div>

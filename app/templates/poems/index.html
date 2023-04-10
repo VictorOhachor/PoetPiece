@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% import "_macros.html" as macros %} {% block title
 %} Poems {% endblock title %} {% block main_content %} {% if
-current_user.is_admin %}
+current_user.is_poet %}
 <div class="create-poem-container">
   <a href="/poems/new">Create Poem</a>
 </div>

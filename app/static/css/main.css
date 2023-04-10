@@ -8,7 +8,7 @@
 
 body {
   font-family: "Titillium Web", sans-serif;
-  color: #000;
+  color: #222;
   position: relative;
   min-height: 100vh;
   margin-bottom: 3rem;
@@ -394,7 +394,7 @@ hr {
 .poem-metadata .poem-category {
   text-transform: uppercase;
   color: orange;
-  font-family: "Space Mono";
+  font-family: "Space Mono", monospace;
 }
 
 .poem-card .poem-premium {
@@ -446,7 +446,9 @@ hr {
 }
 
 .app-main__content > .poem-desc .poem-desc__content {
+    font-size: calc(.8rem + 2vmin);
     white-space: pre-line;
+    font-family: "Titillium Web", sans-serif;
 }
 
 .poems-container .poem-card .poem-title {
@@ -615,8 +617,9 @@ hr {
   display: flex;
   gap: 2rem;
   flex-direction: column;
-  border: 1px solid #eee;
   padding: .5rem;
+  border: 1px solid #eee;
+  margin: 3rem 0;
 }
 
 .comments-container {
@@ -635,28 +638,31 @@ hr {
 }
 
 .comments-title .comment-title__text {
-  margin: 0 0.6rem;
+  margin: 1rem 0.5rem;
+  font-size: calc(1rem + 2vmin);
 }
 
 .comments-container .comments-title .black-dot {
-  width: 10px;
-  height: 10px;
+  width: calc(.5rem + .5vmin);
+  height: calc(.5rem + .5vmin);
   border-radius: 50%;
-  background-color: #222;
+  background-color: #bbb;
 }
 
 .comments-container .poem-comments {
   border: 1px solid #eee;
-  border-bottom: 0;
-  border-radius: 5px;
 }
 
 .poem-comments .comment-card {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: .3rem;
   padding: 1rem;
-  border-bottom: 1px solid #eee;
+  position: relative;
+}
+
+.poem-comments .comment-card:nth-child(even) {
+  background-color: #eee;
 }
 
 .comment-card .comment-heading {
@@ -664,7 +670,7 @@ hr {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  font-size: 1rem;
+  font-size: calc(.6rem + 1.5vmin);
   font-weight: 700;
 }
 
@@ -677,6 +683,14 @@ hr {
   color: grey;
   background-color: #eee;
   padding: 0 0.4rem;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.comment-card:nth-child(even) .comment-heading .comment-date {
+  background-color: #bbb;
+  color: #222;
 }
 
 .comment-card .comment-body {
@@ -976,13 +990,13 @@ hr {
   
 }
 
-.create-admin__box {
+.create-poet__box {
   display: flex;
   margin: .5rem 0 1rem;
   justify-content: flex-end;
 }
 
-.create-admin__btn {
+.create-poet__btn {
   background-color: #000;
   color: #eee;
   padding: .5rem 1rem;

@@ -17,9 +17,9 @@
 <hr>
 <div class="poem-desc">
   <h3 class="poem-desc__heading">Poem Description</h3>
-  <p class="poem-desc__content">
+  <pre class="poem-desc__content">
     {{poem.description if poem.description else 'No Poem Description.'}}
-  </p>
+  </pre>
 </div>
 <hr />
 <div class="poem-stanzas">
@@ -29,7 +29,7 @@
     <p class="no-stanza-text">This poem currently has no stanza.</p>
     {% else %} {% for stanza in poem.stanzas.all() %}
     <div class="poem-stanza__card hidden">
-      {% if current_user.is_admin %}
+      {% if poem.is_accessible %}
       <p class="stanza-action__links">
         <a href="/poems/{{poem.id}}/stanzas/{{stanza.id}}/delete">Delete</a>
         <a href="/poems/{{poem.id}}/stanzas/{{stanza.id}}/edit">Edit</a>
@@ -54,7 +54,7 @@
       </p>
       <button id="slide-forward__btn">&rAarr;</button>
     </div>
-    {% if current_user.is_admin %}
+    {% if poem.is_accessible %}
     <hr width="100%" />
     <a href="/poems/{{poem.id}}/add_stanza" class="add-stanza"
       >Add New Stanza</a
@@ -62,7 +62,7 @@
     {% endif %}
   </div>
 </div>
-{% if current_user.is_admin %}
+{% if poem.is_accessible %}
 <p class="poem-action__links">
   <a href="/poems/{{poem.id}}/delete">Delete Poem</a>
   <a href="/poems/{{poem.id}}/edit">Edit Poem</a>
@@ -86,8 +86,8 @@
     {% for comment in poem.comments.all() %}
     <div class="comment-card">
       <p class="comment-heading">
-        <span class="commenter">{{comment.users.username}}</span>
-        <span class="comment-date">{{comment.last_edit}}</span>
+        <span class="commenter">{{ 'You' if comment.users.id == current_user.id else comment.users.username}}</span>
+        <span class="comment-date">{{comment.created_at}}</span>
       </p>
       <p class="comment-body">{{comment.comment}}</p>
       <p class="comment-footer">

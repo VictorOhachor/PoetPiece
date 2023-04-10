@@ -3,15 +3,16 @@
 from functools import wraps
 from flask import flash, redirect, url_for
 from flask_login import current_user, login_required
-from uuid import uuid4
+from .models import Poem
+from . import db
 
 
-def is_admin(func):
-    """Protect view function from users that are not admins."""
+def is_poet(func):
+    """Protect view function from users that are not poets."""
     @wraps(func)
     @login_required
     def wrapper(**kwargs):
-        if not current_user.is_admin:
+        if not current_user.is_poet:
             flash('You are not authorized to access this page.', 'error')
             # redirect to different urls based on referrer
             if not kwargs:
@@ -21,19 +22,22 @@ def is_admin(func):
     return wrapper
 
 
-def generate_id():
-    """Generate a uuid and return the 32-char string."""
-    uid = uuid4()
-    return uid.hex
+def can_manage_poem(poem_id):
+    """Check if current user can manipulate poem."""
+    poem = Poem.query.get_or_404(poem_id, 'Poem with such id was not found.')
+    return poem.is_accessible
 
 
-def get_category_choices(c, db):
-    """Fetch the list of category names from the database."""
-    return [(category[0], category[0].upper())
-            for category in db.session.query(
-        c.name).all()]
+def _perform_post(context, form_name):
+    """Perform post operation on form."""
+    form = context.get(form_name, None)
 
-
-def get_category_id(c, name):
-    """Get category id from categories by name."""
-    return c.query.filter_by(name=name).first().id
+    if form and form.validate_on_submit():
+        [form.populate_obj(item) for item in context['_poetic_user']]
+        # persist changes to db
+        db.session.add_all(context['_poetic_user'])
+        db.session.commit()
+        
+        # redirect back to me
+        flash('Successfully updated your password.')
+        return redirect(url_for('.me'))

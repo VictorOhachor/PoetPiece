@@ -17,4 +17,4 @@ def internal_server_error(e):
 def unauthorized_error(e):
     """Handle errors that occur when users are not authorized."""
     err_desc = 'You are unauthorized. Login/Sign up if you are not authenticated.'
-    return render_template('errors/401.html', err_desc=err_desc)
+    return render_template('errors/401.html', err_desc=err_desc), 401
