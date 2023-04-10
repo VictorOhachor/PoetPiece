@@ -151,7 +151,7 @@ class Category(BaseModel):
     @classmethod
     def get_choices(cls):
         """Get all category as WTForms select field choices."""
-        return [(category[0], category[0].upper())
+        return [(category[0], category[0])
             for category in db.session.query(
         cls.name).all()]
 
@@ -163,7 +163,7 @@ class Poem(BaseModel):
 
     author_id = db.Column(db.String(255), db.ForeignKey('poets.id',
                                                         ondelete='SET NULL'), nullable=True)
-    title = db.Column(db.String(255), nullable=False, unique=True)
+    title = db.Column(db.String(255), unique=True)
     description = db.Column(db.String(3000), nullable=True)
     category_id = db.Column(db.String(255), db.ForeignKey('categories.id',
                                                           ondelete='SET NULL'), nullable=True)
