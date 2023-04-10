@@ -163,7 +163,7 @@ class Poem(BaseModel):
 
     author_id = db.Column(db.String(255), db.ForeignKey('poets.id',
                                                         ondelete='SET NULL'), nullable=True)
-    title = db.Column(db.String(255), unique=True)
+    title = db.Column(db.String(255))
     description = db.Column(db.String(3000), nullable=True)
     category_id = db.Column(db.String(255), db.ForeignKey('categories.id',
                                                           ondelete='SET NULL'), nullable=True)
