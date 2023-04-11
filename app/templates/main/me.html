@@ -1,15 +1,18 @@
 {% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% block
-title %}Update My Profile{% endblock title %} {% block main_content %} {% if not
-current_user.is_poet %}
-<div class="create-poet__box">
-  <a href="{{url_for('main.become_poet')}}" class="create-poet__btn"
-    >Become a Poet</a
-  >
+title %}Update My Profile{% endblock title %} {% block main_content %}
+<div class="me-actions__box">
+  {% if not current_user.is_poet %}
+  <a href="{{url_for('main.become_poet')}}" class="action-btn">Become a Poet</a>
+  {% endif %}
+  <a href="{{url_for('main.delete_me')}}" class="action-btn action-btn__hp-2">Delete Account</a>
 </div>
-{% endif %}
-<h1 class="main-content__title">Update My Profile</h1>
-<div class="profile-form__container">{{ wtf.quick_form(profile_form) }}</div>
+<div class="me-form__container profile-form__container">
+  <h2 class="form-title main-content__title">Update My Profile</h2>
+  {{ wtf.quick_form(profile_form) }}
+</div>
 <hr />
-<h2 class="update-password__title">Update Password</h2>
-<div class="password-form__container">{{ wtf.quick_form(password_form) }}</div>
+<div class="me-form__container password-form__container">
+  <h2 class="form-title update-password__title">Update Password</h2>
+  {{ wtf.quick_form(password_form) }}
+</div>
 {% endblock main_content %}

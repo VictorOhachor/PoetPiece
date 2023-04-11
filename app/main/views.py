@@ -88,7 +88,7 @@ def me():
 
     if not poetic_user:
         poetic_user = [User.find_by(id=current_user.id, one=True), ]
-    
+
     form_data = {}
 
     for instance in poetic_user:
@@ -129,6 +129,34 @@ def become_poet():
         # save to database
         poet.save()
         # redirect to the profile view
+        flash('Aha! Now, you are in your poetic shoes!')
         return redirect(url_for('.me'))
 
     return render_template('main/poet_form.html', form=form)
+
+
+@main.get('/me/delete-account')
+@login_required
+def delete_me():
+    """Remove a user's account from db (if user is not a poet)."""
+    user = User.find_by(id=current_user.id, one=True)
+
+    if user.is_poet:
+        err_msg = 'So unfortunate! We will need more information before ' \
+            'we can progress with this operation!'
+        flash(err_msg, 'error')
+        
+        return redirect(url_for('.handle_survey', type='account_deletion'))
+    
+    # delete user's account if not a poet
+    user.delete()
+    # redirect user back to home
+    flash("Sorry to see you go; You couldn't even enjoy the poetic privileges!")
+    return redirect(url_for('.index'))
+
+
+@main.get('/surveys/<string:type>')
+@login_required
+def handle_survey(type):
+    """Handles different types of surveys. COMING SOON!"""
+    pass
