@@ -151,7 +151,7 @@ class Category(BaseModel):
     @classmethod
     def get_choices(cls):
         """Get all category as WTForms select field choices."""
-        return [(category[0], category[0])
+        return [(category[0], category[0].upper())
             for category in db.session.query(
         cls.name).all()]
 

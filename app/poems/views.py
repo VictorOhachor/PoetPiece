@@ -17,10 +17,9 @@ def index():
     page = request.args.get('page', 1, type=int)
     # data to be passed to template
     context = {
-        'all_category_names': [c[0] for c in Category.get_choices()],
+        'all_category_names': [c.name for c in Category.find_all()],
         'pagination': None,
         'poems': None,
-        'categories': None,
     }
     # create pagination object from poems
     query_poems = db.session.query(Poem).join(
