@@ -56,13 +56,19 @@ class BaseModel(db.Model):
     
     @classmethod
     def find_by(cls, **kwargs):
-        """Fetch users from db based on fields passed."""
+        """Fetch records from db based on fields passed."""
         fetch_one = kwargs.pop('one', False)
         query = cls.query.filter_by(**kwargs)
 
         if fetch_one:
             return query.first()
         return query.all()
+    
+    @classmethod
+    def find_order_by(cls, **kwargs):
+        """Fetch records from db and order them by created_at."""
+        records = cls.query.filter_by(**kwargs).order_by(cls.created_at).all()
+        return records
 
 
 class User(UserMixin, BaseModel):
