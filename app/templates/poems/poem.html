@@ -27,7 +27,7 @@
   <div class="poem-stanzas__container">
     {% if stanzas|length == 0 %}
     <p class="no-stanza-text">This poem currently has no stanza.</p>
-    {% else %} {% for stanza in poem.stanzas.all() %}
+    {% else %} {% for stanza in stanzas %}
     <div class="poem-stanza__card hidden">
       {% if poem.is_accessible %}
       <p class="stanza-action__links">
