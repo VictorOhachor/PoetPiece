@@ -101,7 +101,7 @@ def poem(poem_id):
         return redirect(url_for('.index'))
 
     # Get poem stanzas order by stanza index
-    context['stanzas'] = context['poem'].stanzas.order_by(Stanza.index.asc()).all()
+    context['stanzas'] = Stanza.find_by(poem_id=poem_id)
 
     if not context['poem'].published:
         if current_user.is_anonymous or not context['poem'].is_accessible:
