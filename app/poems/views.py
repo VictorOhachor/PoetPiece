@@ -93,15 +93,13 @@ def poem(poem_id):
     context = {
         'poem': Poem.query.get_or_404(poem_id,
                                       'Poem with such id not found.'),
-        'form': CommentForm()
+        'form': CommentForm(),
+        'stanzas': Stanza.find_order_by(Stanza.index, poem_id=poem_id)
     }
 
     if current_user.is_anonymous and context['poem'].premium:
         flash('Sorry, this poem is only available to registered users.', 'error')
         return redirect(url_for('.index'))
-
-    # Get poem stanzas order by stanza index
-    context['stanzas'] = sorted(Stanza.find_by(poem_id=poem_id), key=lambda x: x.index)
 
     if not context['poem'].published:
         if current_user.is_anonymous or not context['poem'].is_accessible:
