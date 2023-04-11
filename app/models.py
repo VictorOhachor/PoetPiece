@@ -71,7 +71,7 @@ class User(UserMixin, BaseModel):
     __tablename__ = 'users'
 
     username = db.Column(db.String(100), unique=True)
-    password = db.Column(db.String(128), unique=True)
+    password = db.Column(db.String(128), nullable=False)
     password_hash = db.Column(db.String(255))
     birth_date = db.Column(db.Date)
 
@@ -151,9 +151,8 @@ class Category(BaseModel):
     @classmethod
     def get_choices(cls):
         """Get all category as WTForms select field choices."""
-        return [(category[0], category[0].upper())
-            for category in db.session.query(
-        cls.name).all()]
+        return [(category.name, category.name.upper())
+            for category in cls.find_all()]
 
 
 class Poem(BaseModel):
@@ -163,7 +162,7 @@ class Poem(BaseModel):
 
     author_id = db.Column(db.String(255), db.ForeignKey('poets.id',
                                                         ondelete='SET NULL'), nullable=True)
-    title = db.Column(db.String(255))
+    title = db.Column(db.String(255), unique=True)
     description = db.Column(db.String(3000), nullable=True)
     category_id = db.Column(db.String(255), db.ForeignKey('categories.id',
                                                           ondelete='SET NULL'), nullable=True)
@@ -174,7 +173,7 @@ class Poem(BaseModel):
 
     # foreign keys
     stanzas = db.relationship(
-        'Stanza', backref='poems', lazy='dynamic', cascade='all,delete')
+        'Stanza', backref='poems', lazy='dynamic', cascade='all, delete, delete-orphan')
     comments = db.relationship('Comment', backref='poems', lazy='dynamic',
                                cascade='all,delete')
     

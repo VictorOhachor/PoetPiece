@@ -64,34 +64,17 @@ def signup():
     return render_template('main/signup.html', form=form)
 
 
-@main.route('/become-poet', methods=['GET', 'POST'])
-@login_required
-def become_poet():
-    """Create an poet account for a registered user."""
-    form = PoetForm()
-
-    if Poet.reached_limit():
-        flash('Maximum number of poets reached.', 'error')
-        return redirect(url_for('.me'))
-
-    if form.validate_on_submit():
-        poet = Poet(
-            email=form.email.data,
-            gender=form.gender.data,
-            user_id=current_user.id
-        )
-        # save to database
-        poet.save()
-        # redirect to the profile view
-        return redirect(url_for('.me'))
-
-    return render_template('main/poet_form.html', form=form)
-
-
 @main.get('/notifications')
 @login_required
 def notifications():
     """Get all feature/app updates."""
+    pass
+
+
+@main.route('/search', methods=['GET', 'POST'])
+@login_required
+def search():
+    """Search for poems or notifications."""
     pass
 
 
@@ -127,8 +110,25 @@ def me():
     return render_template('main/me.html', **context)
 
 
-@main.route('/search', methods=['GET', 'POST'])
+@main.route('/me/become-poet', methods=['GET', 'POST'])
 @login_required
-def search():
-    """Search for poems or notifications."""
-    pass
+def become_poet():
+    """Create an poet account for a registered user."""
+    form = PoetForm()
+
+    if Poet.reached_limit():
+        flash('Maximum number of poets reached.', 'error')
+        return redirect(url_for('.me'))
+
+    if form.validate_on_submit():
+        poet = Poet(
+            email=form.email.data,
+            gender=form.gender.data,
+            user_id=current_user.id
+        )
+        # save to database
+        poet.save()
+        # redirect to the profile view
+        return redirect(url_for('.me'))
+
+    return render_template('main/poet_form.html', form=form)

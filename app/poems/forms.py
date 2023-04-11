@@ -52,5 +52,5 @@ class CommentForm(FlaskForm):
     """Represents the form for creating or editing comments."""
 
     comment = TextAreaField('What is your feedback on the poem?', validators=[
-        DataRequired(), Length(1, 1000), ], render_kw={'rows': '2'})
+        Length(0, 1000), ], render_kw={'rows': '2'})
     submit = SubmitField('Post Comment')
