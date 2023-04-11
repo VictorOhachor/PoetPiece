@@ -65,9 +65,9 @@ class BaseModel(db.Model):
         return query.all()
     
     @classmethod
-    def find_order_by(cls, **kwargs):
-        """Fetch records from db and order them by created_at."""
-        records = cls.query.filter_by(**kwargs).order_by(cls.created_at).all()
+    def find_order_by(cls, *args, **kwargs):
+        """Fetch records from db by kwargs and order them by args passed."""
+        records = cls.query.filter_by(**kwargs).order_by(*args).all()
         return records
 
 
