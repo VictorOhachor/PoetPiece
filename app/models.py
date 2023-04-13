@@ -24,36 +24,36 @@ class BaseModel(db.Model):
         """Save instance to database."""
         db.session.add(self)
         db.session.commit()
-    
+
     @classmethod
     def create(cls, **kwargs):
         """Create a new record in the table."""
         record = cls(**kwargs)
         record.save()
-    
+
     def delete(self):
         """Remove instance from database."""
         db.session.delete(self)
         db.session.commit()
-    
+
     def __repr__(self):
         """String representation of a model's instance."""
         return f'[{type(self).__name__} {self.id}] -- Created on {self.created_at}'
-    
+
     def to_dict(self):
         ins_d = {}
 
         for key, value in self.__dict__.items():
             if not key.startswith('_'):
                 ins_d[key] = value
-        
+
         return ins_d
-    
+
     @classmethod
     def find_all(cls):
         """Fetch all stanza from the database."""
         return cls.query.all()
-    
+
     @classmethod
     def find_by(cls, **kwargs):
         """Fetch records from db based on fields passed."""
@@ -63,7 +63,7 @@ class BaseModel(db.Model):
         if fetch_one:
             return query.first()
         return query.all()
-    
+
     @classmethod
     def find_order_by(cls, *args, **kwargs):
         """Fetch records from db by kwargs and order them by args passed."""
@@ -146,19 +146,19 @@ class Category(BaseModel):
 
     # foreign keys
     poems = db.relationship('Poem', backref='categories', lazy='dynamic')
-    
+
     @classmethod
     def get_id(cls, name):
         category = cls.query.filter_by(name=name).first()
 
         if category:
             return category.id
-    
+
     @classmethod
     def get_choices(cls):
         """Get all category as WTForms select field choices."""
         return [(category.name, category.name.upper())
-            for category in cls.find_all()]
+                for category in cls.find_all()]
 
 
 class Poem(BaseModel):
@@ -182,11 +182,11 @@ class Poem(BaseModel):
         'Stanza', backref='poems', lazy='dynamic', cascade='all, delete, delete-orphan')
     comments = db.relationship('Comment', backref='poems', lazy='dynamic',
                                cascade='all,delete')
-    
+
     @property
     def crafted_on(self):
         return self.created_at
-    
+
     @property
     def is_accessible(self):
         """Check if current user is authorized to view or manipulate poem."""
@@ -195,7 +195,7 @@ class Poem(BaseModel):
             if self.author_id == poet.id:
                 return True
         return False
-    
+
     def publish(self):
         """Publish or unpublish a poem."""
         self.published = not self.published
@@ -215,7 +215,7 @@ class Stanza(BaseModel):
     @property
     def added_on(self):
         return self.created_at
-    
+
     @property
     def edited_on(self):
         return self.updated_at
@@ -232,7 +232,7 @@ class Comment(BaseModel):
         'poems.id', ondelete='CASCADE'))
     comment = db.Column(db.String(1000), default='I love this!')
     approved = db.Column(db.Boolean, default=False)
-    
+
     @property
     def last_edit(self):
         return self.updated_at
@@ -248,10 +248,30 @@ class PoemRating(BaseModel):
     poem_id = db.Column(db.String(255), db.ForeignKey(
         'poems.id', ondelete='CASCADE'))
     rating = db.Column(db.Float, default=0.0)
-    
+
     @property
     def rated_on(self):
         return self.created_at
+
+
+class Notification(BaseModel):
+    """Store notifications that can be accessed by the user."""
+
+    __tablename__ = 'notifications'
+
+    unread = db.Column(db.Boolean, default=True)
+    user_id = db.Column(db.String(255), db.ForeignKey(
+        'users.id', ondelete='SET NULL'), nullable=True)
+    content = db.Column(db.String(512), nullable=False)
+    in_trash = db.Column(db.Boolean, default=False)
+    type_ = db.Column(db.String(32), nullable=False)
+
+    def get_user(self):
+        """Get the user's username associated with a notification."""
+        user = User.find_by(id=self.user_id, one=True)
+        if not user:
+            return 'System'
+        return user.username
 
 
 @login_manager.user_loader

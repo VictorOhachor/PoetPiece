@@ -6,8 +6,9 @@ current_user.is_poet %}
 </div>
 {% endif %}
 <h1 class="main-content__title">
-  The Poems <sup class="redden">{{pagination.total}}</span>
+  Explore Poems <sup class="redden">{{pagination.total}}</span>
 </h1>
+{% if pagination.total %}
 <p class="all-categories__name">
   <a href="/poems" class="category-name">All</a>
   {% for category_name in all_category_names %}
@@ -16,9 +17,13 @@ current_user.is_poet %}
   </a>
   {% endfor %}
 </p>
+{% endif %}
 <div class="poems-container">
   {% if not poems %}
-  <p class="no-poem">Empty List</p>
+  <p class="no-poem">
+    No Poems Composed Yet.<br>
+    Be the First to Compose.
+  </p>
   {% endif %} {% for poem in poems %}
   <a href="/poems/{{poem.id}}">
     <div class="poem-card">
@@ -40,6 +45,25 @@ current_user.is_poet %}
   </a>
   {% endfor %}
 </div>
+{% if pagination.total %}
+
 {{ macros.pagination_widget(pagination, 'poems.index') }}
+{% else %}
+{% if current_user.is_authenticated %}
+{% if current_user.is_poet %}
+<p class="poetic-motivation">
+  You are already a piece of poet; therefore, <a href="{{url_for('poems.create_poem')}}">do what you do best</a>.
+</p>
+{% else %}
+<p class="poetic-motivation">
+  Are you disappointed? <a href="{{url_for('main.become_poet')}}">Create a poet account</a> and compose a masterpiece.
+</p>
+{% endif %}
+{% else %}
+<p class="poetic-motivation">
+  Are you disappointed? <a href="{{url_for('main.signup')}}">Create an account</a> and compose a masterpiece
+</p>
+{% endif %}
+{% endif %}
 <script src="{{url_for('static', filename='js/active_category.js')}}"></script>
 {% endblock main_content %}

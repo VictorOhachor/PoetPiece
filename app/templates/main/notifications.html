@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}All Notifications{% endblock title %}
+{% block main_content %}
+<h1 class="main-content__title">All Notifications</h1>
+<div class="notifications-container">
+  {% for notification in notifications %}
+    <div class="notification-card {{'unread-notification' if notification.unread else ''}}">
+      <p class="notification-header">
+        <span class="notification-type">{{notification.type_|upper}}</span>
+        <span class="notification-date">{{notification.created_at}}</span>
+      </p>
+      <p class="notification-body">{{notification.content}}</p>
+      <p class="notification-footer">
+        <span class="notification-user">{{notification.get_user()}}</span>
+        <span class="notification-id">{{notification.id}}</span>
+      </p>
+    </div>
+  {% endfor %}
+</div>
+{% endblock main_content %}

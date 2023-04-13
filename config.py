@@ -10,6 +10,15 @@ class Config:
     FLASK_POEMS_PER_PAGE = 9
     MAXIMUM_POET_COUNT = int(os.environ.get('MAXIMUM_POET_COUNT', 10))
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    CELERY = {
+        'broker_url': 'redis://localhost',
+        'result_backend': os.environ.get(
+            'CELERY_RESULTS_BACKEND',
+            f'db+sqlite:///{os.path.join(basedir, "application.sqlite")}'
+        ),
+        'task_ignore_result': False,
+        'enable_utc': True
+    }
 
     @staticmethod
     def init_app(app):

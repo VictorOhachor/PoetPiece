@@ -130,7 +130,7 @@ hr {
   text-align: center;
   font-size: calc(1.5rem + 1.5vmin);
   margin-bottom: .5rem;
-  color: #000;
+  color: #222;
   text-transform: capitalize;
 }
 
@@ -170,6 +170,13 @@ hr {
   gap: 1rem;
 }
 
+.app-main__content>.form {
+  padding: 1rem;
+  margin-top: 2rem;
+  border-radius: 5px;
+  box-shadow: 1px 1px 10px 5px #eee;
+}
+
 .app-main__content .form-group {
   gap: 0.2rem;
 }
@@ -193,9 +200,9 @@ hr {
 .app-main__content input[type="submit"] {
   font-size: 1.5rem;
   background-color: rgb(145, 21, 21);
-  border: 1px solid #222;
   color: #eee;
   padding: 0.5rem 0;
+  border: none;
   font-weight: 700;
   font-family: "Titillium Web", sans-serif;
   cursor: pointer;
@@ -760,7 +767,7 @@ hr {
 .pagination-container a {
   text-decoration: none;
   font-weight: 700;
-  color: #000;
+  color: #222;
 }
 
 .pagination-container .pagination {
@@ -792,11 +799,36 @@ hr {
   margin: auto;
 }
 
+.no-poem,
+.poetic-motivation {
+  text-align: center;
+}
+
 .no-poem {
-  font-size: 2rem;
-  color: gray;
-  margin: auto;
-  padding: 2rem;
+  line-height: 2.2rem;
+  padding: 2rem .5rem;
+  font-size: calc(1rem + 1vmin);
+  text-transform: uppercase;
+  color: #bbb;
+  border-radius: 5px;
+  border: 1px solid #eee;
+}
+
+.poetic-motivation {
+  color: #666356;
+  font-size: calc(.6rem + .8vmin);
+  font-style: italic;
+
+}
+
+.poetic-motivation a {
+  color: #911515;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.poetic-motivation a:hover {
+  opacity: .8;
 }
 
 .http-error-msg {
@@ -894,7 +926,7 @@ hr {
 }
 
 .poem-progress {
-  color: #000;
+  color: #222;
   background-color: rgb(241, 184, 163);
 }
 
@@ -960,7 +992,7 @@ hr {
 }
 
 .app-navbar .darken {
-  background-color: #000;
+  background-color: #222;
   box-shadow: #911515;
 }
 
@@ -1007,7 +1039,7 @@ hr {
 }
 
 .action-btn {
-  background-color: #000;
+  background-color: #222;
   color: #eee;
   font-size: calc(.6rem + 1vmin);
   padding: .5rem 1rem;
@@ -1016,4 +1048,56 @@ hr {
 /* Higher Priority 2 action button */
 .action-btn__hp-2 {
   background-color: #911515;
+}
+
+/* Notifications Elements Styles */
+
+.notifications-container,
+.notifications-container .notification-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.notifications-container {
+  margin: 1rem 0;
+  gap: 1rem;
+}
+
+.notifications-container .notification-card {
+  gap: .2rem;
+  border: 1px solid #bbb;
+}
+
+.unread-notification {
+  background-color: #eee;
+}
+
+.notification-header,
+.notification-body,
+.notification-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .2rem .5rem;
+}
+
+.notification-header {
+  background-color: #911515;
+  color: #eee;
+  padding: .2rem .5rem;
+}
+
+.unread-notification .notification-body {
+  font-weight: bold;
+}
+
+.notification-body {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  height: 3rem;
+}
+
+.notification-footer {
+  border-top: 1px solid #bbb;
 }

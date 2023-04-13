@@ -1,6 +1,8 @@
 {% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% block
-title %}Update My Profile{% endblock title %} {% block main_content %}
-<div class="me-actions__box">
+title %}
+My {{ 'Poetic' if current_user.is_poet else 'To-Be-Poetic' }} Profile{% endblock title %}
+{% block main_content %}
+<div class="me-actions__box account-action__links">
   {% if not current_user.is_poet %}
   <a href="{{url_for('main.become_poet')}}" class="action-btn">Become a Poet</a>
   {% endif %}
@@ -15,4 +17,5 @@ title %}Update My Profile{% endblock title %} {% block main_content %}
   <h2 class="form-title update-password__title">Update Password</h2>
   {{ wtf.quick_form(password_form) }}
 </div>
+<script src="{{ url_for('static', filename='js/confirm_delete.js') }}"></script>
 {% endblock main_content %}
