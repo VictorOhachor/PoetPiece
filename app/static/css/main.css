@@ -1079,9 +1079,7 @@ hr {
 }
 
 .notification-body {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+
   height: 3rem;
 }
 
