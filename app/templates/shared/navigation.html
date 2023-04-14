@@ -16,7 +16,11 @@
       </a>
     {% endif %}
     <a href="{{url_for('main.notifications')}}" class="nav-item">
-      <i class="fa-solid fa-bell"></i>
+      <i class="fa-solid fa-bell">
+        {% if unread_notifs %}
+          <sup class="redden unread-n__count">{{unread_notifs}}</sup>
+        {% endif %}
+      </i>
       <span>Notifications</span>
     </a>
     <a href="{{url_for('main.me')}}" class="nav-item">

@@ -1,28 +1,33 @@
 {% macro pagination_widget(pagination, endpoint) %}
+{% if pagination.total > pagination.per_page %}
 <div class="pagination-container">
-  <a
-    class="prev-page {{ 'disabled' if not pagination.has_prev else '' }}"
-    href="{{ url_for(endpoint, 
-        page=pagination.page - 1, **kwargs) if pagination.has_prev else '#' }}"
-  >
+  <a class="prev-page {{ 'disabled' if not pagination.has_prev else '' }}" href="{{ url_for(endpoint, 
+        page=pagination.page - 1, **kwargs) if pagination.has_prev else '#' }}">
     &lArr;
   </a>
+  <div class=page-items>
+    {{ pagination.first }} -
+    {{ pagination.last }} of
+    {{ pagination.total }}
+  </div>
   <ul class="pagination">
     {% for p in pagination.iter_pages() %} {% if p %}
-    <li class="{{ 'active' if pagination.page == p else '' }}">
-      <a href="{{ url_for(endpoint, page=p, **kwargs) }}">{{p}}</a>
+    {% if pagination.page != p %}
+    <li>
+      <a href="{{url_for(endpoint, page=p, **kwargs)}}">{{p}}</a>
     </li>
+    {% else %}
+    <li class="active"><strong>{{p}}</strong></li>
+    {% endif %}
     {% else %}
     <li class="disabled"><a href="#">&hellip;</a></li>
     {% endif %} {% endfor %}
   </ul>
-  <a
-    class="next-page {{ 'disabled' if not pagination.has_next else '' }}"
-    href="{% if pagination.has_next %}{{ url_for(endpoint,
-page = pagination.page + 1, **kwargs) }}{% else %}#{% endif %}"
-  >
+  <a class="next-page {{ 'disabled' if not pagination.has_next else '' }}" href="{% if pagination.has_next %}{{ url_for(endpoint,
+page = pagination.page + 1, **kwargs) }}{% else %}#{% endif %}">
     &rArr;
   </a>
+  {% endif %}
 </div>
 {% endmacro %} {% macro more_actions_widget(record, user, name='poem') %}
 <div class="more-actions__container">
@@ -32,10 +37,11 @@ page = pagination.page + 1, **kwargs) }}{% else %}#{% endif %}"
     <button class="more-action__btn" id="generate-btn">Download as PDF</button>
     {% if record.is_accessible %}
     <a href="/poems/{{record.id}}/publish">
-    {{ 'Unp' if record.published else 'P' }}ublish {{name|title}}
+      {{ 'Unp' if record.published else 'P' }}ublish {{name|title}}
     </a>
     <a href="/poems/{{record.id}}/complete">
-      Mark as {{ 'Inc' if record.completed else 'C' }}omplete
+      Mark as
+      {{ 'Inc' if record.completed else 'C' }}omplete
     </a>
     {% endif %}
   </div>

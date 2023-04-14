@@ -80,7 +80,7 @@
     <span class="black-dot"></span>
   </h2>
   {% if poem.comments.all()|length == 0 %}
-  <p class="no-comment">Be the first to add comment</p>
+  <p class="empty-list">Be the first to add comment</p>
   {% endif %}
   <div class="poem-comments">
     {% for comment in poem.comments.all() %}

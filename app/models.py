@@ -272,6 +272,12 @@ class Notification(BaseModel):
         if not user:
             return 'System'
         return user.username
+    
+    @classmethod
+    def count_unread(cls):
+        """Get the count of all unread notifications."""
+        unread_notifications = len(cls.find_by(unread=True))
+        return unread_notifications
 
 
 @login_manager.user_loader

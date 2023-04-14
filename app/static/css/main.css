@@ -740,14 +740,14 @@ hr {
   border: 1px solid #bbb;
 }
 
-.no-comment {
+/* .no-comment {
   color: #222;
   font-size: calc(1.5rem + 1vmin);
   text-align: center;
   border: 1px solid #eee;
   border-bottom: none;
   padding: 1rem 0;
-}
+} */
 
 
 /* Pagination Widget style */
@@ -799,12 +799,16 @@ hr {
   margin: auto;
 }
 
-.no-poem,
+.empty-list,
 .poetic-motivation {
   text-align: center;
 }
 
-.no-poem {
+.unread-n__count {
+  font-size: calc(.5rem + .5vmin);
+}
+
+.empty-list {
   line-height: 2.2rem;
   padding: 2rem .5rem;
   font-size: calc(1rem + 1vmin);

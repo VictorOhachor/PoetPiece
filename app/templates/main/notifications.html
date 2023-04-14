@@ -4,6 +4,11 @@
 {% block main_content %}
 <h1 class="main-content__title">All Notifications</h1>
 <div class="notifications-container">
+  {% if notifications|count == 0 %}
+    <p class="empty-list">
+      No notifications at the moment.
+    </p>
+  {% endif %}
   {% for notification in notifications %}
     <div class="notification-card {{'unread-notification' if notification.unread else ''}}">
       <p class="notification-header">

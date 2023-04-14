@@ -21,6 +21,13 @@ def make_shell_context():
     }
 
 
+@app.context_processor
+def inject_data():
+    return {
+        'unread_notifs': Notification.count_unread(),
+    }
+
+
 @app.cli.command()
 def test():
     """Run the unit tests."""
