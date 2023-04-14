@@ -47,6 +47,7 @@ current_user.is_poet %}
 </div>
 
 {{ macros.pagination_widget(pagination, 'poems.index') }}
+{% if not pagination.total %}
 {% if current_user.is_authenticated %}
 {% if current_user.is_poet %}
 <p class="poetic-motivation">
@@ -61,6 +62,7 @@ current_user.is_poet %}
 <p class="poetic-motivation">
   Are you disappointed? <a href="{{url_for('main.signup')}}">Create an account</a> and compose a masterpiece
 </p>
+{% endif %}
 {% endif %}
 <script src="{{url_for('static', filename='js/active_category.js')}}"></script>
 {% endblock main_content %}
