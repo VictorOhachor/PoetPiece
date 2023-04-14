@@ -1085,5 +1085,8 @@ hr {
 }
 
 .notification-footer {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   border-top: 1px solid #bbb;
 }
