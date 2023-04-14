@@ -1,8 +1,9 @@
 {% macro pagination_widget(pagination, endpoint) %}
 {% if pagination.total > pagination.per_page %}
+<hr>
 <div class="pagination-container">
   <a class="prev-page {{ 'disabled' if not pagination.has_prev else '' }}" href="{{ url_for(endpoint, 
-        page=pagination.page - 1, **kwargs) if pagination.has_prev else '#' }}">
+      page=pagination.page - 1, **kwargs) if pagination.has_prev else '#' }}">
     &lArr;
   </a>
   <div class=page-items>
@@ -10,21 +11,8 @@
     {{ pagination.last }} of
     {{ pagination.total }}
   </div>
-  <ul class="pagination">
-    {% for p in pagination.iter_pages() %} {% if p %}
-    {% if pagination.page != p %}
-    <li>
-      <a href="{{url_for(endpoint, page=p, **kwargs)}}">{{p}}</a>
-    </li>
-    {% else %}
-    <li class="active"><strong>{{p}}</strong></li>
-    {% endif %}
-    {% else %}
-    <li class="disabled"><a href="#">&hellip;</a></li>
-    {% endif %} {% endfor %}
-  </ul>
   <a class="next-page {{ 'disabled' if not pagination.has_next else '' }}" href="{% if pagination.has_next %}{{ url_for(endpoint,
-page = pagination.page + 1, **kwargs) }}{% else %}#{% endif %}">
+    page = pagination.page + 1, **kwargs) }}{% else %}#{% endif %}">
     &rArr;
   </a>
   {% endif %}

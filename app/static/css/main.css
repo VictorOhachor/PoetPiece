@@ -752,51 +752,33 @@ hr {
 
 /* Pagination Widget style */
 .pagination-container {
-  margin: 2rem 0;
-  padding: 2rem 0;
+  padding: .5rem;
   display: flex;
-  gap: .1rem;
+  gap: .5rem;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  background-color: #222;
+  border-radius: 20px;
+}
+
+.pagination-container .page-items {
+  color: #eee;
 }
 
 .pagination-container .disabled {
-  opacity: .4;
-}
-
-.pagination-container a {
-  text-decoration: none;
-  font-weight: 700;
-  color: #222;
-}
-
-.pagination-container .pagination {
-  display: flex;
-  align-items: center;
-  list-style: none;
-}
-
-.pagination li {
-  font-family: 'Space Mono', monospace;
-  padding: .3rem 1rem;
-}
-
-.pagination>.active {
-  border: solid 3px #911515;
-  font-size: larger;
+  opacity: .5;
 }
 
 .pagination-container .prev-page,
 .pagination-container .next-page {
-  background-color: #911515;
-  color: orange;
+  background-color: #eee;
+  color: #911515;
   height: 40px;
   width: 40px;
   text-align: center;
-  padding: .3rem 0 0;
+  padding: .3rem 0 .2rem;
   border-radius: 50%;
   font-size: 1.2rem;
-  margin: auto;
 }
 
 .empty-list,
