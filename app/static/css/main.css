@@ -1046,16 +1046,16 @@ hr {
 
 .notifications-container {
   margin: 1rem 0;
-  gap: 1rem;
 }
 
 .notifications-container .notification-card {
   gap: .2rem;
-  border: 1px solid #bbb;
+  padding: .5rem 0;
+  border-bottom: .5px solid #bbb;
 }
 
-.unread-notification {
-  background-color: #eee;
+.notification-card:last-child {
+  border-bottom: none;
 }
 
 .notification-header,
@@ -1069,23 +1069,20 @@ hr {
 }
 
 .notification-header {
-  background-color: #911515;
-  color: #eee;
-  padding: .2rem .5rem;
+  color: #666356;
 }
 
-.unread-notification .notification-body {
+.unread-notification {
   font-weight: bold;
 }
 
 .notification-body {
-
-  height: 3rem;
+  min-height: 3rem;
 }
 
 .notification-footer {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  border-top: 1px solid #bbb;
+  color: #911515;
 }
