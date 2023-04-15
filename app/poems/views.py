@@ -85,7 +85,7 @@ def create_poem():
         poem = Poem(author_id=poet.id, title=form.title.data,
                     description=form.description.data,
                     category_id=category.id,
-                    premium=form.is_premium.data)
+                    premium=form.premium.data)
         poem.save()
         # add a new notification
         n_content = f'{current_user.username} started a new poem called {poem.title}'
@@ -135,8 +135,10 @@ def edit_poem(poem_id):
     """Edit poem (with given id) title and description."""
     # get poem by id
     poem = Poem.find_by(id=poem_id, one=True)
+    # get category
+    category = Category.find_by(id=poem.category_id, one=True)
     # initialize form
-    form = PoemForm(obj=poem)
+    form = PoemForm(category=category.name, obj=poem)
 
     if form.validate_on_submit():
         # update poem
