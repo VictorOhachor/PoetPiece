@@ -29,8 +29,8 @@ class LoginForm(FlaskForm):
 
     username = _username_field('Remind Me Your Username:')
     password = _password_field('How About Your Password?:')
-    remember_me = BooleanField('Click here to keep you logged in')
-    submit = SubmitField('Hop in, dude!')
+    remember_me = BooleanField('Stay logged in')
+    submit = SubmitField('Hop in, fella!')
 
 
 class SignupForm(FlaskForm):

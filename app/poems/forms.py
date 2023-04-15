@@ -22,7 +22,7 @@ class PoemForm(FlaskForm):
                                 render_kw={'rows': '5'})
     category = SelectField('Select Poem Category', coerce=str,
                            validators=[DataRequired()],)
-    is_premium = BooleanField('Is this a premium poem?')
+    is_premium = BooleanField('Is this a premium poem?', name='premium')
     submit = SubmitField('Create/Update Poem')
 
 
