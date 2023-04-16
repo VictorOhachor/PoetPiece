@@ -3,7 +3,7 @@
 {% import '_macros.html' as macros %}
 {% block title %}Search Poems and Stanzas{% endblock title %}
 {% block main_content %}
-<h1 class="main-content__title">Search Results</h1>
+<h1 class="main-content__title">Search And Filters <strong>(SnF)</strong></h1>
 <form action="{{url_for('poems.search')}}" class="form">
   <div class="form-group">
     <input type="text" name="q" placeholder="Search Poems" autocapitalize="on" autofocus class="form-control">
@@ -21,6 +21,7 @@
   </section>
 
   <div class="results-container">
+    <p>Results: <strong>{{results|count}}</strong></p>
     {% if results %}
     <div class="results-container poems-container">
       {% for poem in results %}

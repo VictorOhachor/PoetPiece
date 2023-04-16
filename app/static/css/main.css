@@ -1187,6 +1187,9 @@ select option {
   max-width: 100%;
   position: sticky;
   top: 0;
+  background-color: #fff;
+  z-index: 2;
+  flex-basis: 30%;
 }
 
 .filters-box .filter-box__title {
@@ -1211,4 +1214,10 @@ select option {
 .search-poems__container .poems-container {
   border: none;
   padding: 0;
+}
+
+@media screen and (max-width: 700px) {
+  .search-poems__container .filters-box {
+    position: static;
+  }
 }
