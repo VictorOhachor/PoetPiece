@@ -792,7 +792,7 @@ select option {
   border-radius: 20px;
 }
 
-.pagination-container .page-items {
+.pagination-container .page-items__count {
   color: #eee;
 }
 
