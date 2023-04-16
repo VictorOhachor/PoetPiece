@@ -79,7 +79,7 @@ def search():
             for r in ratings:
                 if rating <= r[1]:
                     db_query = db_query.filter(
-                        Poem.rating >= r[0] & Poem.rating <= r[1]
+                        (Poem.rating >= r[0]) & (Poem.rating <= r[1])
                     )
         
         # query the remaining data
