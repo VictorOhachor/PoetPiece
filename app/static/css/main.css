@@ -1184,6 +1184,8 @@ select option {
   flex-grow: 1;
   flex-shrink: 0;
   max-width: 100%;
+  position: sticky;
+  top: 0;
 }
 
 .filters-box .filter-box__title {
