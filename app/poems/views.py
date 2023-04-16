@@ -66,7 +66,7 @@ def search():
     db_query = Poem.query
 
     # start the search
-    if len(queryData) <= 1 and queryData.get('q'):
+    if queryData.get('q'):
         q = queryData.pop('q')
         db_query = db_query.filter(
             Poem.title.ilike(f"%{q}%") | Poem.description.ilike(f"%{q}%")
@@ -77,7 +77,10 @@ def search():
             db_query = db_query.filter(Poem.rating <= rating)
         
         # query the remaining data
-        context['results'] = db_query.filter_by(**queryData).all()
+        db_query = db_query.filter_by(**queryData)
+    
+    # fetch the data
+    context['results'] = db_query.all()
 
 
     return render_template('poems/search_poems.html', **context)
