@@ -82,29 +82,6 @@ def notifications():
     return render_template('main/notifications.html', notifications=n)
 
 
-@main.get('/notifications/<string:notification_id>/mark')
-@login_required
-def mark_notification(notification_id):
-    """Mark a notification as read or unread."""
-    notification = Notification.find_by(id=notification_id, one=True)
-
-    if not notification:
-        flash('Something went wrong; could not find notification with given id.', 
-              'error')
-    else:
-        notification.unread = not notification.unread
-        notification.save()
-    
-    return redirect(url_for('.notifications'))
-
-
-@main.route('/search', methods=['GET', 'POST'])
-@login_required
-def search():
-    """Search for poems or notifications."""
-    pass
-
-
 @main.route('/me', methods=['GET', 'POST'])
 @login_required
 def me():
@@ -131,8 +108,11 @@ def me():
         **context['form_data'], prefix='profile_form')
 
     # perform post operations
-    _perform_post(context, 'password_form')
-    _perform_post(context, 'profile_form')
+    if context['password_form'].validate_on_submit():
+        return _perform_post(context['password_form'], context['_poetic_user'])
+    
+    if context['profile_form'].validate_on_submit():
+        return _perform_post(context['profile_form'], context['_poetic_user'])
 
     return render_template('main/me.html', **context)
 

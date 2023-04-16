@@ -50,6 +50,13 @@ def index():
     return render_template('poems/index.html', **context)
 
 
+@poems.route('/search', methods=['GET', 'POST'])
+@login_required
+def search():
+    """Search for poems or notifications."""
+    return render_template('poems/search_poems.html')
+
+
 @poems.route('/categories/new', methods=['GET', 'POST'])
 @is_poet
 def create_category():
@@ -162,7 +169,7 @@ def delete_poem(poem_id):
         return redirect(url_for('.poem', poem_id=poem_id))
 
     # get poem
-    poem = Poem.find_by(poem_id=poem_id, one=True)
+    poem = Poem.find_by(id=poem_id, one=True)
     # delete poem
     poem.delete()
     # create notification
@@ -332,3 +339,19 @@ def complete_poem(poem_id):
     flash(f'Poem has been marked as {flash_msg_type}.')
 
     return redirect(url_for('.poem', poem_id=poem_id))
+
+
+@poems.get('/notifications/<string:notification_id>/mark')
+@is_poet
+def mark_notification(notification_id):
+    """Mark a notification as read or unread."""
+    notification = Notification.find_by(id=notification_id, one=True)
+
+    if not notification:
+        flash('Something went wrong; could not find notification with given id.', 
+              'error')
+    else:
+        notification.unread = not notification.unread
+        notification.save()
+    
+    return redirect(url_for('main.notifications'))

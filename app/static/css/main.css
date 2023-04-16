@@ -517,7 +517,7 @@ input[type='checkbox'] {
   padding: 0 1rem 0 .8rem;
   border-radius: 50%;
   position: absolute;
-  top: 0;
+  top: 3px;
   left: -12px;
 }
 
@@ -526,9 +526,9 @@ input[type='checkbox'] {
   font-style: italic;
   padding: 0.5rem 1rem;
   border: 1px solid #333121;
-  border-top: 5px solid rgb(241, 184, 163);
-  border-top-right-radius: 10px;
-  border-top-left-radius: 10px;
+  border-top: 8px solid #fff;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 6px;
   white-space: pre-line;
   word-spacing: -0.4rem;
   font-size: calc(1rem + 0.8vmin);
@@ -581,7 +581,7 @@ input[type='checkbox'] {
   z-index: 1;
   margin-bottom: -1.8rem;
   align-self: center;
-  border: 1px solid rgb(241, 184, 163);
+  border: 1px solid #bbb;
   border-radius: 20px;
 }
 

@@ -28,19 +28,18 @@ def can_manage_poem(poem_id):
     return poem.is_accessible
 
 
-def _perform_post(context, form_name):
+def _perform_post(form, poetic_user: list):
     """Perform post operation on form."""
-    form = context.get(form_name, None)
 
-    if form and form.validate_on_submit():
-        [form.populate_obj(item) for item in context['_poetic_user']]
-        # persist changes to db
-        db.session.add_all(context['_poetic_user'])
-        db.session.commit()
+    [form.populate_obj(item) for item in poetic_user]
+    # persist changes to db
+    db.session.add_all(poetic_user)
+    db.session.commit()
 
-        # redirect back to me
-        flash('Successfully updated your password.')
-        return redirect(url_for('.me'))
+    # redirect back to me
+    form_type = form._prefix.split('_')[0]
+    flash(f'Successfully updated your {form_type}.')
+    return redirect(url_for('.me'))
 
 
 def create_notification(content, ntype, user_id=None):

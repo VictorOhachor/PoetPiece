@@ -20,10 +20,12 @@
         <span class="notification-user">{{notification.get_user()}}</span>
         <span class="notification-id">{{notification.id}}</span>
       </p>
-      <div class="unread-checkbox" data-mark-endpoint="{{ url_for('main.mark_notification', notification_id=notification.id) }}">
-        <input type="checkbox" name="n_read" id="{{ notification.id }}" {% if not notification.unread %}checked{% endif %}>
-        <label for="{{ notification.id }}">Mark as {{ 'Read' if notification.unread else 'Unread' }}</label>
-      </div>
+      {% if current_user.is_poet %}
+        <div class="unread-checkbox" data-mark-endpoint="{{ url_for('poems.mark_notification', notification_id=notification.id) }}">
+          <input type="checkbox" name="n_read" id="{{ notification.id }}" {% if not notification.unread %}checked{% endif %}>
+          <label for="{{ notification.id }}">Mark as {{ 'Read' if notification.unread else 'Unread' }}</label>
+        </div>
+      {% endif %}
     </div>
   {% endfor %}
 </div>
