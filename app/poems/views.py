@@ -61,7 +61,7 @@ def search():
         'results': None
     }
     # call the helper function to properly parse the args
-    queryData = _process_search_query(request.args.to_dict())
+    queryData = _process_search_query(request.args.to_dict(flat=True))
     # initialize query
     db_query = Poem.query
 
@@ -78,6 +78,8 @@ def search():
         
         # query the remaining data
         db_query = db_query.filter_by(**queryData)
+    
+    print(queryData)
     
     # fetch the data
     context['results'] = db_query.all()

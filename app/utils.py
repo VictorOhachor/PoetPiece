@@ -70,5 +70,7 @@ def _process_search_query(form_data: dict):
         if value and key not in refined_data:
             if converter == bool:
                 refined_data[key] = True if value == 'True' else False
+            else:
+                refined_data[key] = converter(value)
     
     return refined_data
