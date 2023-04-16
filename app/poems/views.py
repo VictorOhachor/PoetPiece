@@ -73,7 +73,7 @@ def search():
         )
     else:
         if queryData.get('rating'):
-            ratings = {'low': (0.0, 1.0), 'fair': (1.1, 3.0), 'high': (3.1, 5.0)}
+            ratings = [(0.0, 1.0), (1.1, 3.0), (3.1, 5.0)]
             
             rating = queryData.pop('rating')
             for r in ratings:
