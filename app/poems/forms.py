@@ -1,10 +1,11 @@
 from flask_wtf import FlaskForm
 from wtforms import (StringField, IntegerField,
                      BooleanField, SubmitField,
-                     SelectField, TextAreaField)
+                     SelectField, TextAreaField, IntegerRangeField)
 from wtforms.validators import (DataRequired, Length,
                                 NumberRange, Regexp)
-from ..models import Category
+from ..models import Category, Poet
+from flask import request
 
 
 class PoemForm(FlaskForm):
@@ -21,9 +22,41 @@ class PoemForm(FlaskForm):
                                 validators=[Length(0, 3000),],
                                 render_kw={'rows': '5'})
     category = SelectField('Select Poem Category', coerce=str,
-                           validators=[DataRequired()],)
-    premium = BooleanField('Is this a premium poem?')
+                           validators=[DataRequired()])
+    premium = BooleanField('Mark as Premium')
     submit = SubmitField('Create/Update Poem')
+
+
+class FilterPoemForm(FlaskForm):
+    """Represents the filter form for searching through poems."""
+
+    poet = SelectField('Filter by Poets:',)
+    rating = SelectField('Filter by Ratings:', choices=[
+        ('', 'All'), (1, 'Rating <= 1.0'), (3, '1.0 < Rating <= 3.0'),
+        (5, '3.0 < Rating <= 5.0')
+    ])
+    completed = SelectField('Filter by Completion:', choices=[
+        ('', 'Any'), (True, 'Completed'), (False, 'In Progress')
+    ])
+    premium = SelectField('Filter by Poem Types:', choices=[
+        ('', 'Any'), (True, 'Premium'), (False, 'Free')
+    ], coerce=bool)
+    filter_poem = SubmitField('Apply Filters', name='')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # set the poets choices
+        self.poet.choices = [('', 'All'), *Poet.get_choices()]
+
+        # delete csrf token on GET requests
+        if request.method == 'GET':
+            del self.csrf_token
+    
+    def hidden_tag(self, *fields):
+        if request.method == 'GET':
+            return ''
+        return super().hidden_tag(*fields)
 
 
 class StanzaForm(FlaskForm):

@@ -4,9 +4,10 @@ from flask_login import login_required, current_user
 from . import poems
 from .. import db
 from .forms import (PoemForm, CategoryForm, StanzaForm,
-                    CommentForm)
+                    CommentForm, FilterPoemForm)
 from ..models import Poet, Poem, Category, Stanza, Comment, Notification
-from ..utils import is_poet, can_manage_poem, create_notification
+from ..utils import (is_poet, can_manage_poem, create_notification,
+                     _process_search_query)
 
 
 @poems.get('/poems')
@@ -54,7 +55,34 @@ def index():
 @login_required
 def search():
     """Search for poems or notifications."""
-    return render_template('poems/search_poems.html')
+    # data to be passed to the template.
+    context = {
+        'form': FilterPoemForm(),
+        'results': None
+    }
+    # call the helper function to properly parse the args
+    queryData = _process_search_query(request.args.to_dict())
+    # initialize query
+    db_query = Poem.query
+
+    print(queryData)
+
+    # start the search
+    if queryData.get('q'):
+        q = queryData.pop('q')
+        db_query = db_query.filter(
+            Poem.title.ilike(f"%{q}%") | Poem.description.ilike(f"%{q}%")
+        )
+
+    if queryData.get('rating'):
+        rating = queryData.pop(rating)
+        db_query = db_query.filter(Poem.rating <= rating)
+    
+    # query the remaining data
+    context['results'] = db_query.filter_by(**queryData).all()
+    print(context['results'])
+
+    return render_template('poems/search_poems.html', **context)
 
 
 @poems.route('/categories/new', methods=['GET', 'POST'])

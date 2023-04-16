@@ -35,3 +35,24 @@
   </div>
 </div>
 {% endmacro %}
+
+{% macro poem_card_widget(poem) %}
+<a href="/poems/{{poem.id}}">
+  <div class="poem-card">
+    <h4 class="poem-title">{{poem.title}}</h4>
+    <p class="poem-desc">
+      {% if poem.description %} {{poem.description[:60]|trim}}{{'...' if
+      poem.description|length > 60 else ''}} {% else %} No Poem Description.
+      {%endif%}
+    </p>
+    <p class="poem-metadata">
+      <span class="poem-creation__date">{{poem.crafted_on.date()}}</span>
+      <span class="poem-rating">{{poem.rating}}</span>
+      <span class="poem-category">{{poem.categories.name}}</span>
+    </p>
+    <p class="poem-premium {{'is-premium' if poem.premium else 'not-premium'}}">
+      {{'Premium' if poem.premium else 'Free'}}
+    </p>
+  </div>
+</a>
+{% endmacro %}

@@ -18,7 +18,7 @@
       <p class="notification-body">{{notification.content}}</p>
       <p class="notification-footer">
         <span class="notification-user">{{notification.get_user()}}</span>
-        <span class="notification-id">{{notification.id}}</span>
+        <span class="notification-id"><strong>NID</strong> &rArr; <em>{{notification.id}}</em></span>
       </p>
       {% if current_user.is_poet %}
         <div class="unread-checkbox" data-mark-endpoint="{{ url_for('poems.mark_notification', notification_id=notification.id) }}">

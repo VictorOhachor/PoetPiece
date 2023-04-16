@@ -26,10 +26,33 @@ hr {
   margin: 1.5rem 0;
 }
 
+input, select, textarea {
+  border: 1px solid #911515 !important;
+  border-radius: 5px;
+}
+
 input[type='checkbox'] {
   min-width: 20px;
   min-height: 20px;
   margin-right: .3rem;
+}
+
+select {
+  background-color: #eee;
+  color: #222;
+  appearance: none;
+  padding: .2rem .5rem;
+  width: 100%;
+  background: url(../assets/down_arrow.png) no-repeat right #ddd;
+  -webkit-appearance: none;
+  background-position: center right;
+  background-size: 24px;
+}
+
+select option {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  background-color: #eee;
+  color: #911515;
 }
 
 .help-block {
@@ -108,7 +131,7 @@ input[type='checkbox'] {
 
 .app-main__content {
   margin: auto;
-  max-width: 900px;
+  max-width: 1240px;
   position: relative;
   padding: 2rem 0.5rem;
 }
@@ -179,7 +202,7 @@ input[type='checkbox'] {
 .app-main__content>.form {
   padding: 1rem;
   margin-top: 2rem;
-  border-radius: 5px;
+  border-radius: 10px;
   box-shadow: 1px 1px 10px 5px #eee;
 }
 
@@ -327,7 +350,8 @@ input[type='checkbox'] {
   margin: 1rem auto;
   max-width: max-content;
   display: block;
-  font-size: 1.5rem;
+  text-align: center;
+  font-size: calc(1rem + 1vmin);
 }
 
 .app-main__content .poems-container {
@@ -1092,7 +1116,7 @@ input[type='checkbox'] {
 }
 
 .notification-footer .notification-user {
-  margin-right: auto;
+  flex-basis: 50%;
 }
 
 .notification-footer .notification-id {
@@ -1138,4 +1162,50 @@ input[type='checkbox'] {
 .unread-checkbox input[type='checkbox']:checked::after {
   content: '\2713';
   color: #911515;
+}
+
+/* Search Poems Container */
+.search-poems__container {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.search-poems__container .filters-box, 
+.search-poems__container .results-container {
+  border-radius: .3rem;
+}
+
+.search-poems__container .filters-box {
+  padding: .5rem;
+  border: 1px solid #eee;
+  flex-grow: 1;
+  flex-shrink: 0;
+  max-width: 100%;
+}
+
+.filters-box .filter-box__title {
+  font-size: calc(.5rem + 1.5vmin);
+}
+
+.search-poems__container .results-container {
+  flex-grow: 2;
+  flex-basis: 60%;
+}
+
+.results-container > a {
+  border-radius: 3px !important;
+  background-color: #222222e8 !important;
+  border: 1px solid #eee !important;
+}
+
+.results-container > a:hover {
+  background-color: #222222b7 !important;
+}
+
+.search-poems__container .poems-container {
+  border: none;
+  padding: 0;
 }

@@ -70,6 +70,11 @@ class BaseModel(db.Model):
         records = cls.query.filter_by(**kwargs).order_by(*args).all()
         return records
 
+    @classmethod
+    def get_choices(cls):
+        """Get all records as WTForms select field choices."""
+        pass
+
 
 class User(UserMixin, BaseModel):
     """Model representing a user instance."""
@@ -108,6 +113,10 @@ class User(UserMixin, BaseModel):
         """Verify that password is correct."""
         return check_password_hash(self.password_hash, password)
 
+    @classmethod
+    def find_by_username(cls, username):
+        return cls.find_by(username=username, one=True)
+
 
 class Poet(BaseModel):
     """Model representing an poet instance."""
@@ -135,6 +144,12 @@ class Poet(BaseModel):
 
         return True if poets_count >= max_poets_count else False
 
+    @classmethod
+    def get_choices(cls):
+        return [(poet.users.username,
+                                 poet.users.username.capitalize())
+                                for poet in cls.find_all()]
+
 
 class Category(BaseModel):
     """Model representing a category instance."""
@@ -156,7 +171,6 @@ class Category(BaseModel):
 
     @classmethod
     def get_choices(cls):
-        """Get all category as WTForms select field choices."""
         return [(category.name, category.name.upper())
                 for category in cls.find_all()]
 
@@ -200,6 +214,11 @@ class Poem(BaseModel):
         """Publish or unpublish a poem."""
         self.published = not self.published
         self.save()
+
+    @classmethod
+    def get_choices(cls):
+        return [(poem.title, poem.title.upper())
+                for poem in cls.find_all()]
 
 
 class Stanza(BaseModel):
@@ -272,7 +291,7 @@ class Notification(BaseModel):
         if not user:
             return 'System'
         return user.username
-    
+
     @classmethod
     def count_unread(cls):
         """Get the count of all unread notifications."""

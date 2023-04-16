@@ -3,7 +3,7 @@
 from functools import wraps
 from flask import flash, redirect, url_for
 from flask_login import current_user, login_required
-from .models import Poem, Notification
+from .models import Poem, Notification, Poet, User
 from . import db
 
 
@@ -52,3 +52,23 @@ def create_notification(content, ntype, user_id=None):
         Notification.create(**n_data)
     except Exception as e:
         print(str(e))
+
+
+def _process_search_query(form_data: dict):
+    """Process the form data passed and returned a more refined dict data."""
+    refined_data = {}
+    # all search/filter query keys that will be used
+    queryKeys = [('q', str), ('author_id', str), ('rating', int), 
+                 ('completed', bool), ('premium', bool)]
+
+    if form_data.get('poet'):
+        refined_data['author_id'] = Poet.find_by(user_id=User.find_by_username(
+            form_data['poet']).id, one=True).id
+    
+    for key, converter in queryKeys:
+        value = form_data.get(key)
+        if value and key not in refined_data:
+            if converter == bool:
+                refined_data[key] = True if value == 'True' else False
+    
+    return refined_data

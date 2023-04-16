@@ -1,6 +1,38 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
+{% import '_macros.html' as macros %}
 {% block title %}Search Poems and Stanzas{% endblock title %}
 {% block main_content %}
-  
+<h1 class="main-content__title">Search Results</h1>
+<form action="{{url_for('poems.search')}}" class="form">
+  <div class="form-group">
+    <input type="text" name="q" placeholder="Search Poems" autocapitalize="on" autofocus class="form-control">
+  </div>
+  <input class="btn btn-default" type="submit" value="Search">
+</form>
+<hr>
+<div class="search-poems__container">
+  <section class="filters-box">
+    <div>
+      <h4 class="filter-box__title">Filters</h4>
+      <hr style="margin: 0 0 .6rem; padding: 0; border: 0;">
+    </div>
+    {{ wtf.quick_form(form, method='GET') }}
+  </section>
+
+  <div class="results-container">
+    {% if results %}
+    <div class="results-container poems-container">
+      {% for poem in results %}
+      {{ macros.poem_card_widget(poem) }}
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty-list">
+      Search for poems using the search bar above <br>
+      and filter down the search to specifics.
+    </p>
+    {% endif %}
+  </div>
+</div>
 {% endblock %}
