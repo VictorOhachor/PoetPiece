@@ -1,4 +1,4 @@
-from flask import render_template, redirect, request, flash, url_for, current_app
+from flask import render_template, redirect, request, flash, url_for
 from flask_login import login_required, login_user, logout_user, current_user
 from . import main
 from .. import db
@@ -75,10 +75,27 @@ def notifications():
     q = request.args.get('q')
     unread = request.args.get('unread')
     # fetch notifications
-    n = Notification.find_by(in_trash=False)
+    n = Notification.find_order_by(Notification.created_at.desc(),
+                                   in_trash=False)
     # fetch user attached to notification
 
     return render_template('main/notifications.html', notifications=n)
+
+
+@main.get('/notifications/<string:notification_id>/mark')
+@login_required
+def mark_notification(notification_id):
+    """Mark a notification as read or unread."""
+    notification = Notification.find_by(id=notification_id, one=True)
+
+    if not notification:
+        flash('Something went wrong; could not find notification with given id.', 
+              'error')
+    else:
+        notification.unread = not notification.unread
+        notification.save()
+    
+    return redirect(url_for('.notifications'))
 
 
 @main.route('/search', methods=['GET', 'POST'])
@@ -158,9 +175,9 @@ def delete_me():
         err_msg = 'So unfortunate! We will need more information before ' \
             'we can progress with this operation!'
         flash(err_msg, 'error')
-        
+
         return redirect(url_for('.handle_survey', type='account_deletion'))
-    
+
     # delete user's account if not a poet
     user.delete()
     # create notification

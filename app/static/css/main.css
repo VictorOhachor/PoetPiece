@@ -26,6 +26,12 @@ hr {
   margin: 1.5rem 0;
 }
 
+input[type='checkbox'] {
+  min-width: 20px;
+  min-height: 20px;
+  margin-right: .3rem;
+}
+
 .help-block {
   color: #911515;
   font-size: 1.3rem;
@@ -1052,6 +1058,7 @@ hr {
   gap: .2rem;
   padding: .5rem 0;
   border-bottom: .5px solid #bbb;
+  position: relative;
 }
 
 .notification-card:last-child {
@@ -1081,8 +1088,54 @@ hr {
 }
 
 .notification-footer {
+  color: #911515;
+}
+
+.notification-footer .notification-user {
+  margin-right: auto;
+}
+
+.notification-footer .notification-id {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+.unread-checkbox {
+  align-self: center;
+  background-color: #eee;
+  padding: .2rem .5rem;
+  margin-top: .5rem;
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  cursor: pointer;
+  color: #911515;
+  border-radius: 20px;
+}
+
+.unread-checkbox label {
+  font-size: calc(.8rem + .6vmin);
+}
+
+.unread-checkbox input[type='checkbox'] {
+  text-align: center;
+  display: table-cell;
+  vertical-align: middle;
+  width: 20px !important;
+  height: 20px !important;
+  appearance: none;
+  border-radius: 20px;
+  border: 1px solid #911515;
+  box-shadow: none;
+  font-size: 1em;
+}
+
+.unread-checkbox input[type='checkbox']:checked {
+  background-color: #fff;
+}
+
+.unread-checkbox input[type='checkbox']:checked::after {
+  content: '\2713';
   color: #911515;
 }
