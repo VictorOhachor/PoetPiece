@@ -73,8 +73,14 @@ def search():
         )
     else:
         if queryData.get('rating'):
-            rating = queryData.pop(rating)
-            db_query = db_query.filter(Poem.rating <= rating)
+            ratings = {'low': (0.0, 1.0), 'fair': (1.1, 3.0), 'high': (3.1, 5.0)}
+            
+            rating = queryData.pop('rating')
+            for r in ratings:
+                if rating <= r[1]:
+                    db_query = db_query.filter(
+                        Poem.rating >= r[0] & Poem.rating <= r[1]
+                    )
         
         # query the remaining data
         db_query = db_query.filter_by(**queryData)
