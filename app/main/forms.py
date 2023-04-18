@@ -2,8 +2,8 @@ from flask_login import current_user
 from flask_wtf import FlaskForm
 from wtforms import (StringField, PasswordField,
                      BooleanField, SubmitField,
-                     DateField, SelectField)
-from wtforms.validators import (DataRequired, Length, Optional,
+                     DateField, SelectField, TextAreaField)
+from wtforms.validators import (DataRequired, Length,
                                 Regexp, EqualTo, Email, AnyOf)
 from wtforms import ValidationError
 from ..models import User, Poet
@@ -63,6 +63,9 @@ class PoetForm(FlaskForm):
                              DataRequired(), AnyOf(
                                  ['female', 'male', 'others'])
                          ])
+    bio = TextAreaField('Enter a brief bio about yourself:', validators=[
+        DataRequired(), Length(1, 2000)
+    ])
     password = _password_field('Enter Your Password to Confirm your Identity')
     submit = SubmitField('Submit')
 
@@ -98,9 +101,11 @@ class EditProfileForm(FlaskForm):
     gender = SelectField('Update Your Gender: ',
                          choices=[('', '--- Choose your gender ---'), ('female', 'Female'),
                                   ('male', 'Male'), ('others', 'Others')], coerce=str,
-                                  validators=[DataRequired(), AnyOf(
-                                 ['female', 'male', 'others'])
+                         validators=[DataRequired(), AnyOf(
+                             ['female', 'male', 'others'])
                          ])
+    bio = TextAreaField('Enter a brief bio about yourself:', validators=[
+        DataRequired(), Length(1, 2000)])
     birth_date = DateField('Update Your Date of Birth (optional): ',
                            validators=[DataRequired()])
     submit = SubmitField('Update Profile')

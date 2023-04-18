@@ -18,7 +18,7 @@ class PoemForm(FlaskForm):
 
     title = StringField('New Poem Title',
                         validators=[DataRequired(), Length(1, 255)])
-    description = TextAreaField('Describe the New Poem',
+    description = TextAreaField('Describe the New Poem (optional)',
                                 validators=[Length(0, 3000),],
                                 render_kw={'rows': '5'})
     category = SelectField('Select Poem Category', coerce=str,

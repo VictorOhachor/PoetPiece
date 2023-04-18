@@ -127,6 +127,7 @@ class Poet(BaseModel):
     email = db.Column(db.String(255), unique=True, index=True)
     gender = db.Column(db.String(10), nullable=False)
     verified = db.Column(db.Boolean, default=False)
+    bio = db.Column(db.String(3000), nullable=True)
 
     # foreign keys
     poems = db.relationship('Poem', backref='poets', lazy='dynamic')
@@ -137,7 +138,7 @@ class Poet(BaseModel):
         return self.created_at
     
     @property
-    def username(self):
+    def poet_name(self):
         """Return the poet username."""
         user = User.find_by(id=self.user_id, one=True)
         return user.username

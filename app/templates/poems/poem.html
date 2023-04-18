@@ -11,7 +11,7 @@
 
 <p class="poem-metadata">
   {% if poem.poets %}
-    <span class="poem-author">{{poem.poets.username}}</span>
+    <span class="poem-author">{{poem.poets.poet_name}}</span>
   {% endif %}
   <span class="poem-creation__date">{{poem.crafted_on.date()}}</span>
   <span class="poem-rating">{{poem.rating}}</span>
