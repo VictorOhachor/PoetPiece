@@ -135,6 +135,12 @@ class Poet(BaseModel):
     def became_poet_on(self):
         """Return the date that user became a poet."""
         return self.created_at
+    
+    @property
+    def username(self):
+        """Return the poet username."""
+        user = User.find_by(id=self.user_id, one=True)
+        return user.username
 
     @classmethod
     def reached_limit(cls):

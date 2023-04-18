@@ -90,7 +90,6 @@ def search():
     # fetch the data
     context['results'] = db_query.all()
 
-
     return render_template('poems/search_poems.html', **context)
 
 
