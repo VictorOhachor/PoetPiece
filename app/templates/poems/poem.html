@@ -10,10 +10,10 @@
 >
 
 <p class="poem-metadata">
+  <span class="poem-creation__date">{{poem.crafted_on.date()}}</span>
   {% if poem.poets %}
     <span class="poem-author">{{poem.poets.poet_name}}</span>
   {% endif %}
-  <span class="poem-creation__date">{{poem.crafted_on.date()}}</span>
   <span class="poem-rating">{{poem.rating}}</span>
   <span class="poem-category">{{poem.categories.name}}</span>
 </p>

@@ -418,12 +418,12 @@ select option {
   border-radius: 20px;
 }
 
-.poem-metadata .poem-author {
-  color: #eee;
-}
-
 .poem-metadata .poem-creation__date {
   color: grey;
+}
+
+.poem-metadata .poem-author {
+  color: #eee;
   margin-right: auto;
 }
 
