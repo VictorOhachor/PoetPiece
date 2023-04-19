@@ -7,7 +7,7 @@ class Config:
     """Contain base configuration settings for this application."""
 
     SECRET_KEY = os.environ.get('SECRET_KEY')
-    FLASK_POEMS_PER_PAGE = int(os.environ.get('FLASK_POEMS_PER_PAGE'), 9)
+    FLASK_POEMS_PER_PAGE = int(os.environ.get('FLASK_POEMS_PER_PAGE', 9))
     MAXIMUM_POET_COUNT = int(os.environ.get('MAXIMUM_POET_COUNT', 10))
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     CELERY = {

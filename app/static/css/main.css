@@ -6,6 +6,10 @@
   padding: 0;
 }
 
+:root {
+  font-size: 14px;
+}
+
 body {
   font-family: "Titillium Web", sans-serif;
   color: #222;
@@ -412,6 +416,7 @@ select option {
   gap: 0.4rem;
   font-weight: 700;
   align-items: center;
+  justify-content: space-between;
   margin: 0.5rem 0;
   background-color: #222;
   padding: .2rem .8rem;
@@ -424,12 +429,11 @@ select option {
 
 .poem-metadata .poem-author {
   color: #eee;
-  margin-right: auto;
+  margin: auto;
 }
 
 .poem-metadata .poem-rating {
   color: yellow;
-  margin-right: 1rem;
 }
 
 .poem-metadata .poem-category {
@@ -808,12 +812,13 @@ select option {
 .pagination-container .next-page {
   background-color: #eee;
   color: #911515;
-  height: 40px;
-  width: 40px;
-  text-align: center;
-  padding: .3rem 0 .2rem;
+  height: 35px;
+  width: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
 }
 
 .empty-list,
@@ -1148,16 +1153,16 @@ select option {
 }
 
 .unread-checkbox input[type='checkbox'] {
-  text-align: center;
-  display: table-cell;
-  vertical-align: middle;
-  width: 20px !important;
-  height: 20px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px !important;
+  height: 25px !important;
   appearance: none;
-  border-radius: 20px;
+  border-radius: 50%;
   border: 1px solid #911515;
   box-shadow: none;
-  font-size: 1em;
+  font-size: calc(1rem + .4vmin);
 }
 
 .unread-checkbox input[type='checkbox']:checked {
