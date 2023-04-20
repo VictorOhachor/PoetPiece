@@ -975,7 +975,7 @@ select option {
   justify-content: space-between;
   align-items: center;
   margin: auto;
-  max-width: 900px;
+  max-width: 1240px;
   font-family: 'PT Sans Narrow', sans-serif;
   overflow: auto hidden;
   scrollbar-width: none;
