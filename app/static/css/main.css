@@ -813,10 +813,10 @@ select option {
 .pagination-container .next-page {
   background-color: #eee;
   color: #e54b4b;
-  height: 35px;
-  width: 35px;
+  height: 40px;
+  width: 40px;
   text-align: center;
-  padding: .5rem .5rem 1rem;
+  padding: auto .5rem 1rem;
   border-radius: 50%;
   font-size: 1.5rem;
 }
