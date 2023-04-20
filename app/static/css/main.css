@@ -124,17 +124,15 @@ select option {
 }
 
 .app-navbar a {
-  color: #eee;
+  color: #fff;
   background-color: #e54b4b;
-  box-shadow: 4px 4px 1px 1px #222;
   padding: .1rem .5rem .2rem;
-  border-radius: 5px;
+  border: 1px solid #bbb;
   transition: all 200ms ease-in-out;
 }
 
 .app-navbar a:hover {
   background-color: #222;
-  box-shadow: 4px 4px 2px 1px #bbb;
   transition: all 200ms ease-in-out;
 }
 
@@ -213,6 +211,7 @@ select option {
   margin-top: 2rem;
   border-radius: 10px;
   background-color: #fff;
+  border: 1px solid #bbb;
 }
 
 .app-main__content .form-group {
@@ -1011,7 +1010,7 @@ select option {
 
 .app-navbar .darken {
   background-color: #222;
-  box-shadow: #e54b4b;
+  color: #eee;
 }
 
 .nav-item__active-parent::before {
