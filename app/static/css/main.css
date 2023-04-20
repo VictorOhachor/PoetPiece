@@ -212,7 +212,7 @@ select option {
   padding: 1rem;
   margin-top: 2rem;
   border-radius: 10px;
-  box-shadow: 1px 1px 10px 5px #eee;
+  background-color: #fff;
 }
 
 .app-main__content .form-group {
@@ -1182,7 +1182,7 @@ select option {
 
 .search-poems__container .filters-box {
   padding: .5rem;
-  border: 1px solid #eee;
+  border: 1px solid #bbb;
   flex-grow: 1;
   flex-shrink: 0;
   max-width: 100%;
