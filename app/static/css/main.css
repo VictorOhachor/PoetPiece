@@ -818,7 +818,8 @@ select option {
   display: flex;
   height: 40px;
   width: 40px;
-  padding: .3rem;
+  text-align: center;
+  padding-bottom: .2rem;
   border-radius: 50%;
   font-size: 1.5rem;
 }
