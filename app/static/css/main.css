@@ -1202,16 +1202,6 @@ select option {
   flex-basis: 60%;
 }
 
-.results-container > a {
-  border-radius: 3px !important;
-  background-color: #222222e8 !important;
-  border: 1px solid #eee !important;
-}
-
-.results-container > a:hover {
-  background-color: #222222b7 !important;
-}
-
 .search-poems__container .poems-container {
   border: none;
   padding: 0;
