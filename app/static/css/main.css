@@ -7,7 +7,7 @@
 }
 
 :root {
-  font-size: 14px;
+  font-size: 15px;
 }
 
 body {
@@ -16,6 +16,7 @@ body {
   position: relative;
   min-height: 100vh;
   margin-bottom: 3rem;
+  background-color: #eee;
 }
 
 a {
@@ -31,7 +32,7 @@ hr {
 }
 
 input, select, textarea {
-  border: 1px solid #911515 !important;
+  border: 1px solid #e54b4b !important;
   border-radius: 5px;
 }
 
@@ -56,11 +57,11 @@ select {
 select option {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   background-color: #eee;
-  color: #911515;
+  color: #e54b4b;
 }
 
 .help-block {
-  color: #911515;
+  color: #e54b4b;
   font-size: 1.3rem;
   font-weight: 700;
 }
@@ -71,13 +72,18 @@ select option {
 }
 
 .error-toast {
-  color: #911515;
+  color: #e54b4b;
   background-color: rgba(255, 166, 0, 0.534);
 }
 
 .msg-toast {
   background-color: rgba(0, 128, 0, 0.335);
   color: #1c521c;
+}
+
+.redden {
+  color: #e54b4b !important;
+  font-weight: bolder;
 }
 
 .new-user__text {
@@ -94,20 +100,19 @@ select option {
   padding: 1rem 2rem;
   gap: 1rem;
   flex-wrap: wrap;
-  background-color: #eee;
+  background-color: #222;
 }
 
 .app-logo {
-  color: #222;
+  color: #eee;
   font-family: "Monoton", cursive;
   font-size: calc(1.5rem + 1.5vmin);
   font-weight: 700;
   flex-grow: 1;
 }
 
-.redden {
-  color: rgb(145, 21, 21) !important;
-  font-weight: bolder;
+.app-logo .redden {
+  color: #e54b4b !important;
 }
 
 .app-navbar {
@@ -120,7 +125,7 @@ select option {
 
 .app-navbar a {
   color: #eee;
-  background-color: rgb(145, 21, 21);
+  background-color: #e54b4b;
   box-shadow: 4px 4px 1px 1px #222;
   padding: .1rem .5rem .2rem;
   border-radius: 5px;
@@ -226,13 +231,13 @@ select option {
   display: flex;
   gap: 0.2rem;
   align-items: center;
-  color: rgb(145, 21, 21);
+  color: #e54b4b;
   font-size: 1.5rem;
 }
 
 .app-main__content input[type="submit"] {
   font-size: 1.5rem;
-  background-color: rgb(145, 21, 21);
+  background-color: #e54b4b;
   color: #eee;
   padding: 0.5rem 0;
   border: none;
@@ -262,7 +267,7 @@ select option {
 }
 
 .app-about .heading {
-  color: rgb(145, 21, 21);
+  color: #e54b4b;
   text-align: end;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid #eee;
@@ -271,12 +276,12 @@ select option {
 
 .app-about .subheading::before {
   content: "[";
-  color: rgb(145, 21, 21);
+  color: #e54b4b;
 }
 
 .app-about .subheading::after {
   content: "]";
-  color: rgb(145, 21, 21);
+  color: #e54b4b;
 }
 
 .app-about .subheading {
@@ -309,7 +314,7 @@ select option {
 }
 
 .app-about>.reasons-list li {
-  background-color: rgb(145, 21, 21);
+  background-color: #e54b4b;
   color: #eee;
   padding: 0.1rem 0.5rem;
   border-radius: 20px;
@@ -343,7 +348,7 @@ select option {
 }
 
 .create-poem-container a {
-  background-color: rgb(145, 21, 21);
+  background-color: #e54b4b;
   padding: 0.5rem 1rem;
   color: #eee;
   text-decoration: none;
@@ -372,7 +377,9 @@ select option {
   justify-content: space-between;
   gap: 0.4rem;
   padding: 0.5rem;
-  color: #eee;
+  color: #222;
+  border: 1px solid #bbb;
+  background-color: #fff;
   height: 100%;
 }
 
@@ -380,13 +387,13 @@ select option {
   text-decoration: none;
 }
 
-.poems-container>a:nth-child(even) {
-  background-color: #911515;
+/* .poems-container>a:nth-child(even) {
+  background-color: #e54b4b;
 }
 
 .poems-container>a:nth-child(odd) {
   background-color: #222;
-}
+} */
 
 .poem-card .poem-title {
   text-transform: uppercase;
@@ -398,7 +405,7 @@ select option {
 
 .poem-card .poem-desc {
   background-color: #eee;
-  color: #911515;
+  color: #e54b4b;
   padding: 0.3rem;
   font-weight: 600;
   font-size: 1.2rem;
@@ -433,7 +440,13 @@ select option {
 }
 
 .poem-metadata .poem-rating {
-  color: yellow;
+  color: rgb(167, 167, 1);
+  font-weight: 800;
+}
+
+.poem-metadata .poem-rating::before {
+  content: '\2605';
+  margin-right: .2rem;
 }
 
 .poem-metadata .poem-category {
@@ -543,7 +556,7 @@ select option {
 .poem-stanza__card .stanza-number {
   font-size: 1rem;
   font-weight: 900;
-  background-color: #911515;
+  background-color: #e54b4b;
   color: #eee;
   align-self: flex-start;
   padding: 0 1rem 0 .8rem;
@@ -578,7 +591,7 @@ select option {
 .slider-btns button {
   font-size: 1.5rem;
   color: #eee;
-  background-color: #911515;
+  background-color: #e54b4b;
   border: none;
   padding: .3rem .6rem;
   cursor: pointer;
@@ -642,7 +655,7 @@ select option {
 
 .poem-action__links>a:first-child,
 .stanza-action__links>a:first-child {
-  background-color: #911515;
+  background-color: #e54b4b;
   color: #eee;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
@@ -664,7 +677,8 @@ select option {
   gap: 2rem;
   flex-direction: column;
   padding: .5rem;
-  border: 1px solid #eee;
+  border-radius: 5px;
+  background-color: #fff;
   margin: 3rem 0;
 }
 
@@ -673,7 +687,7 @@ select option {
 }
 
 .comments-container .comments-title {
-  color: #911515;
+  color: #e54b4b;
   font-size: 2rem;
   text-transform: uppercase;
 
@@ -696,7 +710,9 @@ select option {
 }
 
 .comments-container .poem-comments {
-  border: 1px solid #eee;
+  border: 1px solid #bbb;
+  padding: .5rem 0;
+  background-color: #fff;
 }
 
 .poem-comments .comment-card {
@@ -705,10 +721,11 @@ select option {
   gap: .3rem;
   padding: 1rem;
   position: relative;
+  border-bottom: 1px solid #bbb;
 }
 
-.poem-comments .comment-card:nth-child(even) {
-  background-color: #eee;
+.poem-comments .comment-card:last-child {
+  border-bottom: none;
 }
 
 .comment-card .comment-heading {
@@ -721,22 +738,17 @@ select option {
 }
 
 .comment-card .comment-heading .commenter {
-  color: #911515;
+  color: #e54b4b;
   text-transform: uppercase;
 }
 
 .comment-card .comment-heading .comment-date {
   color: grey;
-  background-color: #eee;
+  background-color: #fff;
   padding: 0 0.4rem;
   position: absolute;
   right: 0;
   top: 0;
-}
-
-.comment-card:nth-child(even) .comment-heading .comment-date {
-  background-color: #bbb;
-  color: #222;
 }
 
 .comment-card .comment-body {
@@ -760,9 +772,9 @@ select option {
 }
 
 .comment-card .delete-btn {
-  padding: 0.3rem 1rem 0.5rem;
+  padding: 0.2rem 1.2rem;
   text-align: center;
-  background-color: #911515;
+  background-color: #e54b4b;
   text-decoration: none;
   color: #eee;
   margin-left: auto;
@@ -771,23 +783,13 @@ select option {
 }
 
 .comments-restricted {
-  color: #911515;
+  color: #e54b4b;
   text-align: center;
   font-size: calc(2rem + 1.5vmin);
   font-weight: 700;
   text-transform: uppercase;
   border: 1px solid #bbb;
 }
-
-/* .no-comment {
-  color: #222;
-  font-size: calc(1.5rem + 1vmin);
-  text-align: center;
-  border: 1px solid #eee;
-  border-bottom: none;
-  padding: 1rem 0;
-} */
-
 
 /* Pagination Widget style */
 .pagination-container {
@@ -811,12 +813,11 @@ select option {
 .pagination-container .prev-page,
 .pagination-container .next-page {
   background-color: #eee;
-  color: #911515;
+  color: #e54b4b;
   height: 35px;
   width: 35px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  text-align: center;
+  padding: auto .5rem;
   border-radius: 50%;
   font-size: 1.5rem;
 }
@@ -835,9 +836,9 @@ select option {
   padding: 2rem .5rem;
   font-size: calc(1rem + 1vmin);
   text-transform: uppercase;
-  color: #bbb;
+  color: #666356;
   border-radius: 5px;
-  border: 1px solid #eee;
+  border: 1px solid #bbb;
 }
 
 .poetic-motivation {
@@ -848,7 +849,7 @@ select option {
 }
 
 .poetic-motivation a {
-  color: #911515;
+  color: #e54b4b;
   font-weight: bold;
   text-decoration: underline;
 }
@@ -865,7 +866,7 @@ select option {
   margin-top: 2rem;
   text-align: center;
   align-items: center;
-  color: #911515;
+  color: #e54b4b;
 }
 
 .http-error-msg .error-code {
@@ -873,7 +874,7 @@ select option {
   font-family: 'Space Mono', monospace;
   padding: 3rem;
   border-radius: 50%;
-  border: 1px solid #911515;
+  border: 1px solid #e54b4b;
 }
 
 .http-error-msg .error-msg {
@@ -892,7 +893,7 @@ select option {
 .more-actions__container #more-action__toggler {
   font-size: 1.5rem;
   padding: .3rem .7rem;
-  background-color: #911515;
+  background-color: #e54b4b;
   border-radius: 3px;
   cursor: pointer;
 }
@@ -904,7 +905,7 @@ select option {
   width: max-content;
   display: flex;
   flex-direction: column;
-  background-color: #911515;
+  background-color: #e54b4b;
   border: 1px solid #eee;
   text-align: center;
   border-radius: 5px;
@@ -962,7 +963,8 @@ select option {
   left: 0;
   right: 0;
   z-index: 2;
-  background-color: #eee;
+  background-color: #222;
+  color: #ddd;
   overflow: auto hidden;
 }
 
@@ -1000,26 +1002,14 @@ select option {
 }
 
 .app-nav-items .nav-item__active {
-  border-top: 3px solid #911515;
-  color: #911515;
-}
-
-.app-nav-items .nav-item__active-parent {
-  display: flex;
-  align-items: center;
-}
-
-.nav-item__active-parent::before,
-.nav-item__active-parent::after {
-  color: #911515;
-  font-family: 'Space Mono', monospace;
-  font-size: 1.1rem;
-  font-weight: bolder;
+  border-top: 3px solid #e54b4b;
+  color: #e54b4b;
+  background-color: #fff;
 }
 
 .app-navbar .darken {
   background-color: #222;
-  box-shadow: #911515;
+  box-shadow: #e54b4b;
 }
 
 .nav-item__active-parent::before {
@@ -1031,8 +1021,8 @@ select option {
 }
 
 .update-password__title {
-  color: #911515;
-  border-color: #911515;
+  color: #e54b4b;
+  border-color: #e54b4b;
 }
 
 .me-form__container .form-title {
@@ -1073,7 +1063,7 @@ select option {
 
 /* Higher Priority 2 action button */
 .action-btn__hp-2 {
-  background-color: #911515;
+  background-color: #e54b4b;
 }
 
 /* Notifications Elements Styles */
@@ -1122,7 +1112,7 @@ select option {
 }
 
 .notification-footer {
-  color: #911515;
+  color: #e54b4b;
 }
 
 .notification-footer .notification-user {
@@ -1144,7 +1134,7 @@ select option {
   align-items: center;
   gap: .4rem;
   cursor: pointer;
-  color: #911515;
+  color: #e54b4b;
   border-radius: 20px;
 }
 
@@ -1160,7 +1150,7 @@ select option {
   height: 25px !important;
   appearance: none;
   border-radius: 50%;
-  border: 1px solid #911515;
+  border: 1px solid #e54b4b;
   box-shadow: none;
   font-size: calc(1rem + .4vmin);
 }
@@ -1171,7 +1161,7 @@ select option {
 
 .unread-checkbox input[type='checkbox']:checked::after {
   content: '\2713';
-  color: #911515;
+  color: #e54b4b;
 }
 
 /* Search Poems Container */

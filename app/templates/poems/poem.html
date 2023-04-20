@@ -3,7 +3,14 @@
 %} {% block menu_toggler %}
 {{ macros.more_actions_widget(poem, current_user) }}
 {% endblock menu_toggler %} {% block main_content %}
-<h1 class="main-content__title">{{poem.title|upper}}</h1>
+<h1 class="main-content__title">
+  {{poem.title|upper}}
+  {% if poem.poets %}
+    <sup>by <span class="redden">
+      {{poem.poets.poet_name if poem.poets.user_id != current_user.id else 'You'}}
+    </span></sup>
+  {% endif %}
+</h1>
 <span
   class="poem-completion poem-{{ 'completed' if poem.completed else 'progress' }}"
   >{{'Completed' if poem.completed else 'In Progress'}}</span
@@ -11,9 +18,6 @@
 
 <p class="poem-metadata">
   <span class="poem-creation__date">{{poem.crafted_on.date()}}</span>
-  {% if poem.poets %}
-    <span class="poem-author">{{poem.poets.poet_name if poem.poets.user_id != current_user.id else 'You'}}</span>
-  {% endif %}
   <span class="poem-rating" title="Poem Rating">{{poem.rating}}</span>
   <span class="poem-category">{{poem.categories.name}}</span>
 </p>
@@ -85,29 +89,31 @@
   {% if poem.comments.all()|length == 0 %}
   <p class="empty-list">Be the first to add comment</p>
   {% endif %}
-  <div class="poem-comments">
-    {% for comment in poem.comments.all() %}
-    <div class="comment-card">
-      <p class="comment-heading">
-        <span class="commenter">{{ 'You' if comment.users.id == current_user.id else comment.users.username}}</span>
-        <span class="comment-date">{{comment.created_at}}</span>
-      </p>
-      <p class="comment-body">{{comment.comment}}</p>
-      <p class="comment-footer">
-        {% if comment.approved %}
-        <span class="comment-status">Approved</span>
-        {% endif %} {% if comment.user_id == current_user.id %}
-        <a
-          href="/poems/{{poem.id}}/comments/{{comment.id}}/delete"
-          class="delete-btn"
-        >
-          Delete
-        </a>
-        {% endif %}
-      </p>
+  {% if poem.comments.all() %}  
+    <div class="poem-comments">
+      {% for comment in poem.comments.all() %}
+      <div class="comment-card">
+        <p class="comment-heading">
+          <span class="commenter">{{ 'You' if comment.users.id == current_user.id else comment.users.username}}</span>
+          <span class="comment-date">{{comment.created_at}}</span>
+        </p>
+        <p class="comment-body">{{comment.comment}}</p>
+        <p class="comment-footer">
+          {% if comment.approved %}
+          <span class="comment-status">Approved</span>
+          {% endif %} {% if comment.user_id == current_user.id %}
+          <a
+            href="/poems/{{poem.id}}/comments/{{comment.id}}/delete"
+            class="delete-btn"
+          >
+            Delete
+          </a>
+          {% endif %}
+        </p>
+      </div>
+      {% endfor %}
     </div>
-    {% endfor %}
-  </div>
+  {% endif %}
 </div>
 {% else %}
 <p class="comments-restricted">Log in to comment</p>

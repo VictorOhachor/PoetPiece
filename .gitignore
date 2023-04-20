@@ -132,3 +132,5 @@ migrations/
 .vscode/
 dump.sql
 poetpiece.sql
+*.*-shm
+*.*-wal
