@@ -131,7 +131,8 @@ def become_poet():
         poet = Poet(
             email=form.email.data,
             gender=form.gender.data,
-            user_id=current_user.id
+            user_id=current_user.id,
+            bio=form.bio.data
         )
         # save to database
         poet.save()
@@ -172,4 +173,4 @@ def delete_me():
 @login_required
 def handle_survey(type):
     """Handles different types of surveys. COMING SOON!"""
-    pass
+    return render_template('main/survey.html', survey_title='Account Deletion')

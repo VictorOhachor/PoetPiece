@@ -92,8 +92,7 @@ class EditProfileForm(FlaskForm):
         super().__init__(*args, **kwargs)
 
         if not current_user.is_poet:
-            del self.gender
-            del self.email
+            del self.gender, self.email, self.bio
 
     email = StringField('Update Your Email Address:',
                         validators=[DataRequired(), Length(1, 255), Email()])
