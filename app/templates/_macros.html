@@ -47,14 +47,16 @@
     </p>
     <p class="poem-metadata">
       <span class="poem-creation__date">{{poem.crafted_on.date()}}</span>
-      {% if poem.poets %}
-      <span class="poem-author">{{poem.poets.poet_name}}</span>
-      {% endif %}
       <span class="poem-rating" title="Poem Rating">{{poem.rating}}</span>
       <span class="poem-category">{{poem.categories.name}}</span>
     </p>
-    <p class="poem-premium {{'is-premium' if poem.premium else 'not-premium'}}">
-      {{'Premium' if poem.premium else 'Free'}}
+    <p class="card-footer">
+      {% if poem.poets %}
+      <span class="poem-author">{{poem.poets.poet_name}}</span>
+      {% endif %}
+      <span class="poem-premium {{'is-premium' if poem.premium else 'not-premium'}}">
+        {{'Premium' if poem.premium else 'Free'}}
+      </span>
     </p>
   </div>
 </a>

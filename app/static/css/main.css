@@ -375,25 +375,18 @@ select option {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 0.4rem;
-  padding: 0.5rem;
+  gap: .5rem;
+  padding: 1rem .5rem;
   color: #222;
   border: 1px solid #bbb;
   background-color: #fff;
+  border-radius: 5px;
   height: 100%;
 }
 
 .poems-container>a {
   text-decoration: none;
 }
-
-/* .poems-container>a:nth-child(even) {
-  background-color: #e54b4b;
-}
-
-.poems-container>a:nth-child(odd) {
-  background-color: #222;
-} */
 
 .poem-card .poem-title {
   text-transform: uppercase;
@@ -434,11 +427,6 @@ select option {
   color: grey;
 }
 
-.poem-metadata .poem-author {
-  color: #eee;
-  margin: auto;
-}
-
 .poem-metadata .poem-rating {
   color: rgb(167, 167, 1);
   font-weight: 800;
@@ -455,20 +443,30 @@ select option {
   font-family: "Space Mono", monospace;
 }
 
-.poem-card .poem-premium {
+.poem-card .card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
   color: #222;
-  align-self: flex-end;
   padding: 0.05rem 0.6rem;
-  font-weight: bolder;
+  font-weight: 700;
   font-size: 1.2rem;
+}
+
+.poem-card .card-footer .poem-author {
+  text-transform: uppercase;
+}
+
+.poem-card .card-footer .poem-premium {
   border-radius: 20px;
 }
 
-.poem-card .is-premium {
+.poem-card .card-footer .is-premium {
   background-color: gold;
 }
 
-.poem-card .not-premium {
+.poem-card .card-footer .not-premium {
   background-color: cyan;
 }
 
