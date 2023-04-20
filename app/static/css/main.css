@@ -449,17 +449,18 @@ select option {
   justify-content: space-between;
   gap: 1rem;
   color: #222;
-  padding: 0.05rem 0.6rem;
   font-weight: 700;
   font-size: 1.2rem;
 }
 
 .poem-card .card-footer .poem-author {
   text-transform: uppercase;
+  color: #e54b4b;
 }
 
 .poem-card .card-footer .poem-premium {
   border-radius: 20px;
+  padding: 0.05rem 0.6rem;
 }
 
 .poem-card .card-footer .is-premium {
