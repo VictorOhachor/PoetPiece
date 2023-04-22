@@ -75,10 +75,9 @@ def notifications():
     q = request.args.get('q')
     unread = request.args.get('unread')
     # fetch notifications
-    n = Notification.find_order_by(Notification.created_at.desc(),
+    n = Notification.find_order_by(Notification.unread.desc(), 
+                                   Notification.created_at.desc(),
                                    in_trash=False)
-    # fetch user attached to notification
-
     return render_template('main/notifications.html', notifications=n)
 
 
@@ -145,27 +144,37 @@ def become_poet():
 
     return render_template('main/poet_form.html', form=form)
 
-
 @main.get('/me/delete-account')
 @login_required
 def delete_me():
     """Remove a user's account from db (if user is not a poet)."""
     user = User.find_by(id=current_user.id, one=True)
+    n_content = ''
 
     if user.is_poet:
-        err_msg = 'So unfortunate! We will need more information before ' \
-            'we can progress with this operation!'
-        flash(err_msg, 'error')
+        poet = Poet.find_by(user_id=user.id, one=True)
 
-        return redirect(url_for('.handle_survey', type='account_deletion'))
-
+        if poet.poems.all():
+            err_msg = 'So unfortunate! We will need more information before ' \
+                'we can progress with this operation!'
+            flash(err_msg, 'error')
+            # redirect to the handle survey route
+            return redirect(url_for('.handle_survey', type='account_deletion'))
+        
+        # delete poet account otherwise
+        n_content += f'{poet.poet_name} is no longer a poet piece!'
+        poet.delete()
+    else:
+        # create notification
+        n_content = f'{user.username} is no longer a PoetPiece user!'
+    
     # delete user's account if not a poet
     user.delete()
-    # create notification
-    n_content = f'{user.username} is no longer a poet piece!'
+    # create new notification
     create_notification(n_content, 'USER', user.id)
     # redirect user back to home
     flash("Sorry to see you go; You couldn't even enjoy the poetic privileges!")
+
     return redirect(url_for('.index'))
 
 

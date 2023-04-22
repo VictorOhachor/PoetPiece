@@ -6,7 +6,7 @@
 <h1 class="main-content__title">
   {{poem.title|upper}}
   {% if poem.poets %}
-    <sup>by <span class="redden">
+    <sup style="text-transform: none;">by <span class="redden">
       {{poem.poets.poet_name if poem.poets.user_id != current_user.id else 'You'}}
     </span></sup>
   {% endif %}
@@ -15,6 +15,8 @@
   class="poem-completion poem-{{ 'completed' if poem.completed else 'progress' }}"
   >{{'Completed' if poem.completed else 'In Progress'}}</span
 >
+
+<a href="{{url_for('poems.view_poet', poem_id=poem.id)}}" class="view-author__link">View Author</a>
 
 <p class="poem-metadata">
   <span class="poem-creation__date">{{poem.crafted_on.date()}}</span>

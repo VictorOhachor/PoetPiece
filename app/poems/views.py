@@ -41,7 +41,7 @@ def index():
         query_poems = query_poems.filter(Category.name == category)
 
     context['pagination'] = query_poems.order_by(
-        Poem.author_id.desc(), Poem.created_at.desc()).paginate(
+        Poem.created_at.desc(), Poem.author_id).paginate(
         page=page, per_page=current_app.config['FLASK_POEMS_PER_PAGE'],
         error_out=False
     )
@@ -54,7 +54,7 @@ def index():
 @poems.route('/search', methods=['GET', 'POST'])
 @login_required
 def search():
-    """Search for poems or notifications."""
+    """Search for poems."""
     # data to be passed to the template.
     context = {
         'form': FilterPoemForm(),
@@ -74,21 +74,20 @@ def search():
     else:
         if queryData.get('rating'):
             ratings = [(0.0, 1.0), (1.1, 3.0), (3.1, 5.0)]
-            
+
             rating = queryData.pop('rating')
             for r in ratings:
                 if rating <= r[1]:
                     db_query = db_query.filter(
                         (Poem.rating >= r[0]) & (Poem.rating <= r[1])
                     )
-        
+
         # query the remaining data
         db_query = db_query.filter_by(**queryData)
-    
-    print(queryData)
-    
+
     # fetch the data
-    context['results'] = db_query.all()
+    context['results'] = db_query.filter_by(published=True).order_by(
+        Poem.completed.desc(), Poem.created_at.desc()).all()
 
     return render_template('poems/search_poems.html', **context)
 
@@ -170,6 +169,40 @@ def poem(poem_id):
         return redirect(url_for('.poem', poem_id=poem_id))
 
     return render_template('poems/poem.html', **context)
+
+
+@poems.route('/poems/<string:poem_id>/view_poet', methods=['GET', 'POST'])
+@login_required
+def view_poet(poem_id):
+    """View the profile of the author of a poem."""
+    context = {
+        'poet': None,
+        'poem_id': poem_id,
+        'other_poems': None
+    }
+
+    poem = Poem.find_by(id=poem_id, one=True)
+    if not poem:
+        flash('A poem with given id does not exist.', 'error')
+        return redirect(url_for('poems.index'))
+
+    # get poet data from db
+    context['poet'] = Poet.find_by(id=poem.author_id, one=True)
+    if not context['poet']:
+        flash('This poem is no longer owned by a poet. The poet must '
+              'have deleted their account.', 'error')
+        return redirect(url_for('poems.index'))
+
+    # get other poems written by same poet
+    context['other_poems'] = context['poet'].poems.filter(Poem.id != poem_id)
+
+    # filter by published when other user aside the poet is viewing page
+    if context['poet'].user_id != current_user.id:
+        context['other_poems'] = context['other_poems'].filter_by(published=True)
+    
+    context['other_poems'] = context['other_poems'].limit(5).all()
+
+    return render_template('main/poet.html', **context)
 
 
 @poems.route('/poems/<string:poem_id>/edit', methods=['GET', 'POST'])
@@ -384,10 +417,10 @@ def mark_notification(notification_id):
     notification = Notification.find_by(id=notification_id, one=True)
 
     if not notification:
-        flash('Something went wrong; could not find notification with given id.', 
+        flash('Something went wrong; could not find notification with given id.',
               'error')
     else:
         notification.unread = not notification.unread
         notification.save()
-    
+
     return redirect(url_for('main.notifications'))

@@ -153,9 +153,8 @@ class Poet(BaseModel):
 
     @classmethod
     def get_choices(cls):
-        return [(poet.users.username,
-                                 poet.users.username.capitalize())
-                                for poet in cls.find_all()]
+        return [(poet.poet_name, poet.poet_name.capitalize())
+                            for poet in cls.find_all()]
 
 
 class Category(BaseModel):

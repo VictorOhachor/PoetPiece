@@ -64,7 +64,7 @@ class PoetForm(FlaskForm):
                                  ['female', 'male', 'others'])
                          ])
     bio = TextAreaField('Enter a brief bio about yourself:', validators=[
-        DataRequired(), Length(1, 2000)
+        Length(0, 2000)
     ])
     password = _password_field('Enter Your Password to Confirm your Identity')
     submit = SubmitField('Submit')
@@ -104,8 +104,8 @@ class EditProfileForm(FlaskForm):
                              ['female', 'male', 'others'])
                          ])
     bio = TextAreaField('Enter a brief bio about yourself:', validators=[
-        DataRequired(), Length(1, 2000)])
-    birth_date = DateField('Update Your Date of Birth (optional): ',
+        Length(0, 2000)], render_kw={'width': '100%'})
+    birth_date = DateField('Update Your Date of Birth: ',
                            validators=[DataRequired()])
     submit = SubmitField('Update Profile')
 

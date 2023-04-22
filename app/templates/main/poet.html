@@ -1,0 +1,21 @@
+{% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %} {% block
+title %}
+{{ poet.poet_name|title }}'s Profile{% endblock title %}
+{% block main_content %}
+<h1 class="main-content__title redden underline">{{ poet.poet_name|upper }}</h1>
+<p class="poet-bio">{{ poet.bio }}</p>
+<hr>
+<h4 class="poet-other-poems__title">Other Poems Composed by Poet</h4>
+<div class="poems-container">
+  {% if not other_poems %}
+  <p class="empty-list">
+    No Other Poem Composed By This Poet.
+  </p>
+  {% endif %}
+  {% for poem in other_poems %}
+  {{ macros.poem_card_widget(poem) }}
+  {% endfor %}
+
+</div>
+{% endblock main_content %}

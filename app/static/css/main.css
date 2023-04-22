@@ -31,6 +31,10 @@ hr {
   margin: 1.5rem 0;
 }
 
+.underline {
+  text-decoration: underline;
+}
+
 input, select, textarea {
   border: 1px solid #e54b4b !important;
   border-radius: 5px;
@@ -218,6 +222,10 @@ select option {
   gap: 0.2rem;
 }
 
+.form-control {
+  width: 100% !important;
+}
+
 .app-main__content .form-control {
   outline: none;
   font-size: 1.5rem;
@@ -342,12 +350,13 @@ select option {
 }
 
 .app-main__content .create-poem-container {
-  margin: 2rem 0;
+  margin: 1rem 0 2rem;
   text-align: end;
 }
 
 .create-poem-container a {
   background-color: #e54b4b;
+  border: 1px solid #bbb;
   padding: 0.5rem 1rem;
   color: #eee;
   text-decoration: none;
@@ -511,6 +520,16 @@ select option {
   overflow-x: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+.view-author__link {
+  color: #e54b4b;
+  text-decoration: underline;
+  text-align: center;
+  font-weight: 600;
+  font-size: calc(.8rem + 1vmin);
+  display: block;
+  margin: .5rem 0 1rem;
 }
 
 .poem-stanzas>.poem-stanzas__container {
@@ -1059,6 +1078,7 @@ select option {
 .action-btn {
   background-color: #222;
   color: #eee;
+  border: 1px solid #bbb;
   font-size: calc(.6rem + 1vmin);
   padding: .5rem 1rem;
 }
@@ -1211,4 +1231,17 @@ select option {
   .search-poems__container .filters-box {
     position: static;
   }
+}
+
+/* Poet Page */
+.poet-bio {
+  font-size: calc(1rem + 1.5vmin);
+  text-align: center;
+}
+
+.poet-other-poems__title {
+  font-size: calc(.8rem + 1vmin);
+  color: #222;
+  text-align: end;
+  text-rendering: optimizeLegibility;
 }

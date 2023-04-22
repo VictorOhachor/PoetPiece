@@ -56,7 +56,7 @@
       <div class="welcome-box">
         <p class="welcome-text">
           Hello, {% if current_user.is_authenticated %}
-          <span class="redden">{{current_user.username|capitalize}}</span>
+          <span class="redden">{{current_user.username|upper}}</span>
           {% else %}
           <span class="redden">Stranger</span>
           {% endif %}
