@@ -71,4 +71,4 @@ In summary, to contribute to any open-source project on the internet:
 
 ### Contribution Notes
 
-1. It is important to note that because this project is at early stage, there is no code of conduct &mdash; except that you must respect the privacy and work of other contributors &mdash; and contribution guide.
+1. It is important to note that because this project is at an **early stage**, there is no code of conduct &mdash; except that you must respect the privacy and efforts of other contributors (no matter how small) &mdash; and contribution guide.
