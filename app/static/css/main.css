@@ -36,7 +36,7 @@ hr {
 }
 
 input, select, textarea {
-  border: 1px solid #e54b4b !important;
+  border: 1px solid #3b8ea5 !important;
   border-radius: 5px;
 }
 
@@ -61,11 +61,11 @@ select {
 select option {
   font-family: 'Dancing Script', cursive;
   background-color: #eee;
-  color: #e54b4b;
+  color: #3b8ea5;
 }
 
 .help-block {
-  color: #e54b4b;
+  color: #3b8ea5;
   font-size: 1.3rem;
   font-weight: 700;
 }
@@ -76,7 +76,7 @@ select option {
 }
 
 .error-toast {
-  color: #e54b4b;
+  color: #3b8ea5;
   background-color: rgba(255, 166, 0, 0.534);
 }
 
@@ -86,7 +86,7 @@ select option {
 }
 
 .redden {
-  color: #e54b4b !important;
+  color: #3b8ea5 !important;
   font-weight: bolder;
 }
 
@@ -116,7 +116,7 @@ select option {
 }
 
 .app-logo .redden {
-  color: #e54b4b !important;
+  color: #3b8ea5 !important;
 }
 
 .app-navbar {
@@ -129,7 +129,7 @@ select option {
 
 .app-navbar a {
   color: #fff;
-  background-color: #e54b4b;
+  background-color: #3b8ea5;
   padding: .1rem .5rem .2rem;
   border: 1px solid #bbb;
   transition: all 200ms ease-in-out;
@@ -238,13 +238,13 @@ select option {
   display: flex;
   gap: 0.2rem;
   align-items: center;
-  color: #e54b4b;
+  color: #3b8ea5;
   font-size: 1.5rem;
 }
 
 .app-main__content input[type="submit"] {
   font-size: 1.5rem;
-  background-color: #e54b4b;
+  background-color: #3b8ea5;
   color: #eee;
   padding: 0.5rem 0;
   border: none;
@@ -274,7 +274,7 @@ select option {
 }
 
 .app-about .heading {
-  color: #e54b4b;
+  color: #3b8ea5;
   text-align: end;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid #eee;
@@ -283,12 +283,12 @@ select option {
 
 .app-about .subheading::before {
   content: "[";
-  color: #e54b4b;
+  color: #3b8ea5;
 }
 
 .app-about .subheading::after {
   content: "]";
-  color: #e54b4b;
+  color: #3b8ea5;
 }
 
 .app-about .subheading {
@@ -321,7 +321,7 @@ select option {
 }
 
 .app-about>.reasons-list li {
-  background-color: #e54b4b;
+  background-color: #3b8ea5;
   color: #eee;
   padding: 0.1rem 0.5rem;
   border-radius: 20px;
@@ -355,7 +355,7 @@ select option {
 }
 
 .create-poem-container a {
-  background-color: #e54b4b;
+  background-color: #3b8ea5;
   border: 1px solid #bbb;
   padding: 0.5rem 1rem;
   color: #eee;
@@ -405,7 +405,7 @@ select option {
 
 .poem-card .poem-desc {
   background-color: #eee;
-  color: #e54b4b;
+  color: #3b8ea5;
   padding: 0.3rem;
   font-weight: 600;
   font-size: 1.2rem;
@@ -462,7 +462,7 @@ select option {
 
 .poem-card .card-footer .poem-author {
   text-transform: uppercase;
-  color: #e54b4b;
+  color: #3b8ea5;
 }
 
 .poem-card .card-footer .poem-premium {
@@ -523,7 +523,7 @@ select option {
 }
 
 .view-author__link {
-  color: #e54b4b;
+  color: #3b8ea5;
   text-decoration: underline;
   text-align: center;
   font-weight: 600;
@@ -573,7 +573,7 @@ select option {
 .poem-stanza__card .stanza-number {
   font-size: 1rem;
   font-weight: 900;
-  background-color: #e54b4b;
+  background-color: #3b8ea5;
   color: #eee;
   align-self: flex-start;
   padding: 0 1rem 0 .8rem;
@@ -608,7 +608,7 @@ select option {
 .slider-btns button {
   font-size: 1.5rem;
   color: #eee;
-  background-color: #e54b4b;
+  background-color: #3b8ea5;
   border: none;
   padding: .3rem .6rem;
   cursor: pointer;
@@ -672,7 +672,7 @@ select option {
 
 .poem-action__links>a:first-child,
 .stanza-action__links>a:first-child {
-  background-color: #e54b4b;
+  background-color: #3b8ea5;
   color: #eee;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
@@ -704,7 +704,7 @@ select option {
 }
 
 .comments-container .comments-title {
-  color: #e54b4b;
+  color: #3b8ea5;
   font-size: 2rem;
   text-transform: uppercase;
 
@@ -755,7 +755,7 @@ select option {
 }
 
 .comment-card .comment-heading .commenter {
-  color: #e54b4b;
+  color: #3b8ea5;
   text-transform: uppercase;
 }
 
@@ -791,7 +791,7 @@ select option {
 .comment-card .delete-btn {
   padding: 0.2rem 1.2rem;
   text-align: center;
-  background-color: #e54b4b;
+  background-color: #3b8ea5;
   text-decoration: none;
   color: #eee;
   margin-left: auto;
@@ -800,7 +800,7 @@ select option {
 }
 
 .comments-restricted {
-  color: #e54b4b;
+  color: #3b8ea5;
   text-align: center;
   font-size: calc(2rem + 1.5vmin);
   font-weight: 700;
@@ -830,7 +830,7 @@ select option {
 .pagination-container .prev-page,
 .pagination-container .next-page {
   background-color: #eee;
-  color: #e54b4b;
+  color: #3b8ea5;
   justify-content: center;
   align-items: center;
   display: flex;
@@ -869,7 +869,7 @@ select option {
 }
 
 .poetic-motivation a {
-  color: #e54b4b;
+  color: #3b8ea5;
   font-weight: bold;
   text-decoration: underline;
 }
@@ -886,7 +886,7 @@ select option {
   margin-top: 2rem;
   text-align: center;
   align-items: center;
-  color: #e54b4b;
+  color: #3b8ea5;
 }
 
 .http-error-msg .error-code {
@@ -894,7 +894,7 @@ select option {
   font-family: 'Space Mono', monospace;
   padding: 3rem;
   border-radius: 50%;
-  border: 1px solid #e54b4b;
+  border: 1px solid #3b8ea5;
 }
 
 .http-error-msg .error-msg {
@@ -913,7 +913,7 @@ select option {
 .more-actions__container #more-action__toggler {
   font-size: 1.5rem;
   padding: .3rem .7rem;
-  background-color: #e54b4b;
+  background-color: #3b8ea5;
   border-radius: 3px;
   cursor: pointer;
 }
@@ -925,7 +925,7 @@ select option {
   width: max-content;
   display: flex;
   flex-direction: column;
-  background-color: #e54b4b;
+  background-color: #3b8ea5;
   border: 1px solid #eee;
   text-align: center;
   border-radius: 5px;
@@ -1022,8 +1022,8 @@ select option {
 }
 
 .app-nav-items .nav-item__active {
-  border-top: 3px solid #e54b4b;
-  color: #e54b4b;
+  border-top: 3px solid #3b8ea5;
+  color: #3b8ea5;
   background-color: #fff;
 }
 
@@ -1041,8 +1041,8 @@ select option {
 }
 
 .update-password__title {
-  color: #e54b4b;
-  border-color: #e54b4b;
+  color: #3b8ea5;
+  border-color: #3b8ea5;
 }
 
 .me-form__container .form-title {
@@ -1085,7 +1085,7 @@ select option {
 
 /* Higher Priority 2 action button */
 .action-btn__hp-2 {
-  background-color: #e54b4b;
+  background-color: #3b8ea5;
 }
 
 /* Notifications Elements Styles */
@@ -1134,7 +1134,7 @@ select option {
 }
 
 .notification-footer {
-  color: #e54b4b;
+  color: #3b8ea5;
 }
 
 .notification-footer .notification-user {
@@ -1156,7 +1156,7 @@ select option {
   align-items: center;
   gap: .4rem;
   cursor: pointer;
-  color: #e54b4b;
+  color: #3b8ea5;
   border-radius: 20px;
 }
 
@@ -1172,7 +1172,7 @@ select option {
   height: 25px !important;
   appearance: none;
   border-radius: 50%;
-  border: 1px solid #e54b4b;
+  border: 1px solid #3b8ea5;
   box-shadow: none;
   font-size: calc(1rem + .4vmin);
 }
@@ -1183,7 +1183,7 @@ select option {
 
 .unread-checkbox input[type='checkbox']:checked::after {
   content: '\2713';
-  color: #e54b4b;
+  color: #3b8ea5;
 }
 
 /* Search Poems Container */
@@ -1206,10 +1206,10 @@ select option {
   height: 100%;
   z-index: -1;
   position: absolute;
-  border-right: 5px solid #e54b4b;
-  border-left: 5px solid #e54b4b;
+  border-right: 5px solid #3b8ea5;
+  border-left: 5px solid #3b8ea5;
   object-fit: cover;
-  filter: opacity(.5) drop-shadow(0 0 #e54b4b);
+  filter: opacity(.5) drop-shadow(0 0 #3b8ea5);
 }
 
 .search-poems__container {
@@ -1285,7 +1285,7 @@ select option {
 }
 
 .verified-poet {
-  background-color: #e54b4b;
+  background-color: #3b8ea5;
 }
 
 .unverified-poet {
@@ -1299,7 +1299,7 @@ select option {
   gap: .4rem;
   color: #eee;
   padding: 1rem .3rem;
-  border-top: 5px solid #e54b4b;
+  border-top: 5px solid #3b8ea5;
   background-color: #222;
 }
 
@@ -1325,7 +1325,7 @@ select option {
   background-color: #222;
   color: #eee;
   padding: .3rem .5rem;
-  border-bottom: 5px solid #e54b4b;
+  border-bottom: 5px solid #3b8ea5;
 }
 
 .poet-metadata .poet-gender {
