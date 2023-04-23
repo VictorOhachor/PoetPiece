@@ -62,8 +62,9 @@ def _process_search_query(form_data: dict):
                  ('completed', bool), ('premium', bool)]
 
     if form_data.get('poet'):
-        refined_data['author_id'] = Poet.find_by(user_id=User.find_by_username(
-            form_data['poet']).id, one=True).id
+        user_id = User.find_by_username(form_data['poet']).id
+        refined_data['author_id'] = Poet.find_by(user_id=user_id, one=True).id
+        print(refined_data['author_id'])
     
     for key, converter in queryKeys:
         value = form_data.get(key)

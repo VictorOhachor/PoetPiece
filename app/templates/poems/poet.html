@@ -29,5 +29,8 @@ title %}
     {{ macros.poem_card_widget(poem) }}
     {% endfor %}
   </div>
+  {% if other_poems|length < poet.poems.all()|length  %}
+    <a class="action-btn view-more__btn action-btn__hp-2" href="{{url_for('poems.search', poet=poet.poet_name)}}">View More</a>
+  {% endif %}
 </div>
 {% endblock main_content %}

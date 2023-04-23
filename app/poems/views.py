@@ -85,9 +85,14 @@ def search():
         # query the remaining data
         db_query = db_query.filter_by(**queryData)
 
+    # remove unpublished poems if poet is not current user
+    poet = Poet.find_by(user_id=current_user.id, one=True)
+    db_query = db_query.filter(
+            ((Poem.author_id == poet.id) & (Poem.published == False)) |
+            (Poem.published == True)
+    )
     # fetch the data
-    context['results'] = db_query.filter_by(published=True).order_by(
-        Poem.completed.desc(), Poem.created_at.desc()).all()
+    context['results'] = db_query.order_by(Poem.title, Poem.created_at.desc()).all()
 
     return render_template('poems/search_poems.html', **context)
 
@@ -196,7 +201,7 @@ def view_poet(poem_id=None):
         context['poet'] = Poet.find_by(id=poem.author_id, one=True)
         if not context['poet']:
             flash('This poem is no longer owned by a poet. The poet must '
-                'have deleted their account.', 'error')
+                  'have deleted their account.', 'error')
             return redirect(url_for('poems.index'))
 
     # get other poems written by same poet
@@ -204,10 +209,11 @@ def view_poet(poem_id=None):
 
     # filter by published when other user aside the poet is viewing page
     if context['poet'].user_id != current_user.id:
-        context['other_poems'] = context['other_poems'].filter_by(published=True)
-    
+        context['other_poems'] = context['other_poems'].filter_by(
+            published=True)
+
     context['other_poems'] = context['other_poems'].order_by(
-        Poem.rating.desc(), Poem.updated_at.desc()).limit(8).all()
+        Poem.rating.desc(), Poem.updated_at.desc()).limit(4).all()
 
     return render_template('poems/poet.html', **context)
 

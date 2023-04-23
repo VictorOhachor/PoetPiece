@@ -931,6 +931,11 @@ select option {
   border-radius: 5px;
 }
 
+.view-more__btn {
+  align-self: center;
+  margin-top: .5rem;
+}
+
 .more-actions__box>.more-action__btn {
   border: none;
   background-color: transparent;
