@@ -75,8 +75,7 @@ def notifications():
     q = request.args.get('q')
     unread = request.args.get('unread')
     # fetch notifications
-    n = Notification.find_order_by(Notification.unread.desc(), 
-                                   Notification.created_at.desc(),
+    n = Notification.find_order_by(Notification.created_at.desc(),
                                    in_trash=False)
     return render_template('main/notifications.html', notifications=n)
 

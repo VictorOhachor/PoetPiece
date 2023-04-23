@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Monoton&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,300;1,400;1,600;1,700&family=PT+Sans+Narrow:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Monoton&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=PT+Sans+Narrow:wght@400;700&family=Dancing+Script:wght@400;500;600;700&family=Quicksand:wght@300;400;500;600;700&display=swap");
 
 * {
   box-sizing: border-box;
@@ -11,12 +11,15 @@
 }
 
 body {
-  font-family: "Titillium Web", sans-serif;
+  font-family: 'Quicksand', sans-serif;
+  background: linear-gradient(270deg, rgba(238, 238, 238, .8), rgba(255, 255, 255, .8)), url(../assets/background.jpg) no-repeat;
+  background-size: cover;
+  background-clip: content-box;
   color: #222;
   position: relative;
   min-height: 100vh;
   margin-bottom: 3rem;
-  background-color: #eee;
+  background-color: rgb(238, 238, 238);
 }
 
 a {
@@ -59,7 +62,7 @@ select {
 }
 
 select option {
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family: 'Dancing Script', cursive;
   background-color: #eee;
   color: #e54b4b;
 }
@@ -249,7 +252,7 @@ select option {
   padding: 0.5rem 0;
   border: none;
   font-weight: 700;
-  font-family: "Titillium Web", sans-serif;
+  font-family: 'Quicksand', sans-serif;
   cursor: pointer;
 }
 
@@ -346,7 +349,7 @@ select option {
   text-align: end;
   align-self: flex-end;
   font-weight: 700;
-  font-family: "Titillium Web", sans-serif;
+  font-family: 'Quicksand', sans-serif;
 }
 
 .app-main__content .create-poem-container {
@@ -513,7 +516,7 @@ select option {
 .app-main__content>.poem-desc .poem-desc__content {
   font-size: calc(.8rem + 2vmin);
   white-space: pre-line;
-  font-family: "Titillium Web", sans-serif;
+  font-family: 'Quicksand', sans-serif;
 }
 
 .poems-container .poem-card .poem-title {
@@ -545,7 +548,7 @@ select option {
 .poem-stanzas__container>.no-stanza-text {
   color: orange;
   margin: auto;
-  font-family: "Titillium Web", sans-serif;
+  font-family: 'Quicksand', sans-serif;
   font-size: 2rem;
   text-align: center;
 }
@@ -941,7 +944,7 @@ select option {
   color: #eee;
   text-decoration: none;
   font-size: 1.1rem;
-  font-family: "Titillium Web", sans-serif;
+  font-family: 'Quicksand', sans-serif;
   cursor: pointer;
   padding: .4rem 1rem;
   border-bottom: 1px solid #730606;
@@ -994,7 +997,6 @@ select option {
   align-items: center;
   margin: auto;
   max-width: 1240px;
-  font-family: 'PT Sans Narrow', sans-serif;
   overflow: auto hidden;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -1015,6 +1017,7 @@ select option {
   flex-grow: 1;
   padding: .6rem;
   text-align: center;
+  font-family: 'Dancing Script', cursive;
 }
 
 .app-nav-items .nav-item>i {
@@ -1295,4 +1298,6 @@ select option {
 .poet-metadata .poet-gender {
   color: #fff;
   font-weight: 700;
+  flex-grow: 1;
+  text-align: end;
 }
