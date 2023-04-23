@@ -171,13 +171,13 @@ def poem(poem_id):
     return render_template('poems/poem.html', **context)
 
 
-@poems.route('/poems/<string:poem_id>/view_poet', methods=['GET', 'POST'])
+@poems.route('/<string:poet_id>')
+@poems.route('/poems/<string:poem_id>/view_poet')
 @login_required
-def view_poet(poem_id):
+def view_poet(poem_id=None, poet_id=None):
     """View the profile of the author of a poem."""
     context = {
         'poet': None,
-        'poem_id': poem_id,
         'other_poems': None
     }
 
@@ -200,9 +200,10 @@ def view_poet(poem_id):
     if context['poet'].user_id != current_user.id:
         context['other_poems'] = context['other_poems'].filter_by(published=True)
     
-    context['other_poems'] = context['other_poems'].limit(5).all()
+    context['other_poems'] = context['other_poems'].order_by(
+        Poem.rating.desc(), Poem.updated_at.desc()).limit(5).all()
 
-    return render_template('main/poet.html', **context)
+    return render_template('poems/poet.html', **context)
 
 
 @poems.route('/poems/<string:poem_id>/edit', methods=['GET', 'POST'])

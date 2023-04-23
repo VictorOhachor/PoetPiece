@@ -1237,11 +1237,62 @@ select option {
 .poet-bio {
   font-size: calc(1rem + 1.5vmin);
   text-align: center;
+  font-stretch: 50%;
 }
 
-.poet-other-poems__title {
+.poet-status {
+  position: absolute;
+  top: 20px;
+  right: -10px;
+  font-size: calc(.8rem + 1.2vmin);
+  color: #fff;
+  padding: .3rem 1rem;
+  transform: scale(.9) rotate(30deg);
+}
+
+.verified-poet {
+  background-color: #e54b4b;
+}
+
+.unverified-poet {
+  background-color: #730606;
+}
+
+.poet-other-poems {
+  display: flex;
+  flex-direction: column;
+  margin-top: .5rem;
+  gap: .4rem;
+  color: #eee;
+  padding: 1rem .5rem;
+  border-top: 5px solid #e54b4b;
+  background-color: #222;
+}
+
+.poet-other-poems .poems-container {
+  padding: 0;
+}
+
+.poet-other-poems .poet-other-poems__title {
   font-size: calc(.8rem + 1vmin);
-  color: #222;
-  text-align: end;
+  font-weight: 300;
   text-rendering: optimizeLegibility;
+  border-bottom: 1px solid #bbb;
+  text-align: end;
+}
+
+.poet-metadata {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background-color: #222;
+  color: #eee;
+  padding: .3rem .5rem;
+  border-bottom: 5px solid #e54b4b;
+}
+
+.poet-metadata .poet-gender {
+  color: #fff;
+  font-weight: 700;
 }
