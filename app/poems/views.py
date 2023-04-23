@@ -207,7 +207,7 @@ def view_poet(poet_id=None, poem_id=None):
         context['other_poems'] = context['other_poems'].filter_by(published=True)
     
     context['other_poems'] = context['other_poems'].order_by(
-        Poem.rating.desc(), Poem.updated_at.desc()).limit(5).all()
+        Poem.rating.desc(), Poem.updated_at.desc()).limit(8).all()
 
     return render_template('poems/poet.html', **context)
 
