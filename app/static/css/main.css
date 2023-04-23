@@ -672,7 +672,7 @@ select option {
 
 .poem-action__links>a:first-child,
 .stanza-action__links>a:first-child {
-  background-color: #3b8ea5;
+  background-color: #e54b4b;
   color: #eee;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
@@ -791,7 +791,7 @@ select option {
 .comment-card .delete-btn {
   padding: 0.2rem 1.2rem;
   text-align: center;
-  background-color: #3b8ea5;
+  background-color: #e54b4b;
   text-decoration: none;
   color: #eee;
   margin-left: auto;
@@ -944,7 +944,7 @@ select option {
   font-family: 'Quicksand', sans-serif;
   cursor: pointer;
   padding: .4rem 1rem;
-  border-bottom: 1px solid #730606;
+  border-bottom: 1px solid #bbb;
 }
 
 .more-actions__box>a:last-child {
