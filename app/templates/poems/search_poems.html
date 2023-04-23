@@ -3,7 +3,10 @@
 {% import '_macros.html' as macros %}
 {% block title %}Search Poems and Stanzas{% endblock title %}
 {% block main_content %}
-<h1 class="main-content__title">Search And Filters <strong>(SnF)</strong></h1>
+<div class="search-page__hero">
+  <h1 class="main-content__title">Search And Filters <strong>(SnF)</strong></h1>
+  <img src="{{url_for('static', filename='assets/search_illustration.png')}}" alt="Search Illustration">
+</div>
 <form action="{{url_for('poems.search')}}" class="form">
   <div class="form-group">
     <input type="text" name="q" placeholder="Search Poems" autocapitalize="on" autofocus class="form-control">

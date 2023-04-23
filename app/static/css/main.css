@@ -7,14 +7,12 @@
 }
 
 :root {
-  font-size: 15px;
+  font-size: 14px;
 }
 
 body {
   font-family: 'Quicksand', sans-serif;
-  background: linear-gradient(270deg, rgba(238, 238, 238, .8), rgba(255, 255, 255, .8)), url(../assets/background.jpg) no-repeat;
-  background-size: cover;
-  background-clip: content-box;
+  background: linear-gradient(90deg, rgb(238, 238, 238), hsla(0, 75%, 60%, 0.35));
   color: #222;
   position: relative;
   min-height: 100vh;
