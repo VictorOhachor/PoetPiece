@@ -171,18 +171,18 @@ def poem(poem_id):
     return render_template('poems/poem.html', **context)
 
 
-@poems.route('/<string:poet_id>')
+@poems.route('/me/view-as-user')
 @poems.route('/poems/<string:poem_id>/view_poet')
 @login_required
-def view_poet(poet_id=None, poem_id=None):
+def view_poet(poem_id=None):
     """View the profile of the author of a poem."""
     context = {
         'poet': None,
         'other_poems': None
     }
 
-    if poet_id:
-        context['poet'] = Poet.find_by(id=poet_id, one=True)
+    if not poem_id:
+        context['poet'] = Poet.find_by(user_id=current_user.id, one=True)
         if not context['poet']:
             flash('Could not find poet with given id', 'error')
             return redirect(url_for('main.me'))

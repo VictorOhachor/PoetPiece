@@ -3,10 +3,12 @@
 title %}
 {{ poet.poet_name|title }}'s Profile{% endblock title %}
 {% block main_content %}
-<span class="poet-status {{'verified' if poet.verified else 'unverified'}}-poet">
-  {{('verified' if poet.verified else 'unverified')|upper}}
-</span>
-<h1 class="main-content__title redden underline">{{ poet.poet_name|upper }}</h1>
+<div class="poet-page__heading">
+  <span class="poet-status {{'verified' if poet.verified else 'unverified'}}-poet">
+    {{('verified' if poet.verified else 'unverified')|upper}}
+  </span>
+  <h1 class="main-content__title redden" title="Poet Username">{{ poet.poet_name }}</h1>
+</div>
 <p class="poet-bio">{{ poet.bio if poet.bio else 'No Description' }}</p>
 <hr>
 <p class="poet-metadata">
