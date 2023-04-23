@@ -493,17 +493,18 @@ select option {
   justify-content: center;
   align-items: center;
   flex-grow: 1;
+  width: 40%;
   text-transform: uppercase;
   color: #222;
   padding: 0.5rem 1rem;
-  font-size: calc(1.5rem + 1vmin);
+  font-size: calc(1rem + 1.5vmin);
   background-color: #bbb;
 }
 
 .app-main__content>.poem-desc .poem-desc__content,
 .app-main__content>.poem-stanzas .poem-stanzas__container {
-  width: 60%;
   flex-grow: 1;
+  min-width: 60%;
   background-color: #222;
   color: #eee;
   padding: 0.5rem 1rem;
