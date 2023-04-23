@@ -100,7 +100,8 @@ def me():
     context = {
         'form_data': form_data,
         'password_form': UpdatePasswordForm(prefix='password_form'),
-        '_poetic_user': poetic_user
+        '_poetic_user': poetic_user,
+        'poet': Poet.find_by(user_id=current_user.id, one=True)
     }
 
     context['profile_form'] = EditProfileForm(

@@ -5,6 +5,8 @@ My {{ 'Poetic' if current_user.is_poet else 'To-Be-Poetic' }} Profile{% endblock
 <div class="me-actions__box account-action__links">
   {% if not current_user.is_poet %}
   <a href="{{url_for('main.become_poet')}}" class="action-btn">Become a Poet</a>
+  {% else %}
+  <a href="{{url_for('poems.view_poet', poet_id=poet.id)}}" class="action-btn">View Profile as User</a>
   {% endif %}
   <a href="{{url_for('main.delete_me')}}" class="action-btn action-btn__hp-2">Delete Account</a>
 </div>

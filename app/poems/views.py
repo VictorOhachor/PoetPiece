@@ -174,24 +174,30 @@ def poem(poem_id):
 @poems.route('/<string:poet_id>')
 @poems.route('/poems/<string:poem_id>/view_poet')
 @login_required
-def view_poet(poem_id=None, poet_id=None):
+def view_poet(poet_id=None, poem_id=None):
     """View the profile of the author of a poem."""
     context = {
         'poet': None,
         'other_poems': None
     }
 
-    poem = Poem.find_by(id=poem_id, one=True)
-    if not poem:
-        flash('A poem with given id does not exist.', 'error')
-        return redirect(url_for('poems.index'))
+    if poet_id:
+        context['poet'] = Poet.find_by(id=poet_id, one=True)
+        if not context['poet']:
+            flash('Could not find poet with given id', 'error')
+            return redirect(url_for('main.me'))
+    else:
+        poem = Poem.find_by(id=poem_id, one=True)
+        if not poem:
+            flash('A poem with given id does not exist.', 'error')
+            return redirect(url_for('poems.index'))
 
-    # get poet data from db
-    context['poet'] = Poet.find_by(id=poem.author_id, one=True)
-    if not context['poet']:
-        flash('This poem is no longer owned by a poet. The poet must '
-              'have deleted their account.', 'error')
-        return redirect(url_for('poems.index'))
+        # get poet data from db
+        context['poet'] = Poet.find_by(id=poem.author_id, one=True)
+        if not context['poet']:
+            flash('This poem is no longer owned by a poet. The poet must '
+                'have deleted their account.', 'error')
+            return redirect(url_for('poems.index'))
 
     # get other poems written by same poet
     context['other_poems'] = context['poet'].poems.filter(Poem.id != poem_id)
