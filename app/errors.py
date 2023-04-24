@@ -1,5 +1,6 @@
 from flask import render_template, current_app
 
+
 @current_app.errorhandler(404,)
 def page_not_found(e):
     """Handle 404 errors."""

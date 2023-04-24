@@ -16,11 +16,16 @@ class ResourceForm(FlaskForm):
                          validators=[DataRequired(), Length(1, 255)]),
         'IMAGE': FileField('Choose the Image You Want to Upload:',
                            validators=[FileRequired(), FileAllowed([
-                               'jpeg', 'jpg', 'png'],
+                               'jpeg', 'jpg', 'png', 'gif'],
                                'Resource must be an image!')]),
         'BRIEF': TextAreaField('What do You Want to Share with Others?',
+                               description='This field supports markdown',
                                validators=[DataRequired(), Length(1, 755)],
-                               render_kw={'rows': '6'})
+                               render_kw={'rows': '8'}),
+        'COURSE': TextAreaField('Enter Course Description:',
+                                description='This field supports markdown',
+                                validators=[DataRequired(), Length(1, 1000)
+                                            ], render_kw={'rows': '4'})
     }
 
     # form fields

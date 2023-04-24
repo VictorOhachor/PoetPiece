@@ -24,7 +24,7 @@ def make_shell_context():
 @app.context_processor
 def inject_data():
     return {
-        'resources_types': Resource.supported_types(),
+        'resources_types': list(Resource.supported_types().keys()),
     }
 
 

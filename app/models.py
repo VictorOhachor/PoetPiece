@@ -55,7 +55,7 @@ class BaseModel(db.Model):
 
     @classmethod
     def find_all(cls):
-        """Fetch all stanza from the database."""
+        """Fetch all records from the table."""
         return cls.query.all()
 
     @classmethod
@@ -93,7 +93,6 @@ class User(UserMixin, BaseModel):
     # foreign keys
     poet = db.relationship('Poet', backref='users', uselist=False)
     comments = db.relationship('Comment', backref='users', lazy='dynamic')
-    resources = db.relationship('Resource', backref="users", lazy='dynamic')
 
     @property
     def last_login(self):
@@ -128,13 +127,15 @@ class Poet(BaseModel):
 
     __tablename__ = 'poets'
 
-    user_id = db.Column(db.String(255), db.ForeignKey('users.id', ondelete='CASCADE'), unique=True)
+    user_id = db.Column(db.String(255), db.ForeignKey(
+        'users.id', ondelete='CASCADE'), unique=True)
     email = db.Column(db.String(255), unique=True, index=True)
     gender = db.Column(db.String(10), nullable=False)
     verified = db.Column(db.Boolean, default=False)
     bio = db.Column(db.String(3000), nullable=True)
 
     # foreign keys
+    resources = db.relationship('Resource', backref="poets", lazy='dynamic')
     poems = db.relationship('Poem', backref='poets', lazy='dynamic')
 
     @property
@@ -289,26 +290,25 @@ class Resource(BaseModel):
 
     __tablename__ = 'resources'
 
-    def __init__(self, title):
-        self.title = title
-        self.slug = slugify(title)
-
     class ResourceTypes(Enum):
         LINK = 0
         IMAGE = 1
         BRIEF = 2
-        # COURSE = 3
+        COURSE = 3
 
     rtype = db.Column(db.Integer, default=ResourceTypes.LINK.value)
     title = db.Column(db.String(255), nullable=False, unique=True)
-    slug = db.Column(db.String(255), unique=True)
-    body = db.Column(db.String(255 + rtype * 255), nullable=False, unique=True)
+    body = db.Column(db.String(2000), nullable=False, unique=True)
     body_html = db.Column(db.Text)
-    approved = db.Column(db.Boolean, default=False)
-    user_id = db.Column(db.String(255), db.ForeignKey(
-        'users.id', ondelete='CASCADE'))
+    approved = db.Column(db.Boolean, default=True)
+    poet_id = db.Column(db.String(255), db.ForeignKey(
+        'poets.id', ondelete='CASCADE'))
     upvotes = db.Column(db.Integer, default=0)
     downvotes = db.Column(db.Integer, default=0)
+
+    @property
+    def slug(self):
+        return slugify(self.title)
 
     @classmethod
     def supported_types(cls):
@@ -331,10 +331,11 @@ class Resource(BaseModel):
         ))
 
 
+# add event listener for set
+db.event.listen(Resource.body, 'set', Resource.on_changed_body)
+
+
 @login_manager.user_loader
 def load_user(user_id):
     """Get user data from database."""
     return User.query.get(user_id)
-
-
-db.event.listen(Resource.body, 'set', Resource.on_changed_body)

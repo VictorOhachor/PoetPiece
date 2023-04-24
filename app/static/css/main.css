@@ -78,7 +78,7 @@ select option {
 
 .help-block {
   color: #e54b4b;
-  font-size: 1.3rem;
+  font-size: calc(.6rem + .6vmin);
   font-weight: 700;
 }
 
@@ -88,12 +88,12 @@ select option {
 }
 
 .error-toast {
-  color: #3b8ea5;
-  background-color: rgba(255, 166, 0, 0.534);
+  color: #e54b4b;
+  background-color: rgba(255, 166, 0, 0.342);
 }
 
 .msg-toast {
-  background-color: rgba(0, 128, 0, 0.335);
+  background-color: rgba(76, 99, 76, 0.335);
   color: #1c521c;
 }
 
@@ -218,6 +218,11 @@ select option {
 
 .resource-types .resource-type {
   color: #fff;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .3rem;
+  align-items: center;
 }
 
 .create-resource__container {
@@ -1378,4 +1383,12 @@ input[type="file"] {
   font-weight: 700;
   flex-grow: 1;
   text-align: end;
+}
+
+.resources-action__links {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 1rem 0 0;
 }

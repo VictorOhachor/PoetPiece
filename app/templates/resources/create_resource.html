@@ -8,10 +8,14 @@
     <small>Resources can be any of {{", ".join(resources_types)}}</small>
   </p>
 </div>
+<p class="resources-action__links">
+  <a href="{{url_for('resources.index')}}" class="action-btn action-btn__hp-2">View Resources</a>
+</p>
 <hr>
 <p class="resource-types">
   {% for r_type in resources_types %}
   <a class="resource-type" id="{{r_type}}" href="{{url_for('resources.create_resource', type=r_type)}}">
+    <i class="fa-solid fa-{{types_icons[resources_types.index(r_type)]}}"></i>
     {{r_type|title}}
   </a>
   {% endfor %}
