@@ -4,6 +4,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, current_user
 from sqlalchemy.sql import func
 from uuid import uuid4
+from enum import Enum
+from markdown import markdown
+import bleach
+from slugify import slugify
 
 
 class BaseModel(db.Model):
@@ -89,6 +93,7 @@ class User(UserMixin, BaseModel):
     # foreign keys
     poet = db.relationship('Poet', backref='users', uselist=False)
     comments = db.relationship('Comment', backref='users', lazy='dynamic')
+    resources = db.relationship('Resource', backref="users", lazy='dynamic')
 
     @property
     def last_login(self):
@@ -123,7 +128,7 @@ class Poet(BaseModel):
 
     __tablename__ = 'poets'
 
-    user_id = db.Column(db.String(255), db.ForeignKey('users.id'), unique=True)
+    user_id = db.Column(db.String(255), db.ForeignKey('users.id', ondelete='CASCADE'), unique=True)
     email = db.Column(db.String(255), unique=True, index=True)
     gender = db.Column(db.String(10), nullable=False)
     verified = db.Column(db.Boolean, default=False)
@@ -136,7 +141,7 @@ class Poet(BaseModel):
     def became_poet_on(self):
         """Return the date that user became a poet."""
         return self.created_at
-    
+
     @property
     def poet_name(self):
         """Return the poet username."""
@@ -154,7 +159,7 @@ class Poet(BaseModel):
     @classmethod
     def get_choices(cls):
         return [(poet.poet_name, poet.poet_name.capitalize())
-                            for poet in cls.find_all()]
+                for poet in cls.find_all()]
 
 
 class Category(BaseModel):
@@ -255,7 +260,7 @@ class Comment(BaseModel):
         'users.id', ondelete='CASCADE'))
     poem_id = db.Column(db.String(255), db.ForeignKey(
         'poems.id', ondelete='CASCADE'))
-    comment = db.Column(db.String(1000), default='I love this!')
+    comment = db.Column(db.String(512), nullable=False)
     approved = db.Column(db.Boolean, default=False)
 
     @property
@@ -279,33 +284,57 @@ class PoemRating(BaseModel):
         return self.created_at
 
 
-class Notification(BaseModel):
-    """Store notifications that can be accessed by the user."""
+class Resource(BaseModel):
+    """Represents a resource added by a poet."""
 
-    __tablename__ = 'notifications'
+    __tablename__ = 'resources'
 
-    unread = db.Column(db.Boolean, default=True)
+    def __init__(self, title):
+        self.title = title
+        self.slug = slugify(title)
+
+    class ResourceTypes(Enum):
+        LINK = 0
+        IMAGE = 1
+        BRIEF = 2
+        # COURSE = 3
+
+    rtype = db.Column(db.Integer, default=ResourceTypes.LINK.value)
+    title = db.Column(db.String(255), nullable=False, unique=True)
+    slug = db.Column(db.String(255), unique=True)
+    body = db.Column(db.String(255 + rtype * 255), nullable=False, unique=True)
+    body_html = db.Column(db.Text)
+    approved = db.Column(db.Boolean, default=False)
     user_id = db.Column(db.String(255), db.ForeignKey(
-        'users.id', ondelete='SET NULL'), nullable=True)
-    content = db.Column(db.String(512), nullable=False)
-    in_trash = db.Column(db.Boolean, default=False)
-    type_ = db.Column(db.String(32), nullable=False)
-
-    def get_user(self):
-        """Get the user's username associated with a notification."""
-        user = User.find_by(id=self.user_id, one=True)
-        if not user:
-            return 'System'
-        return user.username
+        'users.id', ondelete='CASCADE'))
+    upvotes = db.Column(db.Integer, default=0)
+    downvotes = db.Column(db.Integer, default=0)
 
     @classmethod
-    def count_unread(cls):
-        """Get the count of all unread notifications."""
-        unread_notifications = len(cls.find_by(unread=True))
-        return unread_notifications
+    def supported_types(cls):
+        """Get the supported types of resources."""
+        return cls.ResourceTypes.__members__
+
+    @classmethod
+    def is_type_supported(cls, t: str):
+        """Return whether a given type is supported or not."""
+        return cls.ResourceTypes.__contains__(t.upper())
+
+    @staticmethod
+    def on_changed_body(target, value, oldvalue, initiator):
+        allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
+                        'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul',
+                        'h1', 'h2', 'h3', 'p']
+        target.body_html = bleach.linkify(bleach.clean(markdown(
+            value, output_format='html'),
+            tags=allowed_tags, strip=True
+        ))
 
 
 @login_manager.user_loader
 def load_user(user_id):
     """Get user data from database."""
     return User.query.get(user_id)
+
+
+db.event.listen(Resource.body, 'set', Resource.on_changed_body)

@@ -5,7 +5,9 @@ from wtforms import (StringField, PasswordField,
                      DateField, SelectField, TextAreaField)
 from wtforms.validators import (DataRequired, Length,
                                 Regexp, EqualTo, Email, AnyOf)
+from wtforms_components import DateRange
 from wtforms import ValidationError
+from datetime import date
 from ..models import User, Poet
 
 
@@ -41,7 +43,8 @@ class SignupForm(FlaskForm):
     password2 = _password_field('Confirm New Password:',
                                 EqualTo('password', message='Passwords must match.'))
     birth_date = DateField('Enter Your Date of Birth:',
-                           validators=[DataRequired()])
+                           validators=[DataRequired(), DateRange(
+                               min=date(1970, 1, 1), max=date(2010, 12, 31))],)
     submit = SubmitField('Sign Up')
 
     def validate_username(self, field):

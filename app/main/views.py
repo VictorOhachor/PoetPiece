@@ -4,8 +4,8 @@ from . import main
 from .. import db
 from .forms import (LoginForm, SignupForm, PoetForm,
                     UpdatePasswordForm, EditProfileForm)
-from ..models import User, Poet, Notification
-from ..utils import _perform_post, create_notification
+from ..models import User, Poet
+from ..utils import _perform_post
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -57,27 +57,12 @@ def signup():
                     birth_date=form.birth_date.data)
         # persist to database
         user.save()
-        # create notification
-        n_content = f'{user.username} just signed up!'
-        create_notification(n_content, 'AUTH', user.id)
+
         # redirect user to login page or dashboard.
         flash('You can now login.')
         return redirect(url_for('.login'))
 
     return render_template('main/signup.html', form=form)
-
-
-@main.get('/notifications')
-@login_required
-def notifications():
-    """Get all feature/app updates."""
-    # extract query parameters
-    q = request.args.get('q')
-    unread = request.args.get('unread')
-    # fetch notifications
-    n = Notification.find_order_by(Notification.created_at.desc(),
-                                   in_trash=False)
-    return render_template('main/notifications.html', notifications=n)
 
 
 @main.route('/me', methods=['GET', 'POST'])
@@ -135,9 +120,7 @@ def become_poet():
         )
         # save to database
         poet.save()
-        # create notification
-        n_content = f'{current_user.username} just became a poet!'
-        create_notification(n_content, 'POET', current_user.id)
+
         # redirect to the profile view
         flash('Aha! Now, you are in your poetic shoes!')
         return redirect(url_for('.me'))
@@ -164,14 +147,10 @@ def delete_me():
         # delete poet account otherwise
         n_content += f'{poet.poet_name} is no longer a poet piece!'
         poet.delete()
-    else:
-        # create notification
-        n_content = f'{user.username} is no longer a PoetPiece user!'
     
     # delete user's account if not a poet
     user.delete()
-    # create new notification
-    create_notification(n_content, 'USER', user.id)
+
     # redirect user back to home
     flash("Sorry to see you go; You couldn't even enjoy the poetic privileges!")
 

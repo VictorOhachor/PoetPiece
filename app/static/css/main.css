@@ -40,6 +40,14 @@ input, select, textarea {
   border-radius: 5px;
 }
 
+input[type="file"] {
+  padding: .2rem .5rem .4rem !important;
+  color: #3b8ea5 !important;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
 input[type='checkbox'] {
   min-width: 20px;
   min-height: 20px;
@@ -58,6 +66,10 @@ select {
   background-size: 24px;
 }
 
+.text-center {
+  text-align: center;
+}
+
 select option {
   font-family: 'Dancing Script', cursive;
   background-color: #eee;
@@ -65,7 +77,7 @@ select option {
 }
 
 .help-block {
-  color: #3b8ea5;
+  color: #e54b4b;
   font-size: 1.3rem;
   font-weight: 700;
 }
@@ -174,7 +186,8 @@ select option {
   text-transform: capitalize;
 }
 
-.all-categories__name {
+.all-categories__name,
+.resource-types {
   display: flex;
   overflow: auto hidden;
   margin: 1rem 0;
@@ -184,15 +197,41 @@ select option {
   -ms-overflow-style: none;
 }
 
-.all-categories__name::-webkit-scrollbar {
+.all-categories__name::-webkit-scrollbar,
+.resource-types::-webkit-scrollbar {
   display: none;
 }
 
-.all-categories__name .category-name {
+.all-categories__name .category-name,
+.resource-types .resource-type {
   padding: .5rem 1.5rem;
   color: #666356;
   text-decoration: none;
-  font-family: 'Space Mono', monospace;
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 500;
+}
+
+.resource-types {
+  background-color: #3b8ea5;
+  border: none;
+}
+
+.resource-types .resource-type {
+  color: #fff;
+}
+
+.create-resource__container {
+  background-color: #fff;
+  padding: 1rem .5rem;
+  font-size: calc(.8rem + 1vmin);
+  border-radius: 10px;
+  border: 1px solid #bbb;
+}
+
+.resource-types .resource-type__active {
+  background-color: #fff;
+  color: #3b8ea5;
+  border: 1px solid #3b8ea5;
   font-weight: 700;
 }
 
@@ -226,7 +265,8 @@ select option {
   width: 100% !important;
 }
 
-.app-main__content .form-control {
+.app-main__content .form-control,
+input[type="file"] {
   outline: none;
   font-size: 1.5rem;
   font-family: "Space Mono", monospace;

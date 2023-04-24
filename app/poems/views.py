@@ -5,9 +5,8 @@ from . import poems
 from .. import db
 from .forms import (PoemForm, CategoryForm, StanzaForm,
                     CommentForm, FilterPoemForm)
-from ..models import Poet, Poem, Category, Stanza, Comment, Notification
-from ..utils import (is_poet, can_manage_poem, create_notification,
-                     _process_search_query)
+from ..models import Poet, Poem, Category, Stanza, Comment, Resource, PoemRating
+from ..utils import is_poet, can_manage_poem, _process_search_query
 
 
 @poems.get('/poems')
@@ -57,7 +56,7 @@ def search():
     """Search for poems."""
     # data to be passed to the template.
     context = {
-        'form': FilterPoemForm(),
+        'form': FilterPoemForm(request.args),
         'results': None
     }
     # call the helper function to properly parse the args
@@ -108,9 +107,6 @@ def create_category():
                             description=form.description.data)
         category.save()
 
-        # add new notification
-        n_content = f'{current_user.username} created a new category called {category.name}'
-        create_notification(n_content, 'POET', current_user.id)
         # redirect back to home
         flash(f'Created a new category ({form.name.data}).', 'info')
         return redirect(url_for('.index'))
@@ -134,9 +130,7 @@ def create_poem():
                     category_id=category.id,
                     premium=form.premium.data)
         poem.save()
-        # add a new notification
-        n_content = f'{current_user.username} started a new poem called {poem.title}'
-        create_notification(n_content, 'POET', current_user.id)
+
         # redirect to poem page
         flash('Successfully created poem. What a courage!', 'info')
         return redirect(url_for('.poem', poem_id=poem.id))
@@ -254,11 +248,6 @@ def delete_poem(poem_id):
     poem = Poem.find_by(id=poem_id, one=True)
     # delete poem
     poem.delete()
-    # create notification
-    create_notification(
-        f'A poem has been deleted by {current_user.username}',
-        'POET', current_user.id
-    )
     # redirect to dashboard home
     flash('Deletion successfully; what a courage!', 'info')
     return redirect(url_for('.index'))
@@ -294,9 +283,7 @@ def add_stanza(poem_id):
 
             flash(f'Stanza {form.index.data} has been added successfully.',
                   'info')
-        # add notification
-        n_content = f'{current_user.username} added a stanza to their poem called {poem.title}'
-        create_notification(n_content, 'POET', current_user.id)
+
         return redirect(url_for('.poem', poem_id=poem_id))
 
     return render_template('poems/add_stanza.html', form=form)
@@ -320,10 +307,7 @@ def delete_stanza(poem_id, stanza_id):
 
     # delete stanza from poem.
     stanza.delete()
-    # add notification
-    poem = Poem.find_by(id=poem_id, one=True)
-    n_content = f'{current_user.username} deleted a stanza from their poem called {poem.title}'
-    create_notification(n_content, 'POET', current_user.id)
+
     # redirect to the poem page
     flash(f'Successfully deleted stanza {stanza.index} from poem.', 'info')
     return redirect(url_for('.poem', poem_id=poem_id))
@@ -391,9 +375,6 @@ def publish_poem(poem_id):
     # publish poem
     poem.publish()
     published = 'PUBLISHED' if poem.published else 'UNPUBLISHED'
-    # add notification
-    n_content = f'{current_user.username} {published} their poem called {poem.title}'
-    create_notification(n_content, 'POET', current_user.id)
     # redirect to
     flash('Successfully published poem for the world to see!' if poem.published
           else 'Poem has been unpublished')
@@ -421,19 +402,3 @@ def complete_poem(poem_id):
     flash(f'Poem has been marked as {flash_msg_type}.')
 
     return redirect(url_for('.poem', poem_id=poem_id))
-
-
-@poems.get('/notifications/<string:notification_id>/mark')
-@is_poet
-def mark_notification(notification_id):
-    """Mark a notification as read or unread."""
-    notification = Notification.find_by(id=notification_id, one=True)
-
-    if not notification:
-        flash('Something went wrong; could not find notification with given id.',
-              'error')
-    else:
-        notification.unread = not notification.unread
-        notification.save()
-
-    return redirect(url_for('main.notifications'))

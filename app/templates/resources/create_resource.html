@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}Create New Resource{% endblock title %}
+{% block main_content %}
+<div>
+  <h1 class="main-content__title">Create a Poetic Resource</h1>
+  <p class="redden text-center">
+    <small>Resources can be any of {{", ".join(resources_types)}}</small>
+  </p>
+</div>
+<hr>
+<p class="resource-types">
+  {% for r_type in resources_types %}
+  <a class="resource-type" id="{{r_type}}" href="{{url_for('resources.create_resource', type=r_type)}}">
+    {{r_type|title}}
+  </a>
+  {% endfor %}
+</p>
+<div class="create-resource__container">
+  {{ wtf.quick_form(form) }}
+</div>
+<script src="{{url_for('static', filename='js/active_resource_type.js')}}"></script>
+{% endblock main_content %}

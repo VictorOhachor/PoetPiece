@@ -15,13 +15,9 @@
         <span>Compose</span>
       </a>
     {% endif %}
-    <a href="{{url_for('main.notifications')}}" class="nav-item">
-      <i class="fa-solid fa-bell">
-        {% if unread_notifs %}
-          <sup class="redden unread-n__count">{{unread_notifs}}</sup>
-        {% endif %}
-      </i>
-      <span>Notifications</span>
+    <a href="{{url_for('resources.create_resource')}}" class="nav-item">
+      <i class="fa-solid fa-cart-flatbed-suitcase"></i>
+      <span>Resources</span>
     </a>
     <a href="{{url_for('main.me')}}" class="nav-item">
       <i class="fa-solid fa-user"></i>

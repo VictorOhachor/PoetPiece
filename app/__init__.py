@@ -27,10 +27,13 @@ def create_app(config_name):
     login_manager.init_app(app)
 
     # Register blueprints
-    from .main import main as main_blueprint
-    app.register_blueprint(main_blueprint)
+    from .main import main as main_bp
+    app.register_blueprint(main_bp)
 
-    from .poems import poems as poems_blueprint
-    app.register_blueprint(poems_blueprint)
+    from .poems import poems as poems_bp
+    app.register_blueprint(poems_bp)
+
+    from .resources import resources as resources_bp
+    app.register_blueprint(resources_bp)
     
     return app

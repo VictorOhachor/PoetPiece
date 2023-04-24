@@ -3,7 +3,7 @@
 from functools import wraps
 from flask import flash, redirect, url_for
 from flask_login import current_user, login_required
-from .models import Poem, Notification, Poet, User
+from .models import Poem, Poet, User
 from . import db
 
 
@@ -40,18 +40,6 @@ def _perform_post(form, poetic_user: list):
     form_type = form._prefix.split('_')[0]
     flash(f'Successfully updated your {form_type}.')
     return redirect(url_for('.me'))
-
-
-def create_notification(content, ntype, user_id=None):
-    try:
-        # extract notification data
-        n_data = {'content': content, 'type_': ntype}
-        if user_id:
-            n_data['user_id'] = user_id
-        # create notification
-        Notification.create(**n_data)
-    except Exception as e:
-        print(str(e))
 
 
 def _process_search_query(form_data: dict):
