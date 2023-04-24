@@ -298,7 +298,7 @@ class Resource(BaseModel):
 
     rtype = db.Column(db.Integer, default=ResourceTypes.LINK.value)
     title = db.Column(db.String(255), nullable=False, unique=True)
-    body = db.Column(db.String(2000), nullable=False, unique=True)
+    body = db.Column(db.String(2000), nullable=False)
     body_html = db.Column(db.Text)
     approved = db.Column(db.Boolean, default=True)
     poet_id = db.Column(db.String(255), db.ForeignKey(
