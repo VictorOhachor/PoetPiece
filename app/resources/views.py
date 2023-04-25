@@ -104,7 +104,7 @@ def publish_resource():
     rtype = request.args.get('type', 'LINK')
 
     try:
-        resource = Resource.find_by(id=resource_id)
+        resource = Resource.find_by(id=resource_id, one=True)
         if not resource:
             flash('Resource with given id was not found', 'error')
         else:
