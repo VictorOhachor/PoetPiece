@@ -2,7 +2,7 @@ from flask_login import current_user
 from flask_wtf import FlaskForm
 from flask import request
 from wtforms import (StringField, SubmitField, FileField,
-                     TextAreaField, URLField, SelectField)
+                     TextAreaField, URLField, SelectField, BooleanField)
 from flask_wtf.file import FileRequired, FileAllowed
 from wtforms.validators import (DataRequired, Length)
 from wtforms import ValidationError
@@ -35,6 +35,7 @@ class ResourceForm(FlaskForm):
     rtype = SelectField('Resource Type:', choices=[
         (t, name) for t, name in enumerate(Resource.supported_types())
     ], coerce=int)
+    published = BooleanField('Publish Resource', default=True)
     submit = SubmitField('Post Resource')
 
     def __init__(self, *args, **kwargs):

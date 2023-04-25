@@ -2,12 +2,14 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_bootstrap import Bootstrap
+from flask_caching import Cache
 from config import config
 from .celery.init import celery_init_app
 
 bootstrap = Bootstrap()
 db = SQLAlchemy()
 login_manager = LoginManager()
+cache = Cache()
 
 
 def create_app(config_name):
@@ -25,6 +27,7 @@ def create_app(config_name):
     celery_init_app(app)
     bootstrap.init_app(app)
     login_manager.init_app(app)
+    cache.init_app(app)
 
     # Register blueprints
     from .main import main as main_bp

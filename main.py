@@ -3,6 +3,7 @@ from app import create_app, db
 from app.models import (User, Poet, Poem, Category, Stanza, Comment,
                         Resource, PoemRating)
 from flask_migrate import Migrate
+from app.utils import preview_link
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 migrate = Migrate(app, db)
@@ -25,6 +26,8 @@ def make_shell_context():
 def inject_data():
     return {
         'resources_types': list(Resource.supported_types().keys()),
+        'types_icons': ['link', 'image', 'message', 'book'],
+        'preview_link': preview_link
     }
 
 

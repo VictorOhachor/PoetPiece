@@ -4,7 +4,9 @@ from functools import wraps
 from flask import flash, redirect, url_for
 from flask_login import current_user, login_required
 from .models import Poem, Poet, User
-from . import db
+from . import db, cache
+import requests
+from bs4 import BeautifulSoup
 
 
 def is_poet(func):
@@ -46,14 +48,14 @@ def _process_search_query(form_data: dict):
     """Process the form data passed and returned a more refined dict data."""
     refined_data = {}
     # all search/filter query keys that will be used
-    queryKeys = [('q', str), ('author_id', str), ('rating', int), 
+    queryKeys = [('q', str), ('author_id', str), ('rating', int),
                  ('completed', bool), ('premium', bool)]
 
     if form_data.get('poet'):
         user_id = User.find_by_username(form_data['poet']).id
         refined_data['author_id'] = Poet.find_by(user_id=user_id, one=True).id
         print(refined_data['author_id'])
-    
+
     for key, converter in queryKeys:
         value = form_data.get(key)
         if value and key not in refined_data:
@@ -61,5 +63,33 @@ def _process_search_query(form_data: dict):
                 refined_data[key] = True if value == 'True' else False
             else:
                 refined_data[key] = converter(value)
-    
+
     return refined_data
+
+
+def _extract_meta_item(soup: BeautifulSoup, property):
+    """Extract a property from the metadata of the given soup."""
+    result = soup.find('meta', {
+        'property': f'og:{property}'
+    })
+    return result.get('content') if result else ''
+
+
+@cache.cached(timeout=5)
+def preview_link(url):
+    """Get some metadata from a given URL."""
+    try:
+        response = requests.get(url, timeout=5)
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        result = {
+            'title': _extract_meta_item(soup, 'title'),
+            'description': _extract_meta_item(soup, 'description'),
+            'image': _extract_meta_item(soup, 'image')
+        }
+
+        if all(result.values()):
+            return result
+    except Exception as e:
+        flash(str(e), 'error')
+        return

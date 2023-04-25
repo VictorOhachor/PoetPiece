@@ -28,7 +28,7 @@
     <title>PoetPiece | {% block title %}{% endblock title %}</title>
   </head>
   <body>
-    {% for category, message in get_flashed_messages(with_categories=true) %}
+    {% for category, message in get_flashed_messages(with_categories=true)[:1] %}
     <p
       class="toast-card {{ 'error-toast' if category == 'error' else 'msg-toast' }}"
     >

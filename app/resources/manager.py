@@ -31,26 +31,38 @@ class ResourceManager:
     def _handle_img(self, body):
         """Handle the image passed to it and return the image path."""
         if isinstance(body, FileStorage):
-            filename = secure_filename(body.filename)
+            filename = 'resources/' + f'{uuid4().hex}_' + secure_filename(
+                body.filename)
+            upload_folder = current_app.config['UPLOAD_FOLDER']
 
             # create directory if it doesn't exist
-            resources_path = os.path.join(current_app.config['UPLOAD_FOLDER'],
-                                          'resources')
+            resources_path = os.path.join(upload_folder,
+                                          filename.split('/')[0])
             if (not os.path.exists(resources_path)):
                 os.makedirs(resources_path, exist_ok=True)
 
             # construct image path
-            img_path = os.path.join(resources_path,
-                                    f'{uuid4().hex}-{filename}')
+            img_path = os.path.join(upload_folder,
+                                    filename)
             # SAVE image to filesystem
             body.save(img_path)
 
-            return img_path
+            return url_for('static', filename=f'uploads/{filename}')
         raise TypeError('Body is not an image!')
+
+    def delete_img(self, filename):
+        """Delete an image from the filesystem if it exist."""
+        upload_folder = current_app.config['UPLOAD_FOLDER']
+        img_path = os.path.join(upload_folder, '../../', filename)
+
+        if os.path.exists(img_path):
+            os.remove(img_path)
+            return True
+        return False
 
     def _extract_data(self, data):
         """Extract resource data from form data."""
-        supported_keys = ['rtype', 'title', 'body']
+        supported_keys = ['rtype', 'title', 'body', 'published']
 
         formatted_data = {
             key: self._handle_img(data[key])
@@ -78,6 +90,31 @@ class ResourceManager:
             flash(str(e), 'error')
         finally:
             return redirect(url_for('resources.create_resource', type=r_type))
+
+    def find_by_type(self, itype, sort=False):
+        """Find resources by numerical resource type."""
+        db_query = self.model.query
+
+        if current_user.is_poet:
+            # fetch the poet account
+            poet = Poet.find_by(user_id=current_user.id, one=True)
+            # query db for resources based on type
+            db_query = db_query.filter(
+                (Resource.rtype == itype) & (
+                    (Resource.published == True) | (
+                        (Resource.poet_id == poet.id) & (
+                            Resource.published == False)
+                    )
+                )
+            )
+        else:
+            db_query = db_query.filter_by(published=True)
+
+        if sort:
+            db_query = db_query.order_by(Resource.title,
+                                         Resource.upvotes.desc())
+
+        return db_query.all()
 
 
 manager = ResourceManager()

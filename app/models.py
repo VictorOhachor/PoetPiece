@@ -299,6 +299,7 @@ class Resource(BaseModel):
     rtype = db.Column(db.Integer, default=ResourceTypes.LINK.value)
     title = db.Column(db.String(255), nullable=False, unique=True)
     body = db.Column(db.String(2000), nullable=False)
+    published = db.Column(db.Boolean, default=False)
     body_html = db.Column(db.Text)
     approved = db.Column(db.Boolean, default=True)
     poet_id = db.Column(db.String(255), db.ForeignKey(
@@ -319,6 +320,11 @@ class Resource(BaseModel):
     def is_type_supported(cls, t: str):
         """Return whether a given type is supported or not."""
         return cls.ResourceTypes.__contains__(t.upper())
+    
+    @classmethod
+    def get_type_value(cls, t):
+        """Return the value of the key passed as resource type."""
+        return cls.ResourceTypes.__members__.get(t).value
 
     @staticmethod
     def on_changed_body(target, value, oldvalue, initiator):
@@ -329,6 +335,15 @@ class Resource(BaseModel):
             value, output_format='html'),
             tags=allowed_tags, strip=True
         ))
+    
+    @property
+    def is_accessible(self):
+        """Check if current user is authorized to manipulate resource."""
+        if current_user.is_poet:
+            poet = Poet.find_by(user_id=current_user.id, one=True)
+            if self.poet_id == poet.id:
+                return True
+        return False
 
 
 # add event listener for set

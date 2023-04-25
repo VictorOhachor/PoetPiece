@@ -86,12 +86,16 @@ def search():
 
     # remove unpublished poems if poet is not current user
     poet = Poet.find_by(user_id=current_user.id, one=True)
-    db_query = db_query.filter(
+    if current_user.is_poet:
+        db_query = db_query.filter(
             ((Poem.author_id == poet.id) & (Poem.published == False)) |
             (Poem.published == True)
-    )
+        )
+    else:
+        db_query = db_query.filter_by(published=True)
     # fetch the data
-    context['results'] = db_query.order_by(Poem.title, Poem.created_at.desc()).all()
+    context['results'] = db_query.order_by(
+        Poem.title, Poem.created_at.desc()).all()
 
     return render_template('poems/search_poems.html', **context)
 

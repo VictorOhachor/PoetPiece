@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}All Poetic Resources{% endblock title %}
+{% block main_content %}
+<div>
+  <h1 class="main-content__title">Poetic Resources</h1>
+  <p class="redden text-center">
+    Want to learn more about poetry? You are at the right place!
+  </p>
+</div>
+<p class="resources-action__links">
+  {% if current_user.is_poet %}
+  <a href="{{url_for('resources.create_resource')}}" class="action-btn action-btn__hp-2">Create Resource</a>
+  {% endif %}
+</p>
+<hr>
+<p class="resource-types">
+  {% for r_type in resources_types %}
+  <a class="resource-type" id="{{r_type}}" href="{{url_for('resources.index', type=r_type)}}">
+    <i class="fa-solid fa-{{types_icons[resources_types.index(r_type)]}}"></i>
+    {{r_type|title}}
+  </a>
+  {% endfor %}
+</p>
+<section class="resources-container">
+  {% if not resources %}
+    <p class="empty-list">
+      No resource available under this section.
+    </p>
+  {% endif %}
+  {% for resource in resources %}
+  <article class="resource-card">
+    {% if resource.is_accessible %}
+    {% if not resource.published %}
+    <a href="{{url_for('resources.publish_resource', resource_id=resource.id, type=resources_types[resource.rtype])}}" class="publish-btn underline">
+      Publish
+    </a>
+    {% endif %}
+    <p class="resource-action__links">
+      <a href="{{url_for('resources.update_resource', resource_id=resource.id, type=resources_types[resource.rtype])}}">
+        <i class="fa-solid fa-pen-to-square"></i>
+      </a>
+      <a href="{{url_for('resources.delete_resource', resource_id=resource.id, type=resources_types[resource.rtype])}}">
+        <i class="fa-regular fa-trash-can"></i>
+      </a>
+    </p>
+    {% endif %}
+    <p class="resource-metadata">
+      <span class="created-on">Created on {{resource.created_at}}</span>
+      <span class="creator">by {{resource.poets.poet_name}}</span>
+    </p>
+    {% if resources_types[resource.rtype] == 'LINK' %}
+    {% set preview = preview_link(resource.body) %}
+    {% if preview %}
+    <a href="{{resource.body}}" target="_blank" referrerpolicy="no-referrer">
+      <div class="resource-preview">
+        <img src="{{preview['image']}}" alt="{{preview['title']}}">
+        <h4 class="title">{{preview['title']}}</h4>
+        <p class="description">{{preview['description']}}</p>
+      </div>
+    </a>
+    {% else %}
+    <h4 class="title">{{resource.title|title}}</h4>
+    <div class="link-resource">
+      {{resource.body_html|safe}}
+    </div>
+    {% endif %}
+    {% elif resources_types[resource.rtype] == 'IMAGE' %}
+    <div class="image-resource">
+      <h4 class="title">{{resource.title}}</h4>
+      <img src="{{resource.body}}" alt="{{resource.title}}">
+    </div>
+    {% else %}
+    <div class="resource-content">
+      <h4 class="title">{{resource.title}}</h4>
+      <div class="body">{{resource.body_html|safe if resource.body_html else resource.body}}</div>
+      <a href="" class="view-more__btn action-btn action-btn__hp-2">Learn More</a>
+    </div>
+    {% endif %}
+    <hr>
+    <p class="approved-resource resource-{{'approved' if resource.approved else 'unapproved'}}">
+      {% if resource.approved %}
+      <i class="fa-solid fa-check"></i>
+      <span>Approved</span>
+      {% else %}
+      <i class="fa-solid fa-ban"></i>
+      <span>Not Approved</span>
+      {% endif %}
+    </p>
+    <div class="resource-votes">
+      <a class="upvote" href="{{url_for('resources.vote_resource', resource_id=resource.id, up=True)}}">
+        <i class="fa-solid fa-circle-arrow-up"></i>
+        <span class="vote-count">{{resource.upvotes}}</span>
+      </a>
+      <a class="downvote" href="{{url_for('resources.vote_resource', resource_id=resource.id, up=False)}}">
+        <i class="fa-solid fa-circle-arrow-down"></i>
+        <span class="vote-count">{{resource.downvotes}}</span>
+      </a>
+    </div>
+  </article>
+  {% endfor %}
+</section>
+<script src="{{url_for('static', filename='js/active_resource_type.js')}}"></script>
+{% endblock main_content %}

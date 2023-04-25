@@ -12,3 +12,6 @@ markdown
 bleach
 wtforms_components
 python-slugify
+requests
+bs4
+Flask-Caching
