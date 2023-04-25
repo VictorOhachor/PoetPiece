@@ -1472,7 +1472,6 @@ input[type="file"] {
   font-size: calc(.8rem + 1.2vmin);
   margin-top: .2rem;
   color: #3b8ea5;
-  text-decoration: underline;
 }
 
 .resource-card .approved-resource {

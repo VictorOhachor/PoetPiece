@@ -53,7 +53,7 @@ def update_resource():
     if not resource:
         flash('No resource with given id.', 'error')
         return redirect(url_for('.index', type=rtype))
-    
+
     # set the body of the resource form
     ResourceForm.set_body()
     context = dict(
@@ -100,4 +100,20 @@ def vote_resource(resource_id):
 @is_poet
 def publish_resource():
     """Publish or unpublish a resource."""
-    pass
+    resource_id = request.args.get('resource_id')
+    rtype = request.args.get('type', 'LINK')
+
+    try:
+        resource = Resource.find_by(id=resource_id)
+        if not resource:
+            flash('Resource with given id was not found', 'error')
+        else:
+            resource.published = not resource.published
+            resource.save()
+
+            flash(
+                f"Successfully {'P' if resource.published else 'Unp'}ublished resource.")
+    except Exception as e:
+        flash(str(e), 'error')
+    finally:
+        return redirect(url_for('.index', type=rtype))
