@@ -90,5 +90,4 @@ def preview_link(url):
         if all(result.values()):
             return result
     except Exception as e:
-        flash(str(e), 'error')
         return
