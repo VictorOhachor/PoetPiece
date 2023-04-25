@@ -32,11 +32,13 @@ The following are the list of technologies that made the application possible:
 - Access to non-sensitive poet information, such as their bio and published works, for registered users
 - Commenting system for users to provide feedback on poems and engage in discussions with other poets
 - Easy editing and deletion of poem stanzas to refine and perfect the final piece.
+- Creation of poetic resources of 4 different types (external links, images or screenshots, briefs, and courses)
 
 These features make **PoetPiece** a comprehensive platform that provides aspiring poets with a space to showcase their work, connect with other writers, and engage in meaningful discussions on their craft.
 
 ### ⚠️ Functional But Buggy:
-- Notification system that alerts users about operations of other users/poets related to them.
+- Deletion of an image resources works but it fails to remove the image from the filesystem.
+- Creation of courses works, but it is limited and therefore doesn't permit further actions on courses.
 
 ### 🔜 Coming Soon:
 - Advanced analytics feature to track the number of views on individual poems and identify the most popular pieces.
