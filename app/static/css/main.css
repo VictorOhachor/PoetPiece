@@ -1423,6 +1423,7 @@ input[type="file"] {
 .resource-card .link-resource {
   color: #e54b4b;
   text-decoration: underline;
+  overflow-wrap: break-word;
 }
 
 .resource-card .publish-btn {
