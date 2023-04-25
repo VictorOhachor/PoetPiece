@@ -1424,6 +1424,7 @@ input[type="file"] {
   color: #e54b4b;
   text-decoration: underline;
   overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 .resource-card .publish-btn {
