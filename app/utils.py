@@ -75,7 +75,6 @@ def _extract_meta_item(soup: BeautifulSoup, property):
     return result.get('content') if result else ''
 
 
-@cache.cached(timeout=5)
 def preview_link(url):
     """Get some metadata from a given URL."""
     try:
