@@ -1,4 +1,4 @@
-from . import db, login_manager
+from . import db, login_manager, cache
 from flask import current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, current_user
@@ -304,8 +304,18 @@ class Resource(BaseModel):
     approved = db.Column(db.Boolean, default=True)
     poet_id = db.Column(db.String(255), db.ForeignKey(
         'poets.id', ondelete='CASCADE'))
-    upvotes = db.Column(db.Integer, default=0)
-    downvotes = db.Column(db.Integer, default=0)
+
+    @property
+    def upvotes(self):
+        reactions = Reaction.find_by(reaction_type='UPVOTE',
+                                     record_id=self.id)
+        return len(reactions)
+
+    @property
+    def downvotes(self):
+        reactions = Reaction.find_by(reaction_type='DOWNVOTE',
+                                     record_id=self.id)
+        return len(reactions)
 
     @property
     def slug(self):
@@ -320,7 +330,7 @@ class Resource(BaseModel):
     def is_type_supported(cls, t: str):
         """Return whether a given type is supported or not."""
         return cls.ResourceTypes.__contains__(t.upper())
-    
+
     @classmethod
     def get_type_value(cls, t):
         """Return the value of the key passed as resource type."""
@@ -335,7 +345,7 @@ class Resource(BaseModel):
             value, output_format='html'),
             tags=allowed_tags, strip=True
         ))
-    
+
     @property
     def is_accessible(self):
         """Check if current user is authorized to manipulate resource."""
@@ -346,11 +356,35 @@ class Resource(BaseModel):
         return False
 
 
-# add event listener for set
-db.event.listen(Resource.body, 'set', Resource.on_changed_body)
+class Reaction(BaseModel):
+    """Represent a user who votes on a resource."""
+
+    __tablename__ = 'reactions'
+
+    class ReactionTypes:
+        UPVOTE = 'UPVOTE'
+        DOWNVOTE = 'DOWNVOTE'
+        RATE = 'RATE'
+
+    user_id = db.Column(db.String(255), db.ForeignKey('users.id',
+                                                      ondelete='CASCADE'))
+    reaction_type = db.Column(db.String(16), nullable=False)
+    # holds the id of the object of user's reaction e.g poem or resource.
+    record_id = db.Column(db.String(255), nullable=False)
+    value = db.Column(db.Float(precision=1), default=0.0)
+
+    @classmethod
+    def get_types(cls):
+        return {k: v for k, v in cls.ReactionTypes.__dict__
+                if not k.startswith('_')}
 
 
+# load user into the login manager if user exists.
 @login_manager.user_loader
 def load_user(user_id):
     """Get user data from database."""
     return User.query.get(user_id)
+
+
+# add event listeners
+db.event.listen(Resource.body, 'set', Resource.on_changed_body)

@@ -1,4 +1,4 @@
-from ..models import Resource, Poet
+from ..models import Resource, Poet, Reaction
 from flask import flash, redirect, url_for, current_app, request
 from flask_login import current_user
 from flask_wtf.file import FileStorage
@@ -111,10 +111,29 @@ class ResourceManager:
             db_query = db_query.filter_by(published=True)
 
         if sort:
-            db_query = db_query.order_by(Resource.title,
-                                         Resource.upvotes.desc())
+            db_query = db_query.order_by(Resource.title)
 
         return db_query.all()
+
+    def vote(self, resource_id):
+        """Upvote or downvote a resource."""
+        downvote = request.args.get('downvote')
+        vote_type = 'DOWNVOTE' if downvote is not None else 'UPVOTE'
+
+        resource = self.model.find_by(id=resource_id, one=True)
+        if not resource:
+            return False
+
+        reaction = Reaction.find_by(record_id=resource.id,
+                                    user_id=current_user.id, one=True)
+        
+        if reaction:
+            reaction.reaction_type = vote_type
+            reaction.save()
+        else:
+            Reaction.create(user_id=current_user.id, reaction_type=vote_type,
+                            record_id=resource.id)
+        return True
 
 
 manager = ResourceManager()

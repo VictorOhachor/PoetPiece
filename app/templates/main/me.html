@@ -19,5 +19,4 @@ My {{ 'Poetic' if current_user.is_poet else 'To-Be-Poetic' }} Profile{% endblock
   <h2 class="form-title update-password__title">Update My Password</h2>
   {{ wtf.quick_form(password_form) }}
 </div>
-<script src="{{ url_for('static', filename='js/confirm_delete.js') }}"></script>
 {% endblock main_content %}

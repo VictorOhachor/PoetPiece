@@ -93,7 +93,14 @@ def delete_resource():
 @login_required
 def vote_resource(resource_id):
     """Upvote or downvote a resource."""
-    pass
+    status = manager.vote(resource_id)
+    rtype = request.args.get('type', 'LINK')
+    
+    if status:
+        flash('Your vote has has made a difference!')
+    else:
+        flash('Something went wrong. Could not vote.', 'error')
+    return redirect(url_for('.index', type=rtype))
 
 
 @resources.route('/resources/publish')

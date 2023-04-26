@@ -31,13 +31,11 @@
   {% for resource in resources %}
   <article class="resource-card">
     {% if resource.is_accessible %}
-    {% if not resource.published %}
     <a href="{{url_for('resources.publish_resource', resource_id=resource.id, type=resources_types[resource.rtype])}}" class="publish-btn underline">
-      Publish
+      {{'Publish' if not resource.published else 'Unpublish'}}
     </a>
-    {% endif %}
     <p class="resource-action__links">
-      <a href="{{url_for('resources.update_resource', resource_id=resource.id, type=resources_types[resource.rtype])}}">
+      <a href="{{url_for('resources.update_resource', resource_id=resource.id, type=resources_types[resource.rtype])}}" id="delete-resource">
         <i class="fa-solid fa-pen-to-square"></i>
       </a>
       <a href="{{url_for('resources.delete_resource', resource_id=resource.id, type=resources_types[resource.rtype])}}">
@@ -90,11 +88,11 @@
       {% endif %}
     </p>
     <div class="resource-votes">
-      <a class="upvote" href="{{url_for('resources.vote_resource', resource_id=resource.id, up=True)}}">
+      <a class="upvote" href="{{url_for('resources.vote_resource', resource_id=resource.id)}}">
         <i class="fa-solid fa-circle-arrow-up"></i>
         <span class="vote-count">{{resource.upvotes}}</span>
       </a>
-      <a class="downvote" href="{{url_for('resources.vote_resource', resource_id=resource.id, up=False)}}">
+      <a class="downvote" href="{{url_for('resources.vote_resource', resource_id=resource.id, downvote='')}}">
         <i class="fa-solid fa-circle-arrow-down"></i>
         <span class="vote-count">{{resource.downvotes}}</span>
       </a>

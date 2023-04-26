@@ -960,7 +960,7 @@ input[type="file"] {
 
 .more-actions__container {
   position: absolute;
-  bottom: 5px;
+  bottom: 25px;
   right: 0;
   color: #eee;
 }
@@ -1527,9 +1527,12 @@ input[type="file"] {
   object-fit: scale-down;
 }
 
-
 .resource-content .body {
   border: 1px solid #3b8ea5;
   border-radius: 5px;
   padding: 1rem .5rem;
+}
+
+.resource-content .body > ul {
+  list-style-position: inside;
 }
