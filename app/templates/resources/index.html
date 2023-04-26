@@ -35,10 +35,10 @@
       {{'Publish' if not resource.published else 'Unpublish'}}
     </a>
     <p class="resource-action__links">
-      <a href="{{url_for('resources.update_resource', resource_id=resource.id, type=resources_types[resource.rtype])}}" id="delete-resource">
+      <a href="{{url_for('resources.update_resource', resource_id=resource.id, type=resources_types[resource.rtype])}}">
         <i class="fa-solid fa-pen-to-square"></i>
       </a>
-      <a href="{{url_for('resources.delete_resource', resource_id=resource.id, type=resources_types[resource.rtype])}}">
+      <a href="{{url_for('resources.delete_resource', resource_id=resource.id, type=resources_types[resource.rtype])}}" id="delete-resource">
         <i class="fa-regular fa-trash-can"></i>
       </a>
     </p>
