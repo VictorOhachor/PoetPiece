@@ -97,7 +97,7 @@ def vote_resource(resource_id):
     rtype = request.args.get('type', 'LINK')
     
     if status:
-        flash('Your vote has has made a difference!')
+        flash('Your vote has made a difference!')
     else:
         flash('Something went wrong. Could not vote.', 'error')
     return redirect(url_for('.index', type=rtype))
