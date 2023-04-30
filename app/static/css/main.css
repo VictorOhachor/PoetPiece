@@ -16,7 +16,7 @@ body {
   position: relative;
   min-height: 100vh;
   margin-bottom: 3rem;
-  background-color: rgb(238, 238, 238);
+  background: linear-gradient(-120deg, rgb(238, 238, 238), rgba(59, 142, 165, 0.4));
 }
 
 a {
