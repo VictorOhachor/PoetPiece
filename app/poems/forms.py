@@ -52,7 +52,7 @@ class FilterPoemForm(FlaskForm):
         # delete csrf token on GET requests
         if request.method == 'GET':
             del self.csrf_token
-    
+
     def hidden_tag(self, *fields):
         if request.method == 'GET':
             return ''
@@ -63,7 +63,8 @@ class StanzaForm(FlaskForm):
     """Represents the form for creating or editing stanzas."""
 
     index = IntegerField('Enter New Stanza Number (relative to the poem)',
-                         validators=[DataRequired(), NumberRange(1, 20)], default=1)
+                         validators=[DataRequired(), NumberRange(1, 20)],
+                         default=1)
     content = TextAreaField('Enter the Stanza Content', validators=[
         DataRequired(), Length(1, 3000)], render_kw={'rows': '10'})
     submit = SubmitField('Add/Update Stanza')
@@ -77,7 +78,8 @@ class CategoryForm(FlaskForm):
                                    Regexp('^[A-Za-z][A-Za-z0-9_]*$', 0,
                                           'Category name must have only letters, numbers, or underscores')])
     description = TextAreaField('Describe Briefly the New Category',
-                                validators=[Length(0, 1000)], render_kw={'rows': '3'})
+                                validators=[Length(0, 255)],
+                                render_kw={'rows': '3'})
     submit = SubmitField('Add Category')
 
 
@@ -85,5 +87,5 @@ class CommentForm(FlaskForm):
     """Represents the form for creating or editing comments."""
 
     comment = TextAreaField('What is your feedback on the poem?', validators=[
-        Length(0, 1000), ], render_kw={'rows': '2'})
+        Length(1, 1000), DataRequired()], render_kw={'rows': '2'})
     submit = SubmitField('Post Comment')

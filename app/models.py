@@ -261,7 +261,7 @@ class Comment(BaseModel):
         'users.id', ondelete='CASCADE'))
     poem_id = db.Column(db.String(255), db.ForeignKey(
         'poems.id', ondelete='CASCADE'))
-    comment = db.Column(db.String(512), nullable=False)
+    comment = db.Column(db.String(255), nullable=False)
     approved = db.Column(db.Boolean, default=False)
 
     @property
