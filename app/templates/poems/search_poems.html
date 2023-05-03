@@ -28,7 +28,7 @@
     {% if results %}
     <div class="results-container poems-container">
       {% for poem in results %}
-      {{ macros.poem_card_widget(poem) }}
+      {{ macros.poem_card_widget(poem, current_user) }}
       {% endfor %}
     </div>
     {% else %}

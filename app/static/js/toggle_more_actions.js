@@ -81,7 +81,10 @@ const generatePDF = () => {
 }
 
 const copyPoemLink = (e) => {
-    const poemLink = location.href
+    const poemURL = document.querySelector('input[name="poem_url"]')
+    const poemLink = window.location.host + poemURL.value
+
+    // const poemLink = location.href
     const btn = e.currentTarget
     const btnText = btn.textContent
 

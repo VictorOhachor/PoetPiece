@@ -25,7 +25,7 @@ current_user.is_poet %}
     Be the First to Compose.
   </p>
   {% endif %} {% for poem in poems %}
-  {{ macros.poem_card_widget(poem) }}
+  {{ macros.poem_card_widget(poem, current_user) }}
   {% endfor %}
 </div>
 

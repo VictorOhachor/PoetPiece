@@ -3,6 +3,7 @@
 %} {% block menu_toggler %}
 {{ macros.more_actions_widget(poem, current_user) }}
 {% endblock menu_toggler %} {% block main_content %}
+<input type="hidden" name="poem_url" value="{{url_for('poems.poem', slugname=poem.slug)}}">
 <h1 class="main-content__title">
   {{poem.title|upper}}
   {% if poem.poets %}

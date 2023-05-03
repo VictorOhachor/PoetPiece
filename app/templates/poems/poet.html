@@ -26,7 +26,7 @@ title %}
     </p>
     {% endif %}
     {% for poem in other_poems %}
-    {{ macros.poem_card_widget(poem) }}
+    {{ macros.poem_card_widget(poem, current_user) }}
     {% endfor %}
   </div>
   {% if other_poems|length + 1 < poet.poems.all()|length  %}
