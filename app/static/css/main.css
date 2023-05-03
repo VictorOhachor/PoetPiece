@@ -744,7 +744,6 @@ input[type="file"] {
   font-weight: 700;
   padding: 0 0.5rem;
   text-transform: uppercase;
-  background-color: #1c521c;
   color: #eee;
 }
 
@@ -752,7 +751,6 @@ input[type="file"] {
 .stanza-action__links>a:first-child,
 .resource-action__links>a:first-child {
   background-color: #e54b4b;
-  color: #eee;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
 }
@@ -761,6 +759,7 @@ input[type="file"] {
 .stanza-action__links>a:last-child,
 .resource-action__links>a:last-child {
   padding: 0 0.8rem;
+  background-color: #1c521c;
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
 }
