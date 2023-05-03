@@ -7,10 +7,9 @@ title %}
   <span class="poet-status {{'verified' if poet.verified else 'unverified'}}-poet">
     {{('verified' if poet.verified else 'unverified')|upper}}
   </span>
-  <h1 class="main-content__title redden" title="Poet Username">{{ poet.poet_name }}</h1>
+  <h1 class="main-content__title" title="Poet Username">{{ poet.poet_name }}</h1>
 </div>
 <p class="poet-bio">{{ poet.bio|replace('\n', '<br>')|safe if poet.bio else 'No Description' }}</p>
-<hr>
 <p class="poet-metadata">
   <span class="became-poet-on">
     Became a poet on <span class="redden">{{poet.became_poet_on}}</span>
