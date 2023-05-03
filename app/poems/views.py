@@ -159,7 +159,7 @@ def poem(slugname=None, poem_id=None):
     context = {
         'poem': poem,
         'form': CommentForm(),
-        'stanzas': Stanza.find_order_by(Stanza.index, poem_id=poem_id)
+        'stanzas': Stanza.find_order_by(Stanza.index, poem_id=poem.id)
     }
 
     if current_user.is_anonymous and context['poem'].premium:
