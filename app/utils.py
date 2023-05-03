@@ -79,29 +79,3 @@ def _process_search_query(form_data: dict):
                 refined_data[key] = converter(value)
 
     return refined_data
-
-
-def _extract_meta_item(soup: BeautifulSoup, property):
-    """Extract a property from the metadata of the given soup."""
-    result = soup.find('meta', {
-        'property': f'og:{property}'
-    })
-    return result.get('content') if result else ''
-
-
-def preview_link(url):
-    """Get some metadata from a given URL."""
-    try:
-        response = requests.get(url, timeout=5)
-        soup = BeautifulSoup(response.content, 'html.parser')
-
-        result = {
-            'title': _extract_meta_item(soup, 'title'),
-            'description': _extract_meta_item(soup, 'description'),
-            'image': _extract_meta_item(soup, 'image')
-        }
-
-        if all(result.values()):
-            return result
-    except Exception as e:
-        return

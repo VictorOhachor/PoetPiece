@@ -327,6 +327,12 @@ class Resource(BaseModel):
         reactions = Reaction.find_by(reaction_type='DOWNVOTE',
                                      record_id=self.id)
         return len(reactions)
+    
+    def has_voted(self):
+        """Checks if the current user has voted."""
+        reaction = Reaction.find_by(record_id=self.id, user_id=current_user.id,
+                                    one=True)
+        return reaction.reaction_type if reaction else None
 
     @classmethod
     def supported_types(cls):
