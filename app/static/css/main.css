@@ -641,27 +641,28 @@ input[type="file"] {
 }
 
 .poem-stanza__card .stanza-number {
-  font-size: 1rem;
-  font-weight: 900;
+  font-size: calc(.8rem + .5vmin);
+  font-weight: 700;
+  text-align: center;
   background-color: #3b8ea5;
-  color: #eee;
-  align-self: flex-start;
-  padding: 0 1rem 0 .8rem;
-  /* width: calc(); */
+  color: #fff;
   border-radius: 50%;
+  padding: .2rem;
+  min-width: 40px;
+  min-height: 40px;
   position: absolute;
-  top: -10px;
-  left: -12px;
+  top: 0;
+  right: 0;
 }
 
 .poem-stanza__card .stanza-content {
   font-family: "Space Mono", monospace;
   font-style: italic;
   padding: 0.5rem 1rem;
-  border: 1px solid #333121;
+  border: 1px solid #bbb;
   border-top: 8px solid #fff;
-  border-top-right-radius: 6px;
-  border-top-left-radius: 6px;
+  border-bottom: 8px solid #fff;
+  border-radius: 5px;
   white-space: pre-line;
   word-spacing: -0.4rem;
   font-size: calc(1rem + 0.8vmin);

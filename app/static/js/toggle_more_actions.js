@@ -45,9 +45,10 @@ const generatePDF = () => {
     })
 
     css(clonedPoemDesc, {
-      color: '#222',
-      margin: '1rem',
+      color: '#fff',
+      padding: '1rem',
       whiteSpace: 'pre-line',
+      backgroundColor: '#3b8ea5',
     })
 
     poemPage.appendChild(clonedLogo)
@@ -79,8 +80,9 @@ const generatePDF = () => {
         css(stanzaContent, {
             whiteSpace: 'pre-line',
             border: '1px solid #3b8ea5',
-            padding: '.5rem 1rem',
-            margin: '1rem .4rem'
+            padding: '1rem',
+            marginTop: '1rem',
+            borderRadius: '5px'
         })
         // append to stanza container
         stanzaContainer.appendChild(stanzaContent)
