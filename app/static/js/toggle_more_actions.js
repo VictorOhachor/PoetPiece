@@ -18,13 +18,24 @@ const generatePDF = () => {
     // create a new div element
     const poemPage = document.createElement('div')
 
+    css(poemPage, {
+      fontFamily: "'Quicksand', sans-serif",
+      color: '#222',
+      position: 'relative',
+      minHeight: '100vh',
+      padding: '2rem 1rem'
+    })
+
     const poemTitle = document.querySelector('.main-content__title')
     const poemDesc = document.querySelector('.poem-desc__content')
     const poemStanzas = document.querySelectorAll('.poem-stanzas__container .poem-stanza__card')
     const appLogo = document.querySelector('.app-logo')
 
-    // append the title, desc, to div
+    // append the title and desc to div
     const clonedLogo = appLogo.cloneNode(deep=true)
+    const clonedPoemDesc = poemDesc.cloneNode(deep = true)
+
+    // add css styling to them
     css(clonedLogo, {
         color: '#222',
         fontFamily: '"Monoton", cursive',
@@ -32,9 +43,16 @@ const generatePDF = () => {
         padding: '1rem',
         fontWeight: 700
     })
+
+    css(clonedPoemDesc, {
+      color: '#222',
+      margin: '1rem',
+      whiteSpace: 'pre-line',
+    })
+
     poemPage.appendChild(clonedLogo)
     poemPage.appendChild(poemTitle.cloneNode(deep = true))
-    poemPage.appendChild(poemDesc.cloneNode(deep = true))
+    poemPage.appendChild(clonedPoemDesc)
     poemPage.appendChild(document.createElement('hr'))
 
     // extract the stanza content from poemStanzas
@@ -46,8 +64,6 @@ const generatePDF = () => {
         margin: '1rem .3rem',
         fontSize: '1.5rem',
         color: '#222',
-        margin: 'auto',
-        maxWidth: '700px'
     }
 
     css(stanzaContainer, stanzaContainerStyle)
@@ -62,8 +78,9 @@ const generatePDF = () => {
         // set stanza content style
         css(stanzaContent, {
             whiteSpace: 'pre-line',
-            border: '1px solid #bbb',
+            border: '1px solid #3b8ea5',
             padding: '.5rem 1rem',
+            margin: '1rem .4rem'
         })
         // append to stanza container
         stanzaContainer.appendChild(stanzaContent)
