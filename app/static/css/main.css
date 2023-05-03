@@ -1549,14 +1549,19 @@ input[type="file"] {
 
 .resource-votes .upvote,
 .resource-votes .downvote {
-  font-size: calc(.8rem + 1vmin);
   display: flex;
+  font-size: calc(.8rem + 1vmin);
   gap: .1rem;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .resource-votes .has-voted {
+  font-weight: 700;
   color: #e54b4b !important;
+}
+
+.resource-votes .vote-count {
+  align-self: flex-start;
 }
 
 .resource-card .image-resource,
