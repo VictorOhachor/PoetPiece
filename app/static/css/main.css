@@ -1351,6 +1351,7 @@ input[type="file"] {
   background-color: #fff;
   padding: 1rem .5rem;
   border-radius: 5px;
+  margin-bottom: 1rem;
   border-left: 5px solid #3b8ea5;
 }
 
