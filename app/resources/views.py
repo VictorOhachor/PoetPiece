@@ -93,9 +93,13 @@ def delete_resource():
 @login_required
 def vote_resource(resource_id):
     """Upvote or downvote a resource."""
+    # get the rtype of a resource.
+    resource = Resource.find_by(id=resource_id, one=True)
+    rtype = Resource.get_type_key(resource.rtype) or 'LINK'
+
+    # vote on a resource
     status = manager.vote(resource_id)
-    rtype = request.args.get('type', 'LINK')
-    
+
     if status:
         flash('Your vote has made a difference!')
     else:

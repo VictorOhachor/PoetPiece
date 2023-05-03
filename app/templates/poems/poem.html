@@ -26,9 +26,9 @@
 <hr>
 <div class="poem-desc">
   <h3 class="poem-desc__heading">Poem Description</h3>
-  <pre class="poem-desc__content">
-    {{poem.description if poem.description else 'No Poem Description.'}}
-  </pre>
+  <div class="poem-desc__content">
+    {{poem.description|replace('\n', '<br>')|safe if poem.description else 'No Poem Description.'}}
+  </div>
 </div>
 <hr />
 <div class="poem-stanzas">

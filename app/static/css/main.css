@@ -83,19 +83,40 @@ select option {
   font-weight: 700;
 }
 
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
 .toast-card {
-  padding: 0.2rem 1rem;
-  font-size: 1.1rem;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 2;
+
+  padding: 10px;
+  border-radius: 5px;
+  font-size: calc(.8rem + 1vmin);
+  background-color: #fff;
+  border: 2px solid;
+  font-weight: 500;
+
+  animation: fadeOut 1s cubic-bezier(0.645, 0.045, 0.355, 1) forwards 2s;
 }
 
 .error-toast {
   color: #e54b4b;
-  background-color: rgba(255, 166, 0, 0.342);
+  border-color: #e54b4b;
 }
 
 .msg-toast {
-  background-color: rgba(76, 99, 76, 0.335);
-  color: #1c521c;
+  border-color: green;
+  color: green;
 }
 
 .redden {
@@ -545,10 +566,10 @@ input[type="file"] {
   flex-grow: 1;
   width: 40%;
   text-transform: uppercase;
-  color: #222;
+  color: #3b8ea5;
   padding: 0.5rem 1rem;
-  font-size: calc(1rem + 1.5vmin);
-  background-color: #bbb;
+  font-size: calc(1rem + 1.2vmin);
+  background-color: #fff;
 }
 
 .app-main__content>.poem-desc .poem-desc__content,
@@ -561,8 +582,7 @@ input[type="file"] {
 }
 
 .app-main__content>.poem-desc .poem-desc__content {
-  font-size: calc(.8rem + 2vmin);
-  white-space: pre-line;
+  font-size: calc(.8rem + 1.5vmin);
   font-family: 'Quicksand', sans-serif;
 }
 

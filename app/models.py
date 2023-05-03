@@ -78,6 +78,10 @@ class BaseModel(db.Model):
     def get_choices(cls):
         """Get all records as WTForms select field choices."""
         pass
+  
+    @property
+    def slug(self):
+        return slugify(self.title)
 
 
 class User(UserMixin, BaseModel):
@@ -231,6 +235,13 @@ class Poem(BaseModel):
     def get_choices(cls):
         return [(poem.title, poem.title.upper())
                 for poem in cls.find_all()]
+    
+    @classmethod
+    def find_poem_by_slug(cls, slugname):
+        for poem in cls.find_all():
+            if poem.slug == slugname:
+                return poem
+        return None
 
 
 class Stanza(BaseModel):
@@ -317,14 +328,18 @@ class Resource(BaseModel):
                                      record_id=self.id)
         return len(reactions)
 
-    @property
-    def slug(self):
-        return slugify(self.title)
-
     @classmethod
     def supported_types(cls):
         """Get the supported types of resources."""
         return cls.ResourceTypes.__members__
+
+    @classmethod
+    def get_type_key(cls, value):
+        """Get the key of a value in the supported types."""
+        for key, val in cls.supported_types().items():
+            if val.value == value:
+                return key
+        return None
 
     @classmethod
     def is_type_supported(cls, t: str):

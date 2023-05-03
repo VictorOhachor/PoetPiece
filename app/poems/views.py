@@ -5,8 +5,9 @@ from . import poems
 from .. import db
 from .forms import (PoemForm, CategoryForm, StanzaForm,
                     CommentForm, FilterPoemForm)
-from ..models import Poet, Poem, Category, Stanza, Comment, Resource, PoemRating
-from ..utils import is_poet, can_manage_poem, _process_search_query
+from ..models import Poet, Poem, Category, Stanza, Comment
+from ..utils import (is_poet, can_manage_poem, _process_search_query,
+                     is_verified_poet)
 
 
 @poems.get('/poems')
@@ -101,9 +102,10 @@ def search():
 
 
 @poems.route('/categories/new', methods=['GET', 'POST'])
-@is_poet
+@is_verified_poet
 def create_category():
     """Add new category."""
+
     form = CategoryForm()
 
     if form.validate_on_submit():
@@ -137,22 +139,32 @@ def create_poem():
 
         # redirect to poem page
         flash('Successfully created poem. What a courage!', 'info')
-        return redirect(url_for('.poem', poem_id=poem.id))
+        return redirect(url_for('.poem', slugname=poem.slug))
     return render_template('poems/create_poem.html', form=form)
 
 
+@poems.route('/p/<string:slugname>', methods=['GET', 'POST'])
 @poems.route('/poems/<string:poem_id>', methods=['GET', 'POST'])
-def poem(poem_id):
+def poem(slugname=None, poem_id=None):
     """Show details about poem with given id."""
+    if slugname:
+        poem = Poem.find_poem_by_slug(slugname)
+    else:
+        poem = Poem.find_by(id=poem_id, one=True)
+
+    if not poem:
+        flash('Poem with such id not found.', 'error')
+        return redirect(url_for('.index'))
+
     context = {
-        'poem': Poem.query.get_or_404(poem_id,
-                                      'Poem with such id not found.'),
+        'poem': poem,
         'form': CommentForm(),
         'stanzas': Stanza.find_order_by(Stanza.index, poem_id=poem_id)
     }
 
     if current_user.is_anonymous and context['poem'].premium:
-        flash('Sorry, this poem is only available to registered users.', 'error')
+        flash('Sorry, this poem is only available to registered users.',
+              'error')
         return redirect(url_for('.index'))
 
     if not context['poem'].published:
@@ -169,7 +181,7 @@ def poem(poem_id):
 
         flash('Comment posted successfully; you will be notified once approved.',
               'info')
-        return redirect(url_for('.poem', poem_id=poem_id))
+        return redirect(url_for('.poem', slugname=context['poem'].slug))
 
     return render_template('poems/poem.html', **context)
 
