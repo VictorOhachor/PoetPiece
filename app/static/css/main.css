@@ -15,7 +15,7 @@ body {
   color: #222;
   position: relative;
   min-height: 100vh;
-  margin-bottom: 3rem;
+  margin-bottom: 4rem;
   background: linear-gradient(120deg, rgb(238, 238, 238), rgba(59, 142, 165, 0.5));
 }
 
@@ -799,11 +799,11 @@ input[type="file"] {
   width: calc(.5rem + .5vmin);
   height: calc(.5rem + .5vmin);
   border-radius: 50%;
-  background-color: #bbb;
+  background-color: #3b8ea5;
 }
 
 .comments-container .poem-comments {
-  border: 1px solid #bbb;
+  border: 1px solid #3b8ea5;
   padding: .5rem 0;
   background-color: #fff;
 }
@@ -934,7 +934,7 @@ input[type="file"] {
   text-transform: uppercase;
   color: #666356;
   border-radius: 5px;
-  border: 1px solid #bbb;
+  border: 1px solid #fff;
 }
 
 .poetic-motivation {
