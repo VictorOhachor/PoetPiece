@@ -1,6 +1,10 @@
 function extractMetaItem(soup, property) {
-  // Extract a property from the metadata of the given soup.
-  var result = soup.querySelector(`meta[property="og:${property}"]`);
+  // Extract a property from the Open Graph metadata of the given soup.
+  let result = soup.querySelector(`meta[property="og:${property}"]`);
+  if (!result) {
+    // Try extracting from regular metadata instead.
+    result = soup.querySelector(`meta[name="${property}"]`);
+  }
   return result ? result.getAttribute('content') : '';
 }
 
@@ -9,10 +13,10 @@ function previewLink(url) {
   return fetch(url, { timeout: 1000 })
     .then(response => response.text())
     .then(html => {
-      var parser = new DOMParser();
-      var soup = parser.parseFromString(html, 'text/html');
+      let parser = new DOMParser();
+      let soup = parser.parseFromString(html, 'text/html');
 
-      var result = {
+      let result = {
         'title': extractMetaItem(soup, 'title'),
         'description': extractMetaItem(soup, 'description'),
         'image': extractMetaItem(soup, 'image')
