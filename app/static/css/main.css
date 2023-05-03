@@ -1552,6 +1552,7 @@ input[type="file"] {
   display: flex;
   font-size: calc(.8rem + 1vmin);
   gap: .1rem;
+  align-items: baseline;
   font-weight: 500;
 }
 
