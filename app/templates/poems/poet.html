@@ -9,7 +9,7 @@ title %}
   </span>
   <h1 class="main-content__title redden" title="Poet Username">{{ poet.poet_name }}</h1>
 </div>
-<p class="poet-bio">{{ poet.bio if poet.bio else 'No Description' }}</p>
+<p class="poet-bio">{{ poet.bio|replace('\n', '<br>')|safe if poet.bio else 'No Description' }}</p>
 <hr>
 <p class="poet-metadata">
   <span class="became-poet-on">
