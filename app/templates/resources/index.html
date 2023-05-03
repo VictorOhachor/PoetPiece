@@ -79,7 +79,7 @@
       <div class="resource-votes">
         <a class="upvote {{'has-voted' if resource.has_voted() == 'UPVOTE' else ''}}" href="{{url_for('resources.vote_resource', resource_id=resource.id)}}">
           <i class="fa-solid fa-circle-arrow-up"></i>
-          <span class="vote-count">{{resource.upvotes}}</span>
+          <sup class="vote-count">{{resource.upvotes}}</sup>
         </a>
         <a class="downvote {{'has-voted' if resource.has_voted() == 'DOWNVOTE' else ''}}" href="{{url_for('resources.vote_resource', resource_id=resource.id, downvote='')}}">
           <i class="fa-solid fa-circle-arrow-down"></i>

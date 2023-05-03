@@ -1549,10 +1549,7 @@ input[type="file"] {
 
 .resource-votes .upvote,
 .resource-votes .downvote {
-  display: flex;
-  align-items: center;
   font-size: calc(.8rem + 1vmin);
-  gap: .1rem;
   font-weight: 700;
 }
 
