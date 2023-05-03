@@ -83,7 +83,7 @@
         </a>
         <a class="downvote {{'has-voted' if resource.has_voted() == 'DOWNVOTE' else ''}}" href="{{url_for('resources.vote_resource', resource_id=resource.id, downvote='')}}">
           <i class="fa-solid fa-circle-arrow-down"></i>
-          <span class="vote-count">{{resource.downvotes}}</span>
+          <sup class="vote-count">{{resource.downvotes}}</sup>
         </a>
       </div>
       {% if resource.is_accessible %}
