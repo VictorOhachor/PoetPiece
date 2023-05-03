@@ -592,16 +592,6 @@ input[type="file"] {
   text-overflow: ellipsis;
 }
 
-.view-author__link {
-  color: #3b8ea5;
-  text-decoration: underline;
-  text-align: center;
-  font-weight: 600;
-  font-size: calc(.8rem + 1vmin);
-  display: block;
-  margin: .5rem 0 1rem;
-}
-
 .poem-stanzas>.poem-stanzas__container {
   display: flex;
   flex-direction: column;

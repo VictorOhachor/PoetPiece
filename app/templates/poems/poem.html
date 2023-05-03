@@ -17,8 +17,6 @@
   >{{'Completed' if poem.completed else 'In Progress'}}</span
 >
 
-<a href="{{url_for('poems.view_poet', poem_id=poem.id)}}" class="view-author__link">View Author</a>
-
 <p class="poem-metadata">
   <span class="poem-creation__date">{{poem.crafted_on.date()}}</span>
   <span class="poem-rating" title="Poem Rating">{{poem.rating}}</span>

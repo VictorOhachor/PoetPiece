@@ -32,6 +32,9 @@
       {{ 'Inc' if record.completed else 'C' }}omplete
     </a>
     {% endif %}
+    <a href="{{url_for('poems.view_poet', poem_id=record.id)}}">
+      About the Poet
+    </a>
   </div>
 </div>
 {% endmacro %}
