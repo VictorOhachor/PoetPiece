@@ -9,13 +9,13 @@ title %}
   </span>
   <h1 class="main-content__title" title="Poet Username">{{ poet.poet_name }}</h1>
 </div>
-<p class="poet-bio">{{ poet.bio|replace('\n', '<br>')|safe if poet.bio else 'No Description' }}</p>
 <p class="poet-metadata">
   <span class="became-poet-on">
     Became a poet on <span class="redden">{{poet.became_poet_on}}</span>
   </span>
   <span class="poet-gender">{{poet.gender|upper}}</span>
 </p>
+<p class="poet-bio">{{ poet.bio|replace('\n', '<br>')|safe if poet.bio else 'No Description' }}</p>
 <div class="poet-other-poems">
   <h4 class="poet-other-poems__title">Other Poems by Same Author</h4>
   <div class="poems-container">
