@@ -1550,15 +1550,13 @@ input[type="file"] {
 .resource-votes .upvote,
 .resource-votes .downvote {
   font-size: calc(.8rem + 1vmin);
+  display: flex;
+  gap: .1rem;
   font-weight: 700;
 }
 
 .resource-votes .has-voted {
   color: #e54b4b !important;
-}
-
-.resource-votes .vote-count {
-  font-family: calc(1.8rem + 1vmin);
 }
 
 .resource-card .image-resource,
