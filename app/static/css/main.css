@@ -1581,3 +1581,8 @@ input[type="file"] {
 .resource-content .body > ul {
   list-style-position: inside;
 }
+
+.resource-content .body a {
+  color: #e54b4b;
+  font-weight: 500;
+}
