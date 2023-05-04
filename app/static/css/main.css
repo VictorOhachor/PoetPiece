@@ -1575,6 +1575,7 @@ input[type="file"] {
 .resource-content .body {
   border: 1px solid #3b8ea5;
   border-radius: 5px;
+  font-family: 'Quicksand', sans-serif;
   padding: 1rem .5rem;
 }
 

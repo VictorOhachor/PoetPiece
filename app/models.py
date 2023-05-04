@@ -78,7 +78,7 @@ class BaseModel(db.Model):
     def get_choices(cls):
         """Get all records as WTForms select field choices."""
         pass
-  
+
     @property
     def slug(self):
         return slugify(self.title)
@@ -235,7 +235,7 @@ class Poem(BaseModel):
     def get_choices(cls):
         return [(poem.title, poem.title.upper())
                 for poem in cls.find_all()]
-    
+
     @classmethod
     def find_poem_by_slug(cls, slugname):
         for poem in cls.find_all():
@@ -327,7 +327,7 @@ class Resource(BaseModel):
         reactions = Reaction.find_by(reaction_type='DOWNVOTE',
                                      record_id=self.id)
         return len(reactions)
-    
+
     def has_voted(self):
         """Checks if the current user has voted."""
         reaction = Reaction.find_by(record_id=self.id, user_id=current_user.id,
@@ -359,9 +359,12 @@ class Resource(BaseModel):
 
     @staticmethod
     def on_changed_body(target, value, oldvalue, initiator):
-        allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
-                        'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul',
-                        'h1', 'h2', 'h3', 'p']
+        allowed_tags = [
+            'a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
+            'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul',
+            'h1', 'h2', 'h3', 'h4', 'h5', 'p', 'hr', 'u', 'del',
+            's', 'sup', 'sub'
+        ]
         target.body_html = bleach.linkify(bleach.clean(markdown(
             value, output_format='html'),
             tags=allowed_tags, strip=True
