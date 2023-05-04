@@ -1578,7 +1578,8 @@ input[type="file"] {
   padding: 1rem .5rem;
 }
 
-.resource-content .body > ul {
+.resource-content .body > ul,
+.resource-content .body > ol {
   list-style-position: inside;
 }
 
