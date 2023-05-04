@@ -20,11 +20,11 @@ class ResourceForm(FlaskForm):
                                'Resource must be an image!')]),
         'BRIEF': TextAreaField('What do You Want to Share with Others?',
                                description='This field supports markdown',
-                               validators=[DataRequired(), Length(1, 755)],
+                               validators=[DataRequired(), Length(1, 2000)],
                                render_kw={'rows': '8'}),
         'COURSE': TextAreaField('Enter Course Description:',
                                 description='This field supports markdown',
-                                validators=[DataRequired(), Length(1, 1000)
+                                validators=[DataRequired(), Length(1, 2000)
                                             ], render_kw={'rows': '4'})
     }
 
