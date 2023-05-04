@@ -730,8 +730,7 @@ input[type="file"] {
 
 .poem-action__links>a,
 .stanza-action__links>a,
-.resource-action__links>a,
-.account-action__links>a {
+.resource-action__links>a {
   text-decoration: none;
   font-weight: 700;
   padding: 0 0.5rem;
@@ -741,8 +740,7 @@ input[type="file"] {
 
 .poem-action__links>a:first-child,
 .stanza-action__links>a:first-child,
-.resource-action__links>a:first-child,
-.account-action__links>a:first-child {
+.resource-action__links>a:first-child {
   background-color: #e54b4b;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
@@ -750,8 +748,7 @@ input[type="file"] {
 
 .poem-action__links>a:last-child,
 .stanza-action__links>a:last-child,
-.resource-action__links>a:last-child,
-.account-action__links>a:last-child {
+.resource-action__links>a:last-child {
   padding: 0 0.8rem;
   background-color: #1c521c;
   border-top-right-radius: 20px;
@@ -1160,6 +1157,11 @@ input[type="file"] {
   border: 1px solid #bbb;
   font-size: calc(.6rem + 1vmin);
   padding: .5rem 1rem;
+}
+
+/* Higher Priority 2 action button */
+.action-btn__hp-1 {
+  background-color: #e54b4b;
 }
 
 /* Higher Priority 2 action button */

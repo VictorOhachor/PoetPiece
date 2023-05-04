@@ -3,7 +3,7 @@ title %}
 My {{ 'Poetic' if current_user.is_poet else 'To-Be-Poetic' }} Profile{% endblock title %}
 {% block main_content %}
 <div class="me-actions__box account-action__links">
-  <a href="{{url_for('main.delete_me')}}" class="action-btn action-btn__hp-2">Delete Account</a>
+  <a href="{{url_for('main.delete_me')}}" class="action-btn action-btn__hp-1">Delete Account</a>
   {% if not current_user.is_poet %}
   <a href="{{url_for('main.become_poet')}}" class="action-btn">Become a Poet</a>
   {% else %}
