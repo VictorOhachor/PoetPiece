@@ -1347,10 +1347,13 @@ input[type="file"] {
   color: #3b8ea5;
   font-stretch: 50%;
   background-color: #fff;
-  padding: 1rem .5rem;
+  padding: .8rem .5rem;
   border-radius: 5px;
-  margin-bottom: 1rem;
   border-left: 5px solid #3b8ea5;
+}
+
+.poet-bio .poet-bio__data {
+  margin: .6rem 0 0;
 }
 
 .poet-page__heading {

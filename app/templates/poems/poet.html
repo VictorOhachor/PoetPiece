@@ -16,7 +16,10 @@ title %}
   <span class="poet-gender">{{poet.gender|upper}}</span>
 </p>
 <div class="poet-page__main">
-  <p class="poet-bio">{{ poet.bio|replace('\n', '<br>')|safe if poet.bio else 'No Description' }}</p>
+  <div class="poet-bio">
+    <h4 class="redden underline">About The Poet</h4>
+    <p class="poet-bio__data">{{ poet.bio|replace('\n', '<br>')|safe if poet.bio else 'No Description' }}</p>
+  </div>
   <div class="poet-other-poems">
     <h4 class="poet-other-poems__title">Other Poems by Same Author</h4>
     <div class="poems-container">
