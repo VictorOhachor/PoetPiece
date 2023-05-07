@@ -922,8 +922,6 @@ input[type="file"] {
   color: #e54b4b;
   border-radius: 5px;
   background-color: #fff;
-  border: 1px solid #bbb;
-  margin: .5rem 0;
   width: 100%;
 }
 
