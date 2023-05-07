@@ -921,7 +921,8 @@ input[type="file"] {
   text-transform: uppercase;
   color: #e54b4b;
   border-radius: 5px;
-  border: 1px solid #fff;
+  background-color: #fff;
+  border: 1px solid #bbb;
   width: 100%;
 }
 
