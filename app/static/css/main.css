@@ -918,9 +918,9 @@ input[type="file"] {
   line-height: 2.2rem;
   padding: 2.2rem .5rem;
   font-size: calc(1.2rem + .8vmin);
-  text-transform: capitalize;
+  text-transform: uppercase;
   color: #e54b4b;
-  font-weight: 700;
+  font-weight: 300;
   background-color: #ffffffe1;
   width: 100%;
 }
@@ -1333,6 +1333,12 @@ input[type="file"] {
 }
 
 /* Poet Page */
+.poet-page__main {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
 .poet-bio {
   font-size: calc(1rem + 1vmin);
   color: #3b8ea5;

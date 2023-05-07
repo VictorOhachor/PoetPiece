@@ -15,22 +15,23 @@ title %}
   </span>
   <span class="poet-gender">{{poet.gender|upper}}</span>
 </p>
-<p class="poet-bio">{{ poet.bio|replace('\n', '<br>')|safe if poet.bio else 'No Description' }}</p>
-<hr>
-<div class="poet-other-poems">
-  <h4 class="poet-other-poems__title">Other Poems by Same Author</h4>
-  <div class="poems-container">
-    {% if not other_poems %}
-    <p class="empty-list">
-      No <span class="redden">Other</span> Poem Composed By This Poet.
-    </p>
+<div class="poet-page__main">
+  <p class="poet-bio">{{ poet.bio|replace('\n', '<br>')|safe if poet.bio else 'No Description' }}</p>
+  <div class="poet-other-poems">
+    <h4 class="poet-other-poems__title">Other Poems by Same Author</h4>
+    <div class="poems-container">
+      {% if not other_poems %}
+      <p class="empty-list">
+        No <span class="redden">Other</span> Poem Composed By This Poet.
+      </p>
+      {% endif %}
+      {% for poem in other_poems %}
+      {{ macros.poem_card_widget(poem, current_user) }}
+      {% endfor %}
+    </div>
+    {% if other_poems|length + 1 < poet.poems.all()|length  %}
+      <a class="action-btn view-more__btn action-btn__hp-2" href="{{url_for('poems.search', poet=poet.poet_name)}}">View More</a>
     {% endif %}
-    {% for poem in other_poems %}
-    {{ macros.poem_card_widget(poem, current_user) }}
-    {% endfor %}
   </div>
-  {% if other_poems|length + 1 < poet.poems.all()|length  %}
-    <a class="action-btn view-more__btn action-btn__hp-2" href="{{url_for('poems.search', poet=poet.poet_name)}}">View More</a>
-  {% endif %}
 </div>
 {% endblock main_content %}
