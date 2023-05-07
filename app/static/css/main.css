@@ -1326,16 +1326,6 @@ input[type="file"] {
   padding: 0;
 }
 
-@media (max-width: 700px) {
-  .search-poems__container .filters-box {
-    position: static;
-  }
-
-  .poet-bio {
-    position: static;
-  }
-}
-
 /* Poet Page */
 .poet-page__main {
   display: flex;
@@ -1608,4 +1598,15 @@ input[type="file"] {
 .resource-content .body a {
   color: #e54b4b;
   font-weight: 500;
+}
+
+/* Mobile Screens */
+@media (max-width: 700px) {
+  .search-poems__container .filters-box {
+    position: static;
+  }
+
+  .poet-bio {
+    position: static !important;
+  }
 }
