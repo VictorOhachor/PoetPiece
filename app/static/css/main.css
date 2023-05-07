@@ -919,9 +919,10 @@ input[type="file"] {
   padding: 2rem .5rem;
   font-size: calc(1rem + 1vmin);
   text-transform: uppercase;
-  color: #222;
+  color: #bbb;
   border-radius: 5px;
   border: 1px solid #e54b4b;
+  width: 100%;
 }
 
 .poetic-motivation {
