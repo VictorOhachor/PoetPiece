@@ -919,9 +919,9 @@ input[type="file"] {
   padding: 2rem .5rem;
   font-size: calc(1rem + 1vmin);
   text-transform: uppercase;
-  color: #bbb;
+  color: #e54b4b;
   border-radius: 5px;
-  border: 1px solid #e54b4b;
+  border: 1px solid #fff;
   width: 100%;
 }
 
