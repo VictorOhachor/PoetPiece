@@ -1330,6 +1330,10 @@ input[type="file"] {
   .search-poems__container .filters-box {
     position: static;
   }
+
+  .poet-bio {
+    position: static;
+  }
 }
 
 /* Poet Page */
@@ -1347,6 +1351,8 @@ input[type="file"] {
   color: #3b8ea5;
   font-stretch: 50%;
   background-color: #fff;
+  position: sticky;
+  top: 1%;
   padding: .8rem .5rem;
   border-radius: 5px;
   border-left: 5px solid #3b8ea5;
