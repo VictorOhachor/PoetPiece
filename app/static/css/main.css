@@ -1335,11 +1335,14 @@ input[type="file"] {
 /* Poet Page */
 .poet-page__main {
   display: flex;
-  gap: 1rem;
+  gap: calc(1rem + 1vmin);
+  flex-wrap: wrap;
   align-items: flex-start;
 }
 
 .poet-bio {
+  flex-basis: 30%;
+  flex-grow: 1;
   font-size: calc(1rem + 1vmin);
   color: #3b8ea5;
   font-stretch: 50%;
@@ -1380,9 +1383,11 @@ input[type="file"] {
 .poet-other-poems {
   display: flex;
   flex-direction: column;
+  flex-basis: 50%;
+  flex-grow: 1;
   gap: .3rem;
   color: #eee;
-  padding: 1rem .3rem;
+  padding: 1rem .5rem;
   border-top: 5px solid #3b8ea5;
   background-color: #222;
 }
