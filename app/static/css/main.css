@@ -602,14 +602,6 @@ input[type="file"] {
   align-items: flex-start;
 }
 
-.poem-stanzas__container>.no-stanza-text {
-  color: orange;
-  margin: auto;
-  font-family: 'Quicksand', sans-serif;
-  font-size: 2rem;
-  text-align: center;
-}
-
 .poem-stanzas__container>.add-stanza {
   text-decoration: none;
   color: #222;
@@ -927,9 +919,9 @@ input[type="file"] {
   padding: 2rem .5rem;
   font-size: calc(1rem + 1vmin);
   text-transform: uppercase;
-  color: #666356;
+  color: #222;
   border-radius: 5px;
-  border: 1px solid #fff;
+  border: 1px solid #e54b4b;
 }
 
 .poetic-motivation {

@@ -34,7 +34,7 @@
   <h3 class="poem-stanzas__heading">Stanzas</h3>
   <div class="poem-stanzas__container">
     {% if stanzas|length == 0 %}
-    <p class="no-stanza-text">This poem currently has no stanza.</p>
+    <p class="empty-list">This poem currently has no stanza.</p>
     {% else %} {% for stanza in stanzas %}
     <div class="poem-stanza__card hidden">
       {% if poem.is_accessible %}
