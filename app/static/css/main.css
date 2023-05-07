@@ -916,12 +916,12 @@ input[type="file"] {
 
 .empty-list {
   line-height: 2.2rem;
-  padding: 2rem .5rem;
-  font-size: calc(1rem + 1vmin);
-  text-transform: uppercase;
+  padding: 2.2rem .5rem;
+  font-size: calc(1.2rem + .8vmin);
+  text-transform: capitalize;
   color: #e54b4b;
-  border-radius: 5px;
-  background-color: #fff;
+  font-weight: 700;
+  background-color: #ffffffe1;
   width: 100%;
 }
 
