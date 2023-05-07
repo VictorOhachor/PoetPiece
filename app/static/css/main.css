@@ -1386,7 +1386,7 @@ input[type="file"] {
 .poet-other-poems {
   display: flex;
   flex-direction: column;
-  flex-basis: 50%;
+  flex-basis: 60%;
   flex-grow: 1;
   gap: .3rem;
   color: #eee;
