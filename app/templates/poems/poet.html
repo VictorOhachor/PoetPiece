@@ -21,7 +21,7 @@ title %}
     <p class="poet-bio__data">{{ poet.bio|replace('\n', '<br>')|safe if poet.bio else 'No Description' }}</p>
   </div>
   <div class="poet-other-poems">
-    <h4 class="poet-other-poems__title">Other Poems by Same Author</h4>
+    <h4 class="poet-other-poems__title">Selected Poems by Same Author</h4>
     <div class="poems-container">
       {% if not other_poems %}
       <p class="empty-list">

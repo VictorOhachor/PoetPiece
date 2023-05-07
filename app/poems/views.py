@@ -223,7 +223,8 @@ def view_poet(poem_id=None):
             published=True)
 
     context['other_poems'] = context['other_poems'].order_by(
-        Poem.rating.desc(), Poem.updated_at.desc()).limit(4).all()
+        Poem.rating.desc(), Poem.updated_at.desc()
+    ).limit(current_app.config['FLASK_POEMS_PER_PAGE']).all()
 
     return render_template('poems/poet.html', **context)
 
