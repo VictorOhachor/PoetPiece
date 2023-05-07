@@ -998,7 +998,6 @@ input[type="file"] {
 .view-more__btn {
   align-self: center;
   margin-top: .5rem;
-  padding: .5rem 1.5rem;
 }
 
 .more-actions__box>.more-action__btn {
@@ -1150,7 +1149,7 @@ input[type="file"] {
   color: #eee;
   border: 1px solid #bbb;
   font-size: calc(.6rem + 1vmin);
-  padding: .5rem 1rem;
+  padding: .5rem 1.5rem;
 }
 
 /* Higher Priority 2 action button */
