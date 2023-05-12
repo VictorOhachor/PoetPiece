@@ -112,6 +112,9 @@ class ResourceManager:
             )
         else:
             db_query = db_query.filter_by(published=True)
+        
+        # order by latest
+        db_query = db_query.order_by(Resource.created_at.desc())
 
         if sort:
             db_query = db_query.order_by(Resource.title)
