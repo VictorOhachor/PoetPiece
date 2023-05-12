@@ -123,8 +123,7 @@ select option {
 
 .redden {
   color: #e54b4b !important;
-  font-family: 'PT Sans Narrow', sans-serif;
-  font-weight: bolder;
+  font-weight: bold;
 }
 
 .new-user__text {
@@ -209,6 +208,7 @@ select option {
 .app-main__content .main-content__title {
   text-align: center;
   font-size: calc(1.5rem + 1.5vmin);
+  font-family: 'PT Sans Narrow', sans-serif;
   margin-bottom: .5rem;
   color: #222;
   text-transform: capitalize;
