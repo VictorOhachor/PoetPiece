@@ -36,7 +36,9 @@ hr {
   text-decoration: underline;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
   border: 1px solid #3b8ea5 !important;
   border-radius: 5px;
 }
@@ -89,6 +91,7 @@ select option {
   0% {
     opacity: 1;
   }
+
   100% {
     opacity: 0;
     transform: translateY(100%);
@@ -451,7 +454,7 @@ input[type="file"] {
 .resources-container {
   gap: 1rem;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   padding: 1rem 0;
 }
 
@@ -1301,7 +1304,7 @@ input[type="file"] {
   align-items: flex-start;
 }
 
-.search-poems__container .filters-box, 
+.search-poems__container .filters-box,
 .search-poems__container .results-container {
   border-radius: .3rem;
 }
@@ -1439,6 +1442,7 @@ input[type="file"] {
 }
 
 .resources-container {
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   margin: 0 !important;
   padding: 0 !important;
 }
@@ -1597,8 +1601,8 @@ input[type="file"] {
   padding: .5rem .5rem 1rem;
 }
 
-.resource-content .body > ul,
-.resource-content .body > ol {
+.resource-content .body>ul,
+.resource-content .body>ol {
   list-style-position: inside;
 }
 
