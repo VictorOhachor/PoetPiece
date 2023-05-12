@@ -8,6 +8,9 @@ resourceCards.forEach(card => {
       return
     }
 
+    // make cursor a pointer on desktop based screens
+    card.style.cursor = 'zoom-in';
+
     const selectedResourceBox = document.querySelector('#selected-resource')
     const clonedCard = card.cloneNode(true)
 
