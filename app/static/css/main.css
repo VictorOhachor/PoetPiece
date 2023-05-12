@@ -1467,6 +1467,7 @@ input[type="file"] {
 #selected-resource .resource-card.expanded {
   width: 100%;
   height: auto;
+  cursor: auto;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   transition: all 1s ease-in-out;
