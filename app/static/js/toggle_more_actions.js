@@ -45,10 +45,10 @@ const generatePDF = () => {
     })
 
     css(clonedPoemDesc, {
-      color: '#fff',
+      color: '#222',
       padding: '1rem',
       whiteSpace: 'pre-line',
-      backgroundColor: '#3b8ea5',
+      fontSize: '1.5rem'
     })
 
     poemPage.appendChild(clonedLogo)

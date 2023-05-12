@@ -18,6 +18,7 @@ def index():
 
     context = {
         'resources': manager.find_by_type(itype, True),
+        'r_type': r_type
     }
 
     return render_template('resources/index.html', **context)
@@ -27,11 +28,13 @@ def index():
 @is_poet
 def create_resource():
     """Create a new resource."""
+    r_type = request.args.get('type', 'LINK')
     # set body based on resource type from query
     ResourceForm.set_body()
     # context to be passed to template
     context = dict(
         form=ResourceForm(),
+        r_type=r_type
     )
 
     if context['form'].validate_on_submit():

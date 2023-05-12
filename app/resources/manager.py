@@ -49,11 +49,14 @@ class ResourceManager:
 
             return url_for('static', filename=f'uploads/{filename}')
         raise TypeError('Body is not an image!')
-
-    def delete_img(self, filename):
-        """Delete an image from the filesystem if it exist."""
+    
+    def delete_img(self, filepath: str, dirname='resources'):
+        """Delete an image from the filesystem if it exists."""
         upload_folder = current_app.config['UPLOAD_FOLDER']
-        img_path = os.path.join(upload_folder, '../../', filename)
+        # Extract the filename from the file path
+        filename = filepath.rpartition('/')[-1]
+        # Generate an absolute path to the image
+        img_path = os.path.join(upload_folder, f'resources/{filename}')
 
         if os.path.exists(img_path):
             os.remove(img_path)
