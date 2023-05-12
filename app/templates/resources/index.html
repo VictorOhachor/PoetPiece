@@ -22,6 +22,7 @@
   </a>
   {% endfor %}
 </p>
+<div id="selected-resource"></div>
 <section class="resources-container">
   {% if not resources %}
   <p class="empty-list">
@@ -103,5 +104,6 @@
   {% endfor %}
 </section>
 <script src="{{url_for('static', filename='js/active_resource_type.js')}}"></script>
+<script src="{{url_for('static', filename='js/expand_resource_card.js')}}"></script>
 <script src="{{url_for('static', filename='js/preview_link.js')}}"></script>
 {% endblock main_content %}

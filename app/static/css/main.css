@@ -1443,20 +1443,33 @@ input[type="file"] {
 
 .resources-container {
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  position: relative;
   margin: 0 !important;
   padding: 0 !important;
 }
 
-.resources-container .resource-card {
+.resources-container .resource-card,
+#selected-resource .resource-card {
   display: flex;
   flex-direction: column;
   gap: .5rem;
   justify-content: space-between;
-  align-self: flex-start;
   padding: 1rem .5rem .5rem;
   position: relative;
   background-color: #fff;
-  flex-basis: 250px;
+  transition: all 0.3s ease-in-out;
+}
+
+#selected-resource .resource-card {
+  margin-bottom: .8rem;
+}
+
+#selected-resource .resource-card.expanded {
+  width: 100%;
+  height: auto;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  transition: all 1s ease-in-out;
 }
 
 .resource-card .link-resource {
@@ -1583,13 +1596,29 @@ input[type="file"] {
 .resource-card .resource-content {
   display: flex;
   flex-direction: column;
+  position: relative;
   gap: .5rem;
+}
+
+.resource-card .image-resource {
+  overflow: hidden;
+  height: 250px;
 }
 
 .resource-card .image-resource img {
   width: 100%;
-  max-height: 300px;
-  object-fit: scale-down;
+  height: 100%;
+  object-fit: cover;
+}
+
+.resource-card.expanded .image-resource {
+  height: 500px;
+  overflow-y: visible;
+}
+
+.resource-card.expanded .image-resource img {
+  object-fit: contain !important;
+  height: fit-content;
 }
 
 .resource-content .body {
