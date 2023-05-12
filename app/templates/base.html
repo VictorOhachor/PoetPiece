@@ -25,7 +25,7 @@
       crossorigin="anonymous"
     ></script>
     {% block more_stylesheets %} {% endblock more_stylesheets %}
-    <title>PoetPiece | {% block title %}{% endblock title %}</title>
+    <title>[PoetPiece] {% block title %}{% endblock title %}</title>
   </head>
   <body>
     {% for category, message in get_flashed_messages(with_categories=true)[:1] %}
@@ -39,7 +39,7 @@
     <header class="app-header">
       <h3 class="app-logo">
         <a href="/{{ 'poems' if current_user.is_authenticated else '' }}"
-          >Poet<span class="redden">Piece</span></a
+          >Poet<span class="differentiate">Piece</span></a
         >
       </h3>
       <nav class="app-navbar">
