@@ -1,16 +1,15 @@
 const resourceCards = document.querySelectorAll('.resources-container .resource-card')
 
 resourceCards.forEach(card => {
+  // only allow image resource to be clickable
+  if (card.dataset.rtype != 'IMAGE') {
+    return
+  }
+  // make cursor a pointer on desktop based screens
+  card.style.cursor = 'zoom-in';
+
   // create an event handler
   card.addEventListener('click', () => {
-    // only allow image resource to be clickable
-    if (card.dataset.rtype != 'IMAGE') {
-      return
-    }
-
-    // make cursor a pointer on desktop based screens
-    card.style.cursor = 'zoom-in';
-
     const selectedResourceBox = document.querySelector('#selected-resource')
     const clonedCard = card.cloneNode(true)
 
