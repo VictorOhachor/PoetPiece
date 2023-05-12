@@ -1511,7 +1511,7 @@ input[type="file"] {
 }
 
 .resource-card .title {
-  font-size: calc(1rem + .8vmin);
+  font-size: calc(.8rem + .8vmin);
   margin: .5rem 0;
   font-weight: 900;
   text-transform: uppercase;
