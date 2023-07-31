@@ -7,16 +7,32 @@
 }
 
 :root {
-  font-size: 14px;
+  font-size: 16px;
+
+  --bg-primary-color: #e5dbff;
+  --bg-secondary-color: #001c40;
+  --bg-color-shade-1: #5ee0be;
+  --bg-color-shade-2: #183153;
+
+  --color-error: #e54b4b;
+
+  --text-primary-color: #222;
+  --text-secondary-color: #5ee0be;
+  --text-color-shade-1: #e5dbff;
+
+  --font-family-brand-1: "Quicksand", sans-serif;
+
+  --border-primary-color: var(--bg-primary-color);
+  --border-secondary-color: #e3e2e8;
 }
 
 body {
-  font-family: 'Quicksand', sans-serif;
-  color: #222;
+  font-family: var(--font-family-brand-1);
+  color: var(--text-primary-color);
   position: relative;
   min-height: 100vh;
   margin-bottom: 4rem;
-  background: linear-gradient(120deg, rgb(238, 238, 238), rgba(59, 142, 165, 0.5));
+  background: linear-gradient(120deg, #c7cefa, #e3e2e8);
 }
 
 a {
@@ -26,9 +42,8 @@ a {
 
 hr {
   width: 100%;
-  height: 2px;
-  background-color: #bbb;
-  opacity: .6;
+  height: 1px;
+  background-color: var(--bg-color-shade-2);
   border: none;
 }
 
@@ -39,34 +54,34 @@ hr {
 input,
 select,
 textarea {
-  border: 1px solid #3b8ea5 !important;
+  border: 1px solid var(--border-primary-color) !important;
   border-radius: 5px;
 }
 
 input[type="file"] {
-  padding: .2rem .5rem .4rem !important;
-  color: #3b8ea5 !important;
+  padding: 0.2rem 0.5rem 0.4rem !important;
+  color: var(--border-primary-color) !important;
   display: flex;
   gap: 1rem;
   align-items: center;
 }
 
-input[type='checkbox'] {
+input[type="checkbox"] {
   min-width: 20px;
   min-height: 20px;
-  margin-right: .3rem;
+  margin-right: 0.3rem;
 }
 
 select {
-  background-color: rgba(59, 142, 165, 0.404) !important;
-  color: #222;
+  background-color: var(--bg-primary-color) !important;
+  color: var(--text-color-shade-2);
   appearance: none;
-  padding: .2rem .5rem;
   width: 100%;
-  background: url(../assets/down_arrow.png) no-repeat right #ddd;
+  background: url(../assets/down_arrow.png) no-repeat right
+    var(--text-color-shade-1);
   -webkit-appearance: none;
   background-position: center right;
-  background-size: 24px;
+  background-size: 20px;
 }
 
 .text-center {
@@ -74,16 +89,13 @@ select {
 }
 
 select option {
-  color: #3b8ea5;
-  background-color: #fff;
-  border-radius: 10px;
-  padding-bottom: .1rem;
-  border-bottom: 1px solid #bbb;
+  color: var(--text-color-shade-2);
+  background-color: var(--bg-primary-color);
 }
 
 .help-block {
-  color: #e54b4b;
-  font-size: calc(.6rem + .6vmin);
+  color: var(--bg-color-shade-2);
+  font-size: calc(0.6rem + 0.6vmin);
   font-weight: 700;
 }
 
@@ -106,7 +118,7 @@ select option {
 
   padding: 10px;
   border-radius: 5px;
-  font-size: calc(.8rem + 1vmin);
+  font-size: calc(0.8rem + 1vmin);
   background-color: #fff;
   border: 2px solid;
   font-weight: 500;
@@ -115,35 +127,35 @@ select option {
 }
 
 .error-toast {
-  color: #e54b4b;
-  border-color: #e54b4b;
+  color: var(--color-error);
+  border-color: var(--color-error);
 }
 
 .msg-toast {
-  border-color: #3b8ea5;
-  color: #3b8ea5;
+  border-color: var(--border-primary-color);
+  color: var(--bg-color-shade-2);
 }
 
-.redden {
-  color: #e54b4b !important;
+.embolden {
+  color: var(--bg-color-shade-2) !important;
   font-weight: bold;
 }
 
 .new-user__text {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   margin-top: 1rem;
   text-align: center;
-  font-family: "Space Mono", monospace;
+  font-style: italic;
 }
 
 .app-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding: 1rem 2rem;
   gap: 1rem;
   flex-wrap: wrap;
-  background-color: #222;
+  background-color: var(--bg-secondary-color);
 }
 
 .app-logo {
@@ -151,31 +163,31 @@ select option {
   font-family: "Monoton", cursive;
   font-size: calc(1.5rem + 1.5vmin);
   font-weight: 700;
-  flex-grow: 1;
 }
 
 .app-logo .differentiate {
-  color: #3b8ea5 !important;
+  color: var(--text-secondary-color) !important;
 }
 
 .app-navbar {
-  font-size: calc(.8rem + 1vmin);
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  margin: auto;
+  margin-left: auto;
 }
 
 .app-navbar a {
-  color: #fff;
-  background-color: #3b8ea5;
-  padding: .1rem .5rem .2rem;
-  border: 1px solid #bbb;
+  color: var(--text-primary-color);
+  background-color: var(--bg-color-shade-1);
+  font-weight: 600;
+  font-size: calc(0.8rem + 1.5vmin);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
   transition: all 200ms ease-in-out;
 }
 
 .app-navbar a:hover {
-  background-color: #222;
+  background-color: var(--bg-primary-color);
   transition: all 200ms ease-in-out;
 }
 
@@ -184,7 +196,7 @@ select option {
   max-width: 1240px;
   display: flex;
   flex-direction: column;
-  gap: .6rem;
+  gap: 0.6rem;
   position: relative;
   padding: 2rem 0.5rem;
 }
@@ -196,13 +208,14 @@ select option {
 
 .app-main__content .welcome-text {
   font-size: 1.5rem;
-  padding: .3rem 0 0;
+  text-transform: uppercase;
+  padding: 0.3rem 0 0;
 }
 
 .black-liner {
   width: 100%;
   height: 5px;
-  background-color: black;
+  background-color: var(--bg-secondary-color);
   border: none;
   border-radius: 50%;
   margin: 0 0 1.5rem;
@@ -211,9 +224,9 @@ select option {
 .app-main__content .main-content__title {
   text-align: center;
   font-size: calc(1.5rem + 1.5vmin);
-  font-family: 'PT Sans Narrow', sans-serif;
-  margin-bottom: .5rem;
-  color: #222;
+  font-family: "PT Sans Narrow", sans-serif;
+  margin-bottom: 0.5rem;
+  color: var(--bg-secondary-color);
   text-transform: capitalize;
 }
 
@@ -222,7 +235,9 @@ select option {
   display: flex;
   overflow: auto hidden;
   margin: 1rem 0;
-  border-bottom: 2px solid #bbb;
+  border-bottom: 2px solid var(--bg-color-shade-1);
+  background-color: var(--bg-color-shade-2);
+  border: none;
 
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -235,16 +250,11 @@ select option {
 
 .all-categories__name .category-name,
 .resource-types .resource-type {
-  padding: .5rem 1.5rem;
-  color: #666356;
+  padding: 0.5rem 1.5rem;
+  color: var(--bg-primary-color);
   text-decoration: none;
-  font-family: 'Quicksand', sans-serif;
+  font-family: "Quicksand", sans-serif;
   font-weight: 500;
-}
-
-.resource-types {
-  background-color: #3b8ea5;
-  border: none;
 }
 
 .resource-types .resource-type {
@@ -252,27 +262,24 @@ select option {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: .3rem;
+  gap: 0.3rem;
   align-items: center;
 }
 
 .create-resource__container {
   background-color: #fff;
-  padding: 1rem .5rem;
-  font-size: calc(.8rem + 1vmin);
+  padding: 1rem 0.5rem;
+  font-size: calc(0.8rem + 1vmin);
   border-radius: 10px;
-  border: 1px solid #bbb;
+  border: 1px solid var(--border-secondary-color);
 }
 
-.resource-types .resource-type__active {
+.resource-types .resource-type__active,
+.all-categories__name .category-name__active {
   background-color: #fff;
-  color: #3b8ea5;
-  border: 1px solid #3b8ea5;
+  color: var(--text-primary-color);
+  border: 1px solid var(--bg-primary-color);
   font-weight: 700;
-}
-
-.all-categories__name .category-name:hover {
-  background-color: #eee;
 }
 
 .app-main__content .form,
@@ -285,12 +292,12 @@ select option {
   gap: 1rem;
 }
 
-.app-main__content>.form {
+.app-main__content > .form {
   padding: 1rem;
   margin-top: 2rem;
   border-radius: 10px;
   background-color: #fff;
-  border: 1px solid #bbb;
+  border: 1px solid var(--bg-color-shade-1);
 }
 
 .app-main__content .form-group {
@@ -299,33 +306,33 @@ select option {
 
 .form-control {
   width: 100% !important;
+  font-family: var(--font-family-brand-1);
 }
 
 .app-main__content .form-control,
 input[type="file"] {
   outline: none;
   font-size: 1.5rem;
-  font-family: "Space Mono", monospace;
   padding: 0.2rem;
-  border: 1px solid #222;
+  border: 1px solid var(--bg-primary-color);
 }
 
-.app-main__content .form .checkbox>label {
+.app-main__content .form .checkbox > label {
   display: flex;
   gap: 0.2rem;
   align-items: center;
-  color: #3b8ea5;
+  color: var(--text-primary-color);
   font-size: 1.5rem;
 }
 
 .app-main__content input[type="submit"] {
   font-size: 1.5rem;
-  background-color: #3b8ea5;
-  color: #eee;
+  background-color: var(--bg-color-shade-1);
+  color: var(--text-primary-color);
   padding: 0.5rem 0;
   border: none;
   font-weight: 700;
-  font-family: 'Quicksand', sans-serif;
+  font-family: "Quicksand", sans-serif;
   cursor: pointer;
 }
 
@@ -333,39 +340,39 @@ input[type="file"] {
   display: flex;
   flex-direction: column;
   gap: 1;
-  font-size: calc(.8rem + 1vmin);
+  font-size: calc(0.8rem + 1vmin);
   line-height: 2.2rem;
   padding: 2rem 0;
 }
 
 .app-about .join-me {
   width: 100%;
-  padding: .6rem 1rem;
+  padding: 0.6rem 1rem;
   align-self: center;
-  background-color: #3b8ea5;
+  background-color: var(--bg-color-shade-2);
   font-weight: 500;
-  box-shadow: -5px 5px 2px 2px #222;
+  box-shadow: -5px 5px 2px 2px var(--bg-color-shade-1);
   color: #fff;
   text-align: center;
   margin: 1rem 0 0;
 }
 
 .app-about .heading {
-  color: #3b8ea5;
+  color: var(--bg-secondary-color);
   text-align: end;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #222;
+  border-bottom: 2px solid var(--bg-color-shade-2);
   font-size: calc(2.5rem + 1vmin);
 }
 
 .app-about .subheading::before {
   content: "[";
-  color: #3b8ea5;
+  color: var(--bg-color-shade-1);
 }
 
 .app-about .subheading::after {
   content: "]";
-  color: #3b8ea5;
+  color: var(--bg-color-shade-1);
 }
 
 .app-about .subheading {
@@ -384,23 +391,23 @@ input[type="file"] {
 .app-about .reason-to {
   font-weight: 700;
   font-family: "Space Mono", monospace;
-  color: #e54b4b;
+  color: var(--color-error);
 }
 
-.app-about>.reasons-list {
+.app-about > .reasons-list {
   display: flex;
   list-style: none;
-  gap: .5rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
   justify-content: space-between;
   padding: 0.4rem 0;
   margin-bottom: 1.2rem;
 }
 
-.app-about>.reasons-list li {
-  background-color: #222;
+.app-about > .reasons-list li {
+  background-color: var(--text-primary-color);
   color: #eee;
-  padding: 0.1rem .8rem;
+  padding: 0.1rem 0.8rem;
   white-space: nowrap;
   overflow-x: hidden;
   text-overflow: ellipsis;
@@ -411,21 +418,22 @@ input[type="file"] {
 
 .app-about blockquote {
   background-color: #eee;
-  padding: 1rem;
-  margin: .5rem 0 1rem;
-  font-size: calc(.8rem + 1vmin);
-  border: 1px solid #3b8ea5;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 0;
+  font-size: calc(0.8rem + 1vmin);
+  border: 1px solid var(--border-secondary-color);
+  border-radius: 5px;
   font-family: "Space Mono", monospace;
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: 0.2rem;
 }
 
-.app-about blockquote>span {
+.app-about blockquote > span {
   text-align: end;
   align-self: flex-end;
   font-weight: 700;
-  font-family: 'Quicksand', sans-serif;
+  font-family: "Quicksand", sans-serif;
 }
 
 .app-main__content .create-poem-container {
@@ -434,12 +442,13 @@ input[type="file"] {
 }
 
 .create-poem-container a {
-  background-color: #3b8ea5;
-  border: 1px solid #bbb;
-  padding: 0.5rem 1rem;
-  color: #eee;
-  text-decoration: none;
-  font-size: 1.5rem;
+  background-color: var(--bg-secondary-color);
+  border-radius: 5px;
+  width: 100%;
+  padding: 0.8rem 1.5rem;
+  font-size: calc(0.8rem + 0.8vmin);
+  color: var(--text-color-shade-1);
+  font-weight: 600;
 }
 
 .app-main__content .create-category-link {
@@ -462,16 +471,16 @@ input[type="file"] {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: .5rem;
-  padding: 1rem .5rem;
-  color: #222;
-  border: 1px solid #bbb;
+  gap: 0.5rem;
+  padding: 1rem 0.5rem;
+  color: var(--text-primary-color);
+  border: 1px solid var(--border-secondary-color);
   background-color: #fff;
   border-radius: 5px;
   height: 100%;
 }
 
-.poems-container>a {
+.poems-container > a {
   text-decoration: none;
 }
 
@@ -480,12 +489,12 @@ input[type="file"] {
   font-size: 1.5rem;
   text-align: center;
   font-weight: 800;
-  border-bottom: 1px solid #bbb;
+  border-bottom: 1px solid var(--bg-primary-color);
 }
 
 .poem-card .poem-desc {
   background-color: #eee;
-  color: #3b8ea5;
+  color: var(--bg-color-shade-1);
   padding: 0.3rem;
   font-weight: 600;
   font-size: 1.2rem;
@@ -505,8 +514,8 @@ input[type="file"] {
   align-items: center;
   justify-content: space-between;
   margin: 0.5rem 0;
-  background-color: #222;
-  padding: .2rem .8rem;
+  background-color: var(--text-primary-color);
+  padding: 0.2rem 0.8rem;
   border-radius: 20px;
 }
 
@@ -520,14 +529,13 @@ input[type="file"] {
 }
 
 .poem-metadata .poem-rating::before {
-  content: '\2605';
-  margin-right: .2rem;
+  content: "\2605";
+  margin-right: 0.2rem;
 }
 
 .poem-metadata .poem-category {
   text-transform: uppercase;
   color: orange;
-  font-family: "Space Mono", monospace;
 }
 
 .poem-card .card-footer {
@@ -535,14 +543,14 @@ input[type="file"] {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  color: #222;
+  color: var(--text-primary-color);
   font-weight: 700;
   font-size: 1.2rem;
 }
 
 .poem-card .card-footer .poem-author {
   text-transform: uppercase;
-  color: #3b8ea5;
+  color: var(--bg-color-shade-1);
 }
 
 .poem-card .card-footer .poem-premium {
@@ -558,8 +566,8 @@ input[type="file"] {
   background-color: cyan;
 }
 
-.app-main__content>.poem-desc,
-.app-main__content>.poem-stanzas {
+.app-main__content > .poem-desc,
+.app-main__content > .poem-stanzas {
   font-size: calc(1.5rem + 0.6vmin);
   line-height: 2.5rem;
   display: flex;
@@ -567,32 +575,32 @@ input[type="file"] {
   flex-wrap: wrap;
 }
 
-.app-main__content>.poem-desc .poem-desc__heading,
-.app-main__content>.poem-stanzas .poem-stanzas__heading {
+.app-main__content > .poem-desc .poem-desc__heading,
+.app-main__content > .poem-stanzas .poem-stanzas__heading {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-grow: 1;
   width: 40%;
   text-transform: uppercase;
-  color: #3b8ea5;
+  color: var(--bg-color-shade-1);
   padding: 0.5rem 1rem;
   font-size: calc(1rem + 1.2vmin);
   background-color: #fff;
 }
 
-.app-main__content>.poem-desc .poem-desc__content,
-.app-main__content>.poem-stanzas .poem-stanzas__container {
+.app-main__content > .poem-desc .poem-desc__content,
+.app-main__content > .poem-stanzas .poem-stanzas__container {
   flex-grow: 1;
   min-width: 60%;
-  background-color: #222;
+  background-color: var(--bg-secondary-color);
   color: #eee;
   padding: 0.5rem 1rem;
 }
 
-.app-main__content>.poem-desc .poem-desc__content {
-  font-size: calc(.8rem + 1.5vmin);
-  font-family: 'Quicksand', sans-serif;
+.app-main__content > .poem-desc .poem-desc__content {
+  font-size: calc(0.8rem + 1.5vmin);
+  font-family: "Quicksand", sans-serif;
 }
 
 .poems-container .poem-card .poem-title {
@@ -601,7 +609,7 @@ input[type="file"] {
   text-overflow: ellipsis;
 }
 
-.poem-stanzas>.poem-stanzas__container {
+.poem-stanzas > .poem-stanzas__container {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -611,17 +619,18 @@ input[type="file"] {
   align-items: flex-start;
 }
 
-.poem-stanzas__container>.add-stanza {
+.poem-stanzas__container > .add-stanza {
   text-decoration: none;
-  color: #222;
-  background-color: #eee;
+  color: var(--text-primary-color);
+  background-color: var(--bg-color-shade-1);
   width: 100%;
   text-align: center;
+  font-size: calc(0.8rem + 0.8vmin);
   border-radius: 20px;
   font-weight: 600;
 }
 
-.poem-stanzas__container>.poem-stanza__card {
+.poem-stanzas__container > .poem-stanza__card {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
@@ -632,15 +641,18 @@ input[type="file"] {
 }
 
 .poem-stanza__card .stanza-number {
-  font-size: calc(.8rem + .5vmin);
+  font-size: calc(0.6rem + 0.5vmin);
   font-weight: 700;
   text-align: center;
-  background-color: #3b8ea5;
-  color: #fff;
+  background-color: var(--bg-primary-color);
+  color: var(--bg-color-shade-2);
   border-radius: 50%;
-  padding: .2rem;
-  min-width: 40px;
-  min-height: 40px;
+  padding: 0.4rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: absolute;
   top: -8px;
   right: -8px;
@@ -650,13 +662,13 @@ input[type="file"] {
   font-family: "Space Mono", monospace;
   font-style: italic;
   padding: 0.5rem 1rem;
-  border: 1px solid #bbb;
-  border-top: 8px solid #fff;
-  border-bottom: 8px solid #fff;
+  border: 1px solid var(--border-secondary-color);
+  border-top: 8px solid var(--border-primary-color);
+  border-bottom: 8px solid var(--border-primary-color);
   border-radius: 5px;
   white-space: pre-line;
   word-spacing: -0.4rem;
-  font-size: calc(1rem + 0.8vmin);
+  font-size: calc(0.8rem + 0.6vmin);
 }
 
 .poem-stanzas__container .slider-btns {
@@ -670,16 +682,16 @@ input[type="file"] {
 .slider-btns button {
   font-size: 1.5rem;
   color: #eee;
-  background-color: #3b8ea5;
+  background-color: var(--bg-color-shade-1);
   border: none;
-  padding: .3rem .6rem;
+  padding: 0.3rem 0.6rem;
   cursor: pointer;
-  box-shadow: 2px 2px 2px 2px #666356;
+  box-shadow: 2px 2px 2px 2px var(--bg-primary-color);
 }
 
 .slider-btns .what-stanza__number {
-  color: #eee;
-  font-family: 'Space Mono', monospace;
+  color: var(--text-color-shade-1);
+  font-family: "Space Mono", monospace;
 }
 
 .what-stanza__number #what-number {
@@ -691,17 +703,17 @@ input[type="file"] {
   gap: 1rem;
   align-items: center;
   background-color: #fff;
-  color: #222;
-  padding: .5rem;
-  border-left: 5px solid #3b8ea5;
-  border-right: 5px solid #3b8ea5;
+  color: var(--bg-color-shade-2);
+  padding: 0.5rem;
+  border-left: 5px solid var(--bg-color-shade-1);
+  border-right: 5px solid var(--bg-color-shade-1);
   border-radius: 5px;
-  font-family: 'Space Mono', monospace;
+  /* font-family: 'Space Mono', monospace; */
   line-height: 1rem;
-  font-size: calc(0.5rem + .8vmin);
+  font-size: calc(0.5rem + 0.6vmin);
 }
 
-.stanza-metadata>span:nth-child(even) {
+.stanza-metadata > span:nth-child(even) {
   margin-left: auto;
   text-align: end;
 }
@@ -711,7 +723,7 @@ input[type="file"] {
   position: absolute;
   top: -15px;
   align-self: center;
-  border: 1px solid #bbb;
+  border: 1px solid var(--border-secondary-color);
   border-radius: 20px;
 }
 
@@ -729,9 +741,9 @@ input[type="file"] {
   font-size: calc(0.5rem + 1vmin);
 }
 
-.poem-action__links>a,
-.stanza-action__links>a,
-.resource-action__links>a {
+.poem-action__links > a,
+.stanza-action__links > a,
+.resource-action__links > a {
   text-decoration: none;
   font-weight: 700;
   padding: 0 0.5rem;
@@ -739,33 +751,33 @@ input[type="file"] {
   color: #eee;
 }
 
-.poem-action__links>a:first-child,
-.stanza-action__links>a:first-child,
-.resource-action__links>a:first-child {
-  background-color: #e54b4b;
+.poem-action__links > a:first-child,
+.stanza-action__links > a:first-child,
+.resource-action__links > a:first-child {
+  background-color: var(--color-error);
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
 }
 
-.poem-action__links>a:last-child,
-.stanza-action__links>a:last-child,
-.resource-action__links>a:last-child {
+.poem-action__links > a:last-child,
+.stanza-action__links > a:last-child,
+.resource-action__links > a:last-child {
   padding: 0 0.8rem;
-  background-color: #1c521c;
+  background-color: var(--bg-secondary-color);
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
 }
 
-.poem-action__links>a,
-.resource-action__links>a {
-  padding: .5rem 1rem !important;
+.poem-action__links > a,
+.resource-action__links > a {
+  padding: 0.5rem 1rem !important;
 }
 
 .add-comment__form-container {
   display: flex;
   gap: 2rem;
   flex-direction: column;
-  padding: .5rem;
+  padding: 0.5rem;
   border-radius: 5px;
   background-color: #fff;
   margin: 3rem 0;
@@ -776,7 +788,7 @@ input[type="file"] {
 }
 
 .comments-container .comments-title {
-  color: #3b8ea5;
+  color: var(--bg-color-shade-2);
   font-size: 2rem;
   text-transform: uppercase;
 
@@ -792,29 +804,28 @@ input[type="file"] {
 }
 
 .comments-container .comments-title .black-dot {
-  width: calc(.5rem + .5vmin);
-  height: calc(.5rem + .5vmin);
+  width: calc(0.5rem + 0.5vmin);
+  height: calc(0.5rem + 0.5vmin);
   border-radius: 50%;
-  background-color: #e54b4b;
+  background-color: var(--color-error);
 }
 
 .comments-container .poem-comments {
-  border: 1px solid #3b8ea5;
-  padding: .5rem 0;
-  background-color: #fff;
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
 .poem-comments .comment-card {
   display: flex;
   flex-direction: column;
-  gap: .3rem;
+  gap: 0.2rem;
+  flex-basis: 300px;
+  flex-grow: 1;
   padding: 1rem;
   position: relative;
-  border-bottom: 1px solid #bbb;
-}
-
-.poem-comments .comment-card:last-child {
-  border-bottom: none;
+  background-color: #fff;
+  border-radius: 5px;
 }
 
 .comment-card .comment-heading {
@@ -822,28 +833,27 @@ input[type="file"] {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  font-size: calc(.6rem + 1.5vmin);
+  font-size: calc(0.8rem + 0.8vmin);
   font-weight: 700;
 }
 
 .comment-card .comment-heading .commenter {
-  color: #3b8ea5;
+  color: var(--bg-color-shade-1);
   text-transform: uppercase;
 }
 
 .comment-card .comment-heading .comment-date {
-  color: grey;
-  background-color: #fff;
-  padding: 0 0.4rem;
+  color: var(--text-primary-color);
+  font-size: 0.8rem;
+  padding: 0.4rem;
   position: absolute;
   right: 0;
-  top: 0;
+  top: 0.2rem;
 }
 
 .comment-card .comment-body {
   font-size: 1.5rem;
-  color: #333121;
-  font-weight: 300;
+  color: var(--bg-secondary-color);
 }
 
 .comment-card .comment-footer {
@@ -854,62 +864,67 @@ input[type="file"] {
 }
 
 .comment-card .comment-footer .comment-status {
-  color: green;
+  color: var(--text-primary-color);
   font-size: larger;
   font-family: "Space Mono", monospace;
   text-transform: uppercase;
 }
 
 .comment-card .delete-btn {
-  padding: 0.2rem 1.2rem;
+  padding: 0.5rem 1.2rem;
   text-align: center;
-  background-color: #e54b4b;
+  background-color: var(--color-error);
   text-decoration: none;
-  color: #eee;
+  color: var(--bg-primary-color);
   margin-left: auto;
   border-radius: 20px;
   font-size: 1.2rem;
 }
 
 .comments-restricted {
-  color: #3b8ea5;
+  color: var(--bg-color-shade-2);
   text-align: center;
   font-size: calc(2rem + 1.5vmin);
+  min-height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-weight: 700;
   text-transform: uppercase;
-  border: 1px solid #bbb;
+  border-radius: 5px;
+  border: 1px solid var(--bg-color-shade-2);
 }
 
 /* Pagination Widget style */
 .pagination-container {
-  padding: .5rem;
+  padding: 0.5rem;
   display: flex;
-  gap: .5rem;
+  gap: 0.5rem;
   align-items: center;
   justify-content: space-between;
-  background-color: #222;
+  background-color: var(--bg-secondary-color);
   border-radius: 20px;
 }
 
 .pagination-container .page-items__count {
-  color: #eee;
+  color: var(--text-color-shade-1);
 }
 
 .pagination-container .disabled {
-  opacity: .5;
+  opacity: 0.5;
 }
 
 .pagination-container .prev-page,
 .pagination-container .next-page {
-  background-color: #eee;
-  color: #3b8ea5;
+  background-color: var(--bg-color-shade-1);
+  color: var(--text-color-shade-1);
   justify-content: center;
   align-items: center;
   display: flex;
   height: 40px;
   width: 40px;
   text-align: center;
-  padding-bottom: .2rem;
+  padding-bottom: 0.2rem;
   border-radius: 50%;
   font-size: 1.5rem;
 }
@@ -920,35 +935,35 @@ input[type="file"] {
 }
 
 .unread-n__count {
-  font-size: calc(.5rem + .5vmin);
+  font-size: calc(0.5rem + 0.5vmin);
 }
 
 .empty-list {
   line-height: 2.2rem;
-  padding: 2.2rem .5rem;
-  font-size: calc(1.2rem + .8vmin);
+  padding: 2.2rem 0.5rem;
+  font-size: calc(1.2rem + 0.8vmin);
   text-transform: uppercase;
-  color: #e54b4b;
+  color: var(--color-error);
   font-weight: 300;
-  background-color: #ffffffe1;
+  background-color: #fff;
+  border-radius: 5px;
   width: 100%;
 }
 
 .poetic-motivation {
-  color: #666356;
-  font-size: calc(.6rem + .8vmin);
+  color: var(--text-primary-color);
+  font-size: calc(0.6rem + 0.8vmin);
   font-style: italic;
-
 }
 
 .poetic-motivation a {
-  color: #3b8ea5;
+  color: var(--bg-color-shade-2);
   font-weight: bold;
   text-decoration: underline;
 }
 
 .poetic-motivation a:hover {
-  opacity: .8;
+  opacity: 0.8;
 }
 
 .http-error-msg {
@@ -959,34 +974,34 @@ input[type="file"] {
   margin-top: 2rem;
   text-align: center;
   align-items: center;
-  color: #3b8ea5;
+  color: var(--bg-color-shade-2);
 }
 
 .http-error-msg .error-code {
   font-size: calc(4rem + 2vmin);
-  font-family: 'Space Mono', monospace;
+  font-family: "Space Mono", monospace;
   padding: 3rem;
   border-radius: 50%;
-  border: 1px solid #3b8ea5;
+  border: 1px solid var(--bg-color-shade-2);
 }
 
 .http-error-msg .error-msg {
   font-size: calc(1.5rem + 1vmin);
   line-height: 1.2;
-  margin: 0 .5rem;
+  margin: 0 0.5rem;
 }
 
 .more-actions__container {
   position: absolute;
-  bottom: 25px;
+  bottom: 30px;
   right: 0;
-  color: #eee;
+  color: var(--text-color-shade-1);
 }
 
 .more-actions__container #more-action__toggler {
   font-size: 1.5rem;
-  padding: .3rem .7rem;
-  background-color: #3b8ea5;
+  padding: 0.3rem 0.7rem;
+  background-color: var(--bg-color-shade-2);
   border-radius: 3px;
   cursor: pointer;
 }
@@ -994,38 +1009,45 @@ input[type="file"] {
 .more-actions__container .more-actions__box {
   position: absolute;
   right: 0;
+  margin-top: 0.2rem;
   z-index: 2;
   width: max-content;
   display: flex;
   flex-direction: column;
-  background-color: #3b8ea5;
-  border: 1px solid #eee;
+  background-color: var(--bg-color-shade-2);
   text-align: center;
   border-radius: 5px;
 }
 
 .view-more__btn {
   align-self: center;
-  margin-top: .5rem;
+  margin-top: 0.5rem;
 }
 
-.more-actions__box>.more-action__btn {
+.more-actions__box > .more-action__btn {
   border: none;
   background-color: transparent;
 }
 
-.more-actions__box>a,
-.more-actions__box>.more-action__btn {
-  color: #eee;
+.more-actions__box > a,
+.more-actions__box > .more-action__btn {
+  color: var(--text-color-shade-1);
   text-decoration: none;
   font-size: 1.1rem;
-  font-family: 'Quicksand', sans-serif;
+  font-family: "Quicksand", sans-serif;
   cursor: pointer;
-  padding: .4rem 1rem;
-  border-bottom: 1px solid #bbb;
+  padding: 0.4rem 1rem;
+  border-bottom: 1px solid var(--border-secondary-color);
 }
 
-.more-actions__box>a:last-child {
+.more-actions__box > a:hover,
+.more-actions__box > .more-action__btn:hover {
+  background-color: var(--bg-color-shade-1);
+  color: var(--text-primary-color);
+  font-weight: 600;
+}
+
+.more-actions__box > a:last-child {
   border-bottom: none;
 }
 
@@ -1034,10 +1056,10 @@ input[type="file"] {
 }
 
 .poem-completion {
-  font-family: 'Space Mono', monospace;
+  font-family: "Space Mono", monospace;
   font-weight: 700;
   text-align: center;
-  padding: .1rem 1rem .2rem;
+  padding: 0.1rem 1rem 0.2rem;
   position: absolute;
   top: 0;
   left: 50%;
@@ -1046,13 +1068,13 @@ input[type="file"] {
 }
 
 .poem-completed {
-  color: #eee;
-  background-color: #1c521c;
+  color: var(--text-color-shade-1);
+  background-color: var(--bg-secondary-color);
 }
 
 .poem-progress {
-  color: #222;
-  background-color: rgb(241, 184, 163);
+  color: var(--text-color-shade-1);
+  background-color: var(--color-error);
 }
 
 .app-navigation__container {
@@ -1061,8 +1083,8 @@ input[type="file"] {
   left: 0;
   right: 0;
   z-index: 2;
-  background-color: #222;
-  color: #ddd;
+  background-color: var(--bg-secondary-color);
+  color: var(--bg-primary-color);
   overflow: auto hidden;
 }
 
@@ -1085,189 +1107,86 @@ input[type="file"] {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: .2rem;
+  gap: 0.2rem;
   font-weight: 700;
   width: max-content;
-  font-size: calc(.5rem + 1vmin);
+  font-size: calc(0.8rem + 1vmin);
   flex-grow: 1;
-  padding: .6rem;
+  padding: 0.6rem;
   text-align: center;
-  font-family: 'PT Sans Narrow', sans-serif;
-  /* font-family: 'Dancing Script', cursive; */
+  font-family: "Dancing Script", cursive;
 }
 
-.app-nav-items .nav-item>i {
+.app-nav-items .nav-item > i {
   font-size: calc(1rem + 1vmin);
 }
 
 .app-nav-items .nav-item__active {
-  border-top: 3px solid #3b8ea5;
-  color: #3b8ea5;
+  border-top: 3px solid var(--bg-color-shade-1);
+  color: var(--bg-color-shade-1);
   background-color: #fff;
 }
 
-.app-navbar .darken {
-  background-color: #222;
-  color: #eee;
-}
-
 .nav-item__active-parent::before {
-  content: '[';
+  content: "[";
 }
 
 .nav-item__active-parent::after {
-  content: ']';
+  content: "]";
 }
 
 .update-password__title {
-  color: #3b8ea5;
-  border-color: #3b8ea5 !important;
+  border-color: var(--border-primary-color) !important;
 }
 
 .me-form__container .form-title {
   font-size: calc(1.2rem + 1vmin);
   text-align: center;
-  padding: .5rem .1rem 0;
+  padding: 0.5rem 0.1rem 0;
   margin-bottom: 1.5rem;
-  border-bottom: 3px solid #222;
+  border-bottom: 3px solid var(--border-secondary-color);
 }
 
 .me-form__container {
-  border: 1px solid #bbb;
+  border: 1px solid var(--border-secondary-color);
   background-color: #fff;
-  padding: .5rem;
+  padding: 0.5rem;
   border-radius: 5px;
 }
 
-.profile-form__container input[type='submit'] {
-  background-color: #222;
+.profile-form__container input[type="submit"] {
+  background-color: var(--bg-secondary-color);
+  color: var(--bg-primary-color);
 }
 
-.me-form__container input[type='submit'] {
+.me-form__container input[type="submit"] {
   border: none;
 }
 
 .me-actions__box {
   display: flex;
   margin: 1rem 0 2rem;
-  gap: .5rem;
+  gap: 0.5rem;
   justify-content: flex-end;
 }
 
 .action-btn {
-  background-color: #222;
-  color: #eee;
-  border: 1px solid #bbb;
-  font-size: calc(.6rem + 1vmin);
-  padding: .5rem 1.5rem;
+  background-color: var(--bg-color-shade-2);
+  color: var(--text-color-shade-1);
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: calc(0.6rem + 1vmin);
+  padding: 0.5rem 1.5rem;
 }
 
 /* Higher Priority 2 action button */
 .action-btn__hp-1 {
-  background-color: #e54b4b;
+  background-color: var(--color-error);
 }
 
 /* Higher Priority 2 action button */
 .action-btn__hp-2 {
-  background-color: #3b8ea5;
-}
-
-/* Notifications Elements Styles */
-
-.notifications-container,
-.notifications-container .notification-card {
-  display: flex;
-  flex-direction: column;
-}
-
-.notifications-container {
-  margin: 1rem 0;
-}
-
-.notifications-container .notification-card {
-  gap: .2rem;
-  padding: .5rem 0;
-  border-bottom: .5px solid #bbb;
-  position: relative;
-}
-
-.notification-card:last-child {
-  border-bottom: none;
-}
-
-.notification-header,
-.notification-body,
-.notification-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: .2rem .5rem;
-  gap: .5rem;
-}
-
-.notification-header {
-  color: #666356;
-}
-
-.unread-notification {
-  font-weight: bold;
-}
-
-.notification-body {
-  min-height: 3rem;
-}
-
-.notification-footer {
-  color: #3b8ea5;
-}
-
-.notification-footer .notification-user {
-  flex-basis: 50%;
-}
-
-.notification-footer .notification-id {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.unread-checkbox {
-  align-self: center;
-  background-color: #eee;
-  padding: .2rem .5rem;
-  margin-top: .5rem;
-  display: flex;
-  align-items: center;
-  gap: .4rem;
-  cursor: pointer;
-  color: #3b8ea5;
-  border-radius: 20px;
-}
-
-.unread-checkbox label {
-  font-size: calc(.8rem + .6vmin);
-}
-
-.unread-checkbox input[type='checkbox'] {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 25px !important;
-  height: 25px !important;
-  appearance: none;
-  border-radius: 50%;
-  border: 1px solid #3b8ea5;
-  box-shadow: none;
-  font-size: calc(1rem + .4vmin);
-}
-
-.unread-checkbox input[type='checkbox']:checked {
-  background-color: #fff;
-}
-
-.unread-checkbox input[type='checkbox']:checked::after {
-  content: '\2713';
-  color: #3b8ea5;
+  background-color: var(--bg-secondary-color);
 }
 
 /* Search Poems Container */
@@ -1282,7 +1201,7 @@ input[type="file"] {
 .search-page__hero .main-content__title {
   text-align: center;
   vertical-align: middle;
-  padding: .2rem .5rem;
+  padding: 0.2rem 0.5rem;
 }
 
 .search-page__hero img {
@@ -1290,10 +1209,10 @@ input[type="file"] {
   height: 100%;
   z-index: -1;
   position: absolute;
-  border-right: 5px solid #3b8ea5;
-  border-left: 5px solid #3b8ea5;
+  border-right: 5px solid var(--bg-color-shade-1);
+  border-left: 5px solid var(--bg-color-shade-1);
   object-fit: cover;
-  filter: opacity(.5) drop-shadow(0 0 #3b8ea5);
+  filter: opacity(0.5) drop-shadow(0 0 var(--bg-color-shade-1));
 }
 
 .search-poems__container {
@@ -1306,12 +1225,12 @@ input[type="file"] {
 
 .search-poems__container .filters-box,
 .search-poems__container .results-container {
-  border-radius: .3rem;
+  border-radius: 0.3rem;
 }
 
 .search-poems__container .filters-box {
-  padding: .5rem;
-  border: 1px solid #bbb;
+  padding: 0.5rem;
+  border: 1px solid var(--border-secondary-color);
   flex-grow: 1;
   flex-shrink: 0;
   max-width: 100%;
@@ -1323,7 +1242,7 @@ input[type="file"] {
 }
 
 .filters-box .filter-box__title {
-  font-size: calc(.5rem + 1.5vmin);
+  font-size: calc(0.5rem + 1.5vmin);
 }
 
 .search-poems__container .results-container {
@@ -1348,18 +1267,18 @@ input[type="file"] {
   flex-basis: 30%;
   flex-grow: 1;
   font-size: calc(1rem + 1vmin);
-  color: #3b8ea5;
+  color: var(--bg-color-shade-1);
   font-stretch: 50%;
   background-color: #fff;
   position: sticky;
   top: 1%;
-  padding: .8rem .5rem;
+  padding: 0.8rem 0.5rem;
   border-radius: 5px;
-  border-left: 5px solid #3b8ea5;
+  border-left: 5px solid var(--bg-secondary-color);
 }
 
 .poet-bio .poet-bio__data {
-  margin: .6rem 0 0;
+  margin: 0.6rem 0 0;
 }
 
 .poet-page__heading {
@@ -1368,6 +1287,7 @@ input[type="file"] {
 }
 
 .poet-page__heading .main-content__title {
+  text-transform: uppercase;
   text-align: center;
 }
 
@@ -1375,18 +1295,18 @@ input[type="file"] {
   position: absolute;
   top: -5px;
   right: -5px;
-  font-size: calc(.8rem + 1.2vmin);
-  color: #fff;
-  padding: .3rem 1rem;
-  transform: scale(.7) rotate(30deg);
+  font-size: calc(0.8rem + 1.2vmin);
+  color: var(--text-color-shade-1);
+  padding: 0.3rem 1rem;
+  transform: scale(0.8) rotate(30deg);
 }
 
 .verified-poet {
-  background-color: #3b8ea5;
+  background-color: var(--bg-secondary-color);
 }
 
 .unverified-poet {
-  background-color: #730606;
+  background-color: var(--color-error);
 }
 
 .poet-other-poems {
@@ -1394,11 +1314,11 @@ input[type="file"] {
   flex-direction: column;
   flex-basis: 60%;
   flex-grow: 1;
-  gap: .3rem;
+  gap: 0.3rem;
   color: #eee;
-  padding: 1rem .5rem;
-  border-top: 5px solid #3b8ea5;
-  background-color: #222;
+  padding: 1rem 0.5rem;
+  border-top: 5px solid var(--bg-color-shade-1);
+  background-color: var(--bg-color-shade-2);
 }
 
 .poet-other-poems .poems-container {
@@ -1406,12 +1326,11 @@ input[type="file"] {
   padding: 0;
 }
 
-
 .poet-other-poems .poet-other-poems__title {
-  font-size: calc(.8rem + 1vmin);
+  font-size: calc(0.8rem + 1vmin);
   font-weight: 300;
   text-rendering: optimizeLegibility;
-  border-bottom: 1px solid #bbb;
+  border-bottom: 1px solid var(--border-secondary-color);
   text-align: end;
 }
 
@@ -1420,10 +1339,10 @@ input[type="file"] {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  background-color: #222;
+  background-color: var(--bg-color-shade-2);
   color: #eee;
-  padding: .3rem .5rem;
-  border-bottom: 5px solid #3b8ea5;
+  padding: 0.3rem 0.5rem;
+  border-bottom: 5px solid var(--bg-color-shade-1);
 }
 
 .poet-metadata .poet-gender {
@@ -1452,16 +1371,17 @@ input[type="file"] {
 #selected-resource .resource-card {
   display: flex;
   flex-direction: column;
-  gap: .5rem;
+  gap: 0.2rem;
   justify-content: space-between;
-  padding: 1rem .5rem .5rem;
+  padding: .5rem 1rem;
+  border-radius: 5px;
   position: relative;
   background-color: #fff;
   transition: all 0.3s ease-in-out;
 }
 
 #selected-resource .resource-card {
-  margin-bottom: .8rem;
+  margin-bottom: 0.8rem;
 }
 
 #selected-resource .resource-card.expanded {
@@ -1474,18 +1394,24 @@ input[type="file"] {
 }
 
 .resource-card .link-resource {
-  color: #e54b4b;
+  color: var(--color-error);
   text-decoration: underline;
   overflow-wrap: break-word;
   word-wrap: break-word;
 }
 
-.resource-card .publish-btn {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  font-weight: 500;
-  color: #e54b4b;
+.resource-card .resource-card__top,
+.resource-card .resource-card__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.resource-card .resource-card__top {
+    border-bottom: 1px solid var(--border-secondary-color);
+    padding-bottom: .5rem;
+    margin-bottom: 1rem;
 }
 
 .resource-card .resource-action__links {
@@ -1495,10 +1421,9 @@ input[type="file"] {
 .resource-card .resource-metadata {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: .5rem;
   font-weight: 700;
-  margin-top: .2rem;
-  border-bottom: 1px solid #e54b4b;
 }
 
 .resource-metadata .created-on {
@@ -1507,14 +1432,14 @@ input[type="file"] {
 }
 
 .resource-metadata .creator {
-  color: #222;
+  color: var(--text-primary-color);
+  font-weight: 400 !important;
 }
 
 .resource-card .resource-preview {
   display: flex;
   flex-direction: column;
-  gap: .1rem;
-  /* border-bottom: 1px solid #e54b4b; */
+  gap: 0.1rem;
 }
 
 .resource-preview img {
@@ -1525,19 +1450,18 @@ input[type="file"] {
 }
 
 .resource-card .title {
-  font-size: calc(.8rem + .8vmin);
-  margin: .5rem 0;
+  font-size: calc(0.8rem + 0.8vmin);
+  margin: 0.5rem 0;
   font-weight: 900;
   text-transform: uppercase;
   align-self: center;
-  color: #3b8ea5;
+  color: var(--bg-color-shade-2);
 }
 
 .resource-card .resource-card__bottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  border-top: 1px solid var(--border-secondary-color);
+  padding-top: .5rem;
+  margin-top: 1rem;
 }
 
 .resource-card .approved-resource {
@@ -1547,17 +1471,16 @@ input[type="file"] {
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: calc(.8rem + .8vmin);
-  padding: .7rem .5rem .5rem;
+  font-size: calc(0.8rem + 0.8vmin);
+  padding: 0.7rem 0.5rem 0.5rem;
   color: #fff;
-  font-family: 'Space Mono', monospace;
   width: 30px;
   height: 30px;
   border-radius: 50%;
 }
 
 .resource-card .approved-resource:hover {
-  opacity: .5;
+  opacity: 0.5;
 }
 
 .resource-card .resource-approved {
@@ -1565,28 +1488,28 @@ input[type="file"] {
 }
 
 .resource-card .resource-unapproved {
-  background-color: #e54b4b;
+  background-color: var(--color-error);
 }
 
 .resource-card .resource-votes {
   display: flex;
   align-items: center;
-  gap: .5rem;
-  color: #3b8ea5;
+  gap: 0.5rem;
+  color: var(--bg-color-shade-1);
 }
 
 .resource-votes .upvote,
 .resource-votes .downvote {
   display: flex;
-  font-size: calc(.8rem + 1vmin);
-  gap: .1rem;
-  align-items: baseline;
+  font-size: calc(0.8rem + 1vmin);
+  gap: 0.1rem;
+  align-items: center;
   font-weight: 500;
 }
 
 .resource-votes .has-voted {
   font-weight: 700;
-  color: #e54b4b !important;
+  color: var(--color-error) !important;
 }
 
 .resource-votes .vote-count {
@@ -1598,7 +1521,7 @@ input[type="file"] {
   display: flex;
   flex-direction: column;
   position: relative;
-  gap: .5rem;
+  gap: 0.5rem;
 }
 
 .resource-card .image-resource {
@@ -1623,21 +1546,21 @@ input[type="file"] {
 }
 
 .resource-content .body {
-  border: 1px solid #3b8ea5;
+  border: 1px solid var(--bg-color-shade-1);
   border-radius: 5px;
   white-space: pre-line;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  padding: .5rem .5rem 1rem;
+  padding: 0.5rem 0.5rem 1rem;
 }
 
-.resource-content .body>ul,
-.resource-content .body>ol {
+.resource-content .body > ul,
+.resource-content .body > ol {
   list-style-position: inside;
 }
 
 .resource-content .body a {
-  color: #e54b4b;
+  color: var(--color-error);
   font-weight: 500;
 }
 

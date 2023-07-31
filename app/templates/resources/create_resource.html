@@ -2,11 +2,9 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% block title %}Create New Resource{% endblock title %}
 {% block main_content %}
-<div>
-  <h1 class="main-content__title">Create a Poetic Resource</h1>
-  <p class="redden text-center">
-    <small>Resources can be any of {{", ".join(resources_types)}}</small>
-  </p>
+<div class="text-center">
+  <h1 class="main-content__title">CREATE A POETIC RESOURCE</h1>
+  <small>Resources can be any of {{", ".join(resources_types)}}</small>
 </div>
 <p class="resources-action__links">
   <a href="{{url_for('resources.index', type=r_type)}}" class="action-btn action-btn__hp-2">View Resources</a>

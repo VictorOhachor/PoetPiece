@@ -24,6 +24,18 @@ class BaseModel(db.Model):
                            server_default=func.now())
     updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
 
+    @property
+    def created_on(self):
+        day = self.created_at.day
+        suffix = 'th' if 11 <= day <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(day % 10, 'th')
+        return self.created_at.strftime(f"{day}{suffix}, %b %Y")
+    
+    @property
+    def updated_on(self):
+        day = self.updated_at.day
+        suffix = 'th' if 11 <= day <= 13 else {1: 'st', 2: 'nd', 3: 'rd'}.get(day % 10, 'th')
+        return self.updated_at.strftime(f"{day}{suffix}, %b %Y")
+
     def save(self):
         """Save instance to database."""
         db.session.add(self)
@@ -100,7 +112,7 @@ class User(UserMixin, BaseModel):
 
     @property
     def last_login(self):
-        return self.updated_at
+        return self.updated_on
 
     @property
     def is_poet(self):
@@ -145,7 +157,7 @@ class Poet(BaseModel):
     @property
     def became_poet_on(self):
         """Return the date that user became a poet."""
-        return self.created_at
+        return self.created_on
 
     @property
     def poet_name(self):
@@ -256,11 +268,11 @@ class Stanza(BaseModel):
 
     @property
     def added_on(self):
-        return self.created_at
+        return self.created_on
 
     @property
     def edited_on(self):
-        return self.updated_at
+        return self.updated_on
 
 
 class Comment(BaseModel):
@@ -277,7 +289,7 @@ class Comment(BaseModel):
 
     @property
     def last_edit(self):
-        return self.updated_at
+        return self.updated_on
 
 
 class PoemRating(BaseModel):

@@ -31,17 +31,17 @@ class FilterPoemForm(FlaskForm):
     """Represents the filter form for searching through poems."""
 
     poet = SelectField('Filter by Poets:',)
-    rating = SelectField('Filter by Ratings:', choices=[
+    rating = SelectField('Choose Ratings:', choices=[
         ('', 'All'), (1, 'Rating <= 1.0'), (3, '1.0 < Rating <= 3.0'),
         (5, '3.0 < Rating <= 5.0')
     ])
-    completed = SelectField('Filter by Completion:', choices=[
-        ('', 'Any'), (True, 'Completed'), (False, 'In Progress')
+    completed = SelectField('Select Poem State:', choices=[
+        (False, 'In Progress'), (True, 'Completed')
     ])
-    premium = SelectField('Filter by Poem Types:', choices=[
-        ('', 'Any'), (True, 'Premium'), (False, 'Free')
-    ], coerce=bool)
-    filter_poem = SubmitField('Apply Filters', name='')
+    premium = SelectField('Select Poem Type:', choices=[
+        (False, 'Free'), (True, 'Premium')
+    ])
+    filter_poem = SubmitField('Apply Filters')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -86,6 +86,6 @@ class CategoryForm(FlaskForm):
 class CommentForm(FlaskForm):
     """Represents the form for creating or editing comments."""
 
-    comment = TextAreaField('What is your feedback on the poem?', validators=[
+    comment = TextAreaField('Add a comment', validators=[
         Length(1, 1000), DataRequired()], render_kw={'rows': '2'})
-    submit = SubmitField('Post Comment')
+    submit = SubmitField('Post')

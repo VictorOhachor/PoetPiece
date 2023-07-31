@@ -1,4 +1,3 @@
-{% if current_user.is_authenticated %}
 <div class="app-navigation__container">
   <div class="app-nav-items">
     <a href="{{url_for('poems.index')}}" class="nav-item">
@@ -15,14 +14,20 @@
         <span>Compose</span>
       </a>
     {% endif %}
-    <a href="{{url_for('resources.index')}}" class="nav-item">
-      <i class="fa-solid fa-cart-flatbed-suitcase"></i>
-      <span>Resources</span>
-    </a>
-    <a href="{{url_for('main.me')}}" class="nav-item">
-      <i class="fa-solid fa-user"></i>
-      <span>Profile</span>
-    </a>
+    {% if current_user.is_authenticated %}
+        <a href="{{url_for('resources.index')}}" class="nav-item">
+            <i class="fa-solid fa-cart-flatbed-suitcase"></i>
+            <span>Resources</span>
+        </a>
+        <a href="{{url_for('main.me')}}" class="nav-item">
+            <i class="fa-solid fa-user"></i>
+            <span>Profile</span>
+        </a>
+    {% else %}
+        <a href="{{url_for('main.login')}}" class="nav-item">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <span>Login</span>
+        </a>
+    {% endif %}
   </div>
 </div>
-{% endif %}

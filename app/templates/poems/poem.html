@@ -6,11 +6,6 @@
 <input type="hidden" name="poem_url" value="{{url_for('poems.poem', slugname=poem.slug)}}">
 <h1 class="main-content__title">
   {{poem.title|upper}}
-  {% if poem.poets %}
-    <sup style="text-transform: none;">by <span class="redden">
-      {{poem.poets.poet_name if poem.poets.user_id != current_user.id else 'You'}}
-    </span></sup>
-  {% endif %}
 </h1>
 <span
   class="poem-completion poem-{{ 'completed' if poem.completed else 'progress' }}"
@@ -22,14 +17,13 @@
   <span class="poem-rating" title="Poem Rating">{{poem.rating}}</span>
   <span class="poem-category">{{poem.categories.name}}</span>
 </p>
-<hr>
+
 <div class="poem-desc">
   <h3 class="poem-desc__heading">Poem Description</h3>
   <div class="poem-desc__content">
     {{poem.description|replace('\n', '<br>')|safe if poem.description else 'No Poem Description.'}}
   </div>
 </div>
-<hr />
 <div class="poem-stanzas">
   <h3 class="poem-stanzas__heading">Stanzas</h3>
   <div class="poem-stanzas__container">
@@ -48,9 +42,9 @@
           {{stanza.content|trim}}
       </pre>
       <p class="stanza-metadata">
-        <span><strong>Added On:</strong> {{stanza.added_on}}</span>
+        <span>Written on <strong>{{stanza.added_on}}</strong></span>
         {% if stanza.edited_on %}
-        <span><strong>Edited On:</strong> {{stanza.edited_on}}</span>
+        <span>Last Edit: </strong>{{stanza.edited_on}}</strong></span>
         {% endif %}
       </p>
     </div>
@@ -64,8 +58,10 @@
     </div>
     {% if poem.is_accessible %}
     <hr width="100%" />
-    <a href="/poems/{{poem.id}}/add_stanza" class="add-stanza"
-      >Add New Stanza</a
+    <a href="/poems/{{poem.id}}/add_stanza" class="add-stanza">
+        <i class="fa-solid fa-circle-plus"></i>
+        <span>Add New</span>
+    </a
     >
     {% endif %}
   </div>
@@ -96,9 +92,9 @@
       <div class="comment-card">
         <p class="comment-heading">
           <span class="commenter">{{ 'You' if comment.users.id == current_user.id else comment.users.username}}</span>
-          <span class="comment-date">{{comment.created_at}}</span>
+          <span class="comment-date">{{comment.created_on}}</span>
         </p>
-        <p class="comment-body">{{comment.comment}}</p>
+        <p class="comment-body">{{comment.comment|safe}}</p>
         <p class="comment-footer">
           {% if comment.approved %}
           <span class="comment-status">Approved</span>

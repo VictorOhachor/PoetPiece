@@ -11,13 +11,13 @@ title %}
 </div>
 <p class="poet-metadata">
   <span class="became-poet-on">
-    Became a poet on <span class="redden">{{poet.became_poet_on}}</span>
+    Became a poet on <strong>{{poet.became_poet_on}}</strong></span>
   </span>
   <span class="poet-gender">{{poet.gender|upper}}</span>
 </p>
 <div class="poet-page__main">
   <div class="poet-bio">
-    <h4 class="redden underline">About The Poet</h4>
+    <h4 class="embolden underline">About The Poet</h4>
     <p class="poet-bio__data">{{ poet.bio|replace('\n', '<br>')|safe if poet.bio else 'No Description' }}</p>
   </div>
   <div class="poet-other-poems">
@@ -25,7 +25,7 @@ title %}
     <div class="poems-container">
       {% if not other_poems %}
       <p class="empty-list">
-        No <span class="redden">Other</span> Poem Composed By This Poet.
+        No <span class="embolden">Other</span> Poem Composed By This Poet.
       </p>
       {% endif %}
       {% for poem in other_poems %}

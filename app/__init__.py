@@ -38,5 +38,8 @@ def create_app(config_name):
 
     from .resources import resources as resources_bp
     app.register_blueprint(resources_bp)
+
+    # Set the login page for the login manager
+    login_manager.login_view = 'main.login'
     
     return app

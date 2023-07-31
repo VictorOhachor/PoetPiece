@@ -1,13 +1,10 @@
 from . import resources
-from flask_login import login_required, current_user
-from flask import (render_template, url_for, redirect, request,
-                   flash, send_from_directory, current_app)
+from flask_login import login_required
+from flask import render_template, url_for, redirect, request, flash
 from .forms import ResourceForm
 from .manager import manager
-from ..models import Resource, Poet
+from ..models import Resource
 from ..utils import is_poet
-import os
-
 
 @resources.route('/resources')
 @login_required
@@ -66,6 +63,7 @@ def update_resource():
     if context['form'].validate_on_submit():
         context['form'].populate_obj(resource)
         resource.save()
+        
         flash(f'{rtype} resource has been updated successfully.')
         return redirect(url_for('.index', type=rtype))
 

@@ -15,8 +15,7 @@ window.addEventListener('load', () => {
         if (location.pathname === categoryName.pathname &&
             windowParams.category === categoryParams.category
         ) {
-            categoryName.style.borderBottom = '3px solid rgb(145, 21, 21)';
-            categoryName.style.color = '#000';
+            categoryName.classList.add('category-name__active');
         }
     }
 })

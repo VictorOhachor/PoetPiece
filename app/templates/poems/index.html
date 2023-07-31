@@ -1,22 +1,25 @@
 {% extends "base.html" %} {% import "_macros.html" as macros %} {% block title
-%} Poems {% endblock title %} {% block main_content %} {% if
-current_user.is_poet %}
-<div class="create-poem-container">
-  <a href="/poems/new">Create Poem</a>
-</div>
-{% endif %}
+%} Poems {% endblock title %} {% block main_content %} 
 <h1 class="main-content__title">
-  Explore Poems <sup class="redden">{{pagination.total}}</span>
+  Explore Poems <sup class="embolden">{{pagination.total}}</span>
 </h1>
 {% if pagination.total %}
-<p class="all-categories__name">
-  <a href="/poems" class="category-name">All</a>
-  {% for category_name in all_category_names %}
-  <a href="/poems?category={{category_name}}" class="category-name">
-    {{ category_name|capitalize }}
-  </a>
-  {% endfor %}
-</p>
+    {% if current_user.is_poet %}
+        <div class="create-poem-container">
+            <a href="/poems/new">
+                <i class="fa-solid fa-circle-plus"></i>
+                <span>Create Poem</span>
+            </a>
+        </div>
+    {% endif %}
+    <p class="all-categories__name">
+    <a href="/poems" class="category-name">All</a>
+    {% for category_name in all_category_names %}
+    <a href="/poems?category={{category_name}}" class="category-name">
+        {{ category_name|capitalize }}
+    </a>
+    {% endfor %}
+    </p>
 {% endif %}
 <div class="poems-container">
   {% if not poems %}
@@ -28,7 +31,6 @@ current_user.is_poet %}
   {{ macros.poem_card_widget(poem, current_user) }}
   {% endfor %}
 </div>
-
 {{ macros.pagination_widget(pagination, 'poems.index') }}
 {% if not pagination.total %}
 {% if current_user.is_authenticated %}

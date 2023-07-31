@@ -4,7 +4,7 @@
 {% block main_content %}
 <div>
   <h1 class="main-content__title">Poetic Resources</h1>
-  <p class="redden text-center">
+  <p class="embolden text-center">
     Want to learn more about poetry? You are at the right place!
   </p>
 </div>
@@ -31,22 +31,24 @@
   {% endif %}
   {% for resource in resources %}
   <article class="resource-card" data-rtype="{{resources_types[resource.rtype]}}">
-    {% if resource.is_accessible %}
-    <a href="{{url_for('resources.publish_resource', resource_id=resource.id, type=resources_types[resource.rtype])}}" class="publish-btn underline">
-      {{'Publish' if not resource.published else 'Unpublish'}}
-    </a>
-    {% endif %}
-    <p class="approved-resource resource-{{'approved' if resource.approved else 'unapproved'}}" title="{{'Approved' if resource.approved else 'Not Approved'}}">
-      {% if resource.approved %}
-      <i class="fa-solid fa-check"></i>
-      {% else %}
-      <i class="fa-solid fa-ban"></i>
-      {% endif %}
-    </p>
     <p class="resource-metadata">
-      <span class="creator">Posted by {{resource.poets.poet_name}}</span>
+      <span class="creator">Posted by <strong>{{resource.poets.poet_name}}</strong> on</span>
       <span class="created-on">{{resource.created_at.date()}}</span>
     </p>
+    <div class="resource-card__top">
+        {% if resource.is_accessible %}
+            <a href="{{url_for('resources.publish_resource', resource_id=resource.id, type=resources_types[resource.rtype])}}" class="publish-btn underline">
+            {{'Publish' if not resource.published else 'Unpublish'}}
+            </a>
+        {% endif %}
+        <p class="approved-resource resource-{{'approved' if resource.approved else 'unapproved'}}" title="{{'Approved' if resource.approved else 'Not Approved'}}">
+            {% if resource.approved %}
+            <i class="fa-solid fa-check"></i>
+            {% else %}
+            <i class="fa-solid fa-ban"></i>
+            {% endif %}
+        </p>
+    </div>
     {% if resources_types[resource.rtype] == 'LINK' %}
     <a href="{{resource.body}}" target="_blank" referrerpolicy="no-referrer" class="hidden">
       <div class="resource-preview">
@@ -77,7 +79,6 @@
       {% endif %}
     </div>
     {% endif %}
-    <hr>
     <div class="resource-card__bottom">
       <div class="resource-votes">
         <a class="upvote {{'has-voted' if resource.has_voted() == 'UPVOTE' else ''}}" href="{{url_for('resources.vote_resource', resource_id=resource.id)}}">

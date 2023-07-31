@@ -52,7 +52,6 @@ def index():
 
 
 @poems.route('/search', methods=['GET', 'POST'])
-@login_required
 def search():
     """Search for poems."""
     # data to be passed to the template.
@@ -61,33 +60,37 @@ def search():
         'results': None
     }
     # call the helper function to properly parse the args
-    queryData = _process_search_query(request.args.to_dict(flat=True))
+    query_data = _process_search_query(request.args.to_dict(flat=True))
     # initialize query
     db_query = Poem.query
 
-    # start the search
-    if queryData.get('q'):
-        q = queryData.pop('q')
+    # search by query string
+    if query_data.get('q'):
+        q = query_data.pop('q')
         db_query = db_query.filter(
             Poem.title.ilike(f"%{q}%") | Poem.description.ilike(f"%{q}%")
         )
-    else:
-        if queryData.get('rating'):
-            ratings = [(0.0, 1.0), (1.1, 3.0), (3.1, 5.0)]
 
-            rating = queryData.pop('rating')
-            for r in ratings:
-                if rating <= r[1]:
-                    db_query = db_query.filter(
-                        (Poem.rating >= r[0]) & (Poem.rating <= r[1])
-                    )
+    # filter by rating
+    if query_data.get('rating'):
+        ratings = [(0, 1), (1, 3), (3, 5)]
+        rating = query_data.pop('rating')
 
-        # query the remaining data
-        db_query = db_query.filter_by(**queryData)
+        for r in ratings:
+            if rating <= r[1]:
+                db_query = db_query.filter(
+                    (Poem.rating >= r[0]) & (Poem.rating <= r[1])
+                )
+                break
+
+    # query the remaining data
+    print(query_data)
+    db_query = db_query.filter_by(**query_data)
 
     # remove unpublished poems if poet is not current user
-    poet = Poet.find_by(user_id=current_user.id, one=True)
-    if current_user.is_poet:
+    if current_user.is_authenticated and current_user.is_poet:
+        poet = Poet.find_by(user_id=current_user.id, one=True)
+
         db_query = db_query.filter(
             ((Poem.author_id == poet.id) & (Poem.published == False)) |
             (Poem.published == True)
@@ -169,19 +172,18 @@ def poem(slugname=None, poem_id=None):
 
     if not context['poem'].published:
         if current_user.is_anonymous or not context['poem'].is_accessible:
-            flash('This poem has not been published yet.', 'error')
+            flash('This poem is not available to you.', 'error')
             return redirect(url_for('.index'))
 
     if context['form'].validate_on_submit():
         Comment.create(
             user_id=current_user.id,
-            poem_id=poem_id,
+            poem_id=context['poem'].id,
             comment=context['form'].comment.data
         )
 
-        flash('Comment posted successfully; you will be notified once approved.',
-              'info')
-        return redirect(url_for('.poem', slugname=context['poem'].slug))
+        flash('Your comment has been added successfully', 'info')
+        return redirect(url_for('.poem', poem_id=context['poem'].id))
 
     return render_template('poems/poem.html', **context)
 
