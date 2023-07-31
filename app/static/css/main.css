@@ -821,7 +821,7 @@ input[type="file"] {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
-  flex-basis: 300px;
+  flex-basis: 100px;
   padding: 1rem;
   position: relative;
   background-color: #fff;
