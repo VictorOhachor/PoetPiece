@@ -7,7 +7,6 @@ gunicorn
 Flask-WTF
 python-dotenv
 Flask-Migrate
-celery
 markdown
 bleach
 wtforms_components

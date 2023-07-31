@@ -4,7 +4,6 @@ from flask_login import LoginManager
 from flask_bootstrap import Bootstrap
 from flask_caching import Cache
 from config import config
-from .celery.init import celery_init_app
 
 bootstrap = Bootstrap()
 db = SQLAlchemy()
@@ -24,7 +23,6 @@ def create_app(config_name):
 
     # Initialize Flask extensions
     db.init_app(app)
-    celery_init_app(app)
     bootstrap.init_app(app)
     login_manager.init_app(app)
     cache.init_app(app)

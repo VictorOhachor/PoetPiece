@@ -7,10 +7,6 @@ from flask_migrate import Migrate
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 migrate = Migrate(app, db)
 
-# make celery app available globally.
-celery_app = app.extensions['celery']
-
-
 @app.shell_context_processor
 def make_shell_context():
     return {

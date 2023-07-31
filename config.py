@@ -13,15 +13,6 @@ class Config:
     UPLOAD_FOLDER = os.path.join(basedir, 'app/static/uploads')
     CACHE_TYPE = 'simple'
     MAX_CONTENT_LENGTH = 1024 * 1024
-    CELERY = {
-        'broker_url': 'redis://localhost',
-        'result_backend': os.environ.get(
-            'CELERY_RESULTS_BACKEND',
-            f'db+sqlite:///{os.path.join(basedir, "application.sqlite")}'
-        ),
-        'task_ignore_result': False,
-        'enable_utc': True
-    }
 
     @staticmethod
     def init_app(app):
