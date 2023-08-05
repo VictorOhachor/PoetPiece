@@ -366,16 +366,14 @@ def edit_stanza(poem_id, stanza_id):
 @login_required
 def delete_comment(poem_id, comment_id):
     """Remove a comment from a poem."""
-    comment = Comment.query.get_or_404(comment_id,
-                                       'Comment not found, hence cannot be deleted')
+    comment = Comment.find_by(comment_id=comment_id, one=True)
 
     if current_user.id != comment.user_id:
-        flash('You cannot delete a comment you did not made.', 'error')
+        flash('You are not authorized to delete this comment', 'error')
     else:
-        db.session.delete(comment)
-        db.session.commit()
-
+        comment.delete()
         flash('Deleted comment successfully', 'info')
+
     # return user to the poem page
     return redirect(url_for('.poem', poem_id=poem_id))
 

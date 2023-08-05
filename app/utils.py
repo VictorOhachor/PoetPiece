@@ -4,9 +4,6 @@ from functools import wraps
 from flask import flash, redirect, url_for, request
 from flask_login import current_user, login_required
 from .models import Poem, Poet, User
-from . import db, cache
-import requests
-from bs4 import BeautifulSoup
 
 
 def is_poet(func):
@@ -42,21 +39,6 @@ def can_manage_poem(poem_id):
     """Check if current user can manipulate poem."""
     poem = Poem.query.get_or_404(poem_id, 'Poem with such id was not found.')
     return poem.is_accessible
-
-
-def _perform_post(form, poetic_user: list):
-    """Perform post operation on form."""
-
-    [form.populate_obj(item) for item in poetic_user]
-    # persist changes to db
-    db.session.add_all(poetic_user)
-    db.session.commit()
-
-    # redirect back to me
-    form_type = form._prefix.split('_')[0]
-    flash(f'Successfully updated your {form_type}.')
-    return redirect(url_for('.me'))
-
 
 def _process_search_query(form_data: dict):
     """Process the form data passed and returned a more refined dict data."""

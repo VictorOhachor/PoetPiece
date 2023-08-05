@@ -1,164 +1,128 @@
-from flask import render_template, redirect, request, flash, url_for
-from flask_login import login_required, login_user, logout_user, current_user
+from flask.views import MethodView
+from flask import render_template, redirect, url_for, flash, request
+from flask_login import current_user, logout_user, login_required
 from . import main
-from .. import db
-from .forms import (LoginForm, SignupForm, PoetForm,
-                    UpdatePasswordForm, EditProfileForm)
-from ..models import User, Poet
-from ..utils import _perform_post
+from ..models import Poet
+from .forms import LoginForm, SignupForm, PoetForm
+from .controllers import MainController
+
+# Create the main controller
+controllers = MainController()
 
 
-@main.route('/', methods=['GET', 'POST'])
-def index():
-    """Implement Index View."""
-    return render_template('index.html')
+class IndexView(MethodView):
+    def get(self):
+        """Return user to the home page"""
+        return render_template('index.html')
 
 
-@main.route('/login', methods=['GET', 'POST'])
-def login():
-    """Implement Login View."""
-    form = LoginForm()
+class LoginView(MethodView):
+    def get(self):
+        form = LoginForm()
 
-    if current_user.is_authenticated:
-        flash('Automatically logged you in.')
-        return redirect(url_for('poems.index'))
-
-    if form.validate_on_submit():
-        username = form.username.data
-        user = User.query.filter_by(username=username).first()
-
-        if user is not None and user.verify_password(form.password.data):
-            login_user(user, form.remember_me.data)
-            next = request.args.get('next')
-            if next is None or not next.startswith('/'):
-                next = url_for('poems.index')
-            return redirect(next)
-        flash('Invalid username or password.', 'error')
-    return render_template('main/login.html', form=form)
-
-
-@main.get('/logout')
-@login_required
-def logout():
-    """Log user out of the session."""
-    logout_user()
-    flash('You have been logged out.')
-    return redirect(url_for('.index'))
-
-
-@main.route('/signup', methods=['GET', 'POST'])
-def signup():
-    """Implement Sign up View."""
-    form = SignupForm()
-
-    if form.validate_on_submit():
-        user = User(username=form.username.data,
-                    password=form.password.data,
-                    birth_date=form.birth_date.data)
-        # persist to database
-        user.save()
-
-        # redirect user to login page or dashboard.
-        flash('You can now login.')
-        return redirect(url_for('.login'))
-
-    return render_template('main/signup.html', form=form)
-
-
-@main.route('/me', methods=['GET', 'POST'])
-@login_required
-def me():
-    """Display and update user information."""
-    poetic_user = db.session.query(User, Poet).filter(
-        User.id == Poet.user_id, User.id == current_user.id
-    ).first()
-
-    if not poetic_user:
-        poetic_user = [User.find_by(id=current_user.id, one=True), ]
-
-    form_data = {}
-
-    for instance in poetic_user:
-        form_data.update(**instance.to_dict())
-
-    context = {
-        'form_data': form_data,
-        'password_form': UpdatePasswordForm(prefix='password_form'),
-        '_poetic_user': poetic_user,
-        'poet': Poet.find_by(user_id=current_user.id, one=True)
-    }
-
-    context['profile_form'] = EditProfileForm(
-        **context['form_data'], prefix='profile_form')
-
-    # perform post operations
-    if context['password_form'].validate_on_submit():
-        return _perform_post(context['password_form'], context['_poetic_user'])
-    
-    if context['profile_form'].validate_on_submit():
-        return _perform_post(context['profile_form'], context['_poetic_user'])
-
-    return render_template('main/me.html', **context)
-
-
-@main.route('/me/become-poet', methods=['GET', 'POST'])
-@login_required
-def become_poet():
-    """Create an poet account for a registered user."""
-    form = PoetForm()
-
-    if Poet.reached_limit():
-        flash('Maximum number of poets reached.', 'error')
-        return redirect(url_for('.me'))
-
-    if form.validate_on_submit():
-        poet = Poet(
-            email=form.email.data,
-            gender=form.gender.data,
-            user_id=current_user.id,
-            bio=form.bio.data
-        )
-        # save to database
-        poet.save()
-
-        # redirect to the profile view
-        flash('Aha! Now, you are in your poetic shoes!')
-        return redirect(url_for('.me'))
-
-    return render_template('main/poet_form.html', form=form)
-
-@main.get('/me/delete-account')
-@login_required
-def delete_me():
-    """Remove a user's account from db (if user is not a poet)."""
-    user = User.find_by(id=current_user.id, one=True)
-    n_content = ''
-
-    if user.is_poet:
-        poet = Poet.find_by(user_id=user.id, one=True)
-
-        if poet.poems.all():
-            err_msg = 'So unfortunate! We will need more information before ' \
-                'we can progress with this operation!'
-            flash(err_msg, 'error')
-            # redirect to the handle survey route
-            return redirect(url_for('.handle_survey', type='account_deletion'))
+        if current_user.is_authenticated:
+            flash('I know who you are; logging you in now...')
+            return redirect(url_for('poems.index'))
         
-        # delete poet account otherwise
-        n_content += f'{poet.poet_name} is no longer a poet piece!'
-        poet.delete()
+        return render_template('main/login.html', form=form)
     
-    # delete user's account if not a poet
-    user.delete()
+    def post(self):
+        form = LoginForm()
 
-    # redirect user back to home
-    flash("Sorry to see you go; You couldn't even enjoy the poetic privileges!")
+        if form.validate_on_submit():
+            # authenticate user with given username and password
+            res = controllers.authenticate_user(
+                form.username.data,
+                form.password.data,
+                form.remember_me.data
+            )
 
-    return redirect(url_for('.index'))
+            if res:
+                return res
+
+        return render_template('main/login.html', form=form)
 
 
-@main.get('/surveys/<string:type>')
-@login_required
-def handle_survey(type):
-    """Handles different types of surveys. COMING SOON!"""
-    return render_template('main/survey.html', survey_title='Account Deletion')
+class SignupView(MethodView):
+    def get(self):
+        """Show user the signup page"""
+        return render_template('main/signup.html', form=SignupForm())
+    
+    def post(self):
+        form = SignupForm(request.form)
+
+        if form.validate_on_submit():
+            return controllers.create_user(
+                username=form.username.data,
+                password=form.password.data,
+                birth_date=form.birth_date.data
+            )
+        
+        return render_template('main/signup.html', form=form)
+
+
+class LogoutView(MethodView):
+    decorators = [login_required,]
+
+    def get(self):
+        """Log user out of the application"""
+        logout_user()
+
+        flash('You chose to log out.')
+        return redirect(url_for('.index'))
+
+
+class ProfileView(MethodView):
+    decorators = [login_required, ]
+
+    def get(self):
+        """Display user's profile."""
+        context = controllers.get_profile()
+        return render_template('main/me.html', **context)
+    
+    def post(self):
+        """Update user's profile or password."""
+        return controllers.update_profile()
+
+
+class BecomePoetView(MethodView):
+    decorators = [login_required]
+
+    def get(self):
+        """Get the form used to create new poet."""
+        form = PoetForm()
+        return render_template('main/poet_form.html', form=form)
+    
+    def post(self):
+        if Poet.reached_limit():
+            flash('At the moment, set maximum limit of poets reached', 'error')
+            return redirect(request.referrer)
+        
+        return controllers.create_poet()
+
+
+class DeleteUserView(MethodView):
+    decorators = [login_required]
+
+    def get(self):
+        """Delete a user's account"""
+        return controllers.delete_account()
+
+
+class SurveyView(MethodView):
+    decorators = [login_required]
+
+    def get(self):
+        """Handles different types of surveys. COMING SOON!"""
+        return render_template('main/survey.html', survey_title='Account Deletion')
+
+
+# Add endpoints for the views
+main.add_url_rule('/', view_func=IndexView.as_view('index'), methods=['GET'])
+main.add_url_rule('/login', view_func=LoginView.as_view('login'), methods=['GET', 'POST'])
+main.add_url_rule('/signup', view_func=SignupView.as_view('signup'), methods=['GET', 'POST'])
+main.add_url_rule('/logout', view_func=LogoutView.as_view('logout'), methods=['GET'])
+main.add_url_rule('/me', view_func=ProfileView.as_view('me'), methods=['GET', 'POST'])
+main.add_url_rule('/become-poet', view_func=BecomePoetView.as_view('become_poet'), methods=['GET', 'POST'])
+main.add_url_rule('/delete-account', view_func=DeleteUserView.as_view('delete_me'), methods=['GET'])
+main.add_url_rule('/take-survey', view_func=LoginView.as_view('handle_survey'), methods=['GET', 'POST'])

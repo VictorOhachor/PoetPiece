@@ -4,12 +4,13 @@ from flask_login import LoginManager
 from flask_bootstrap import Bootstrap
 from flask_caching import Cache
 from config import config
+from flask_migrate import Migrate
 
 bootstrap = Bootstrap()
 db = SQLAlchemy()
 login_manager = LoginManager()
 cache = Cache()
-
+migrate = Migrate(db=db)
 
 def create_app(config_name):
     """Create an instance of this flask application."""
@@ -19,6 +20,7 @@ def create_app(config_name):
     app.config.from_prefixed_env('POETPIECE')
 
     with app.app_context():
+        from .helpers import cleanup
         from . import errors
 
     # Initialize Flask extensions
@@ -26,6 +28,7 @@ def create_app(config_name):
     bootstrap.init_app(app)
     login_manager.init_app(app)
     cache.init_app(app)
+    migrate.init_app(app)
 
     # Register blueprints
     from .main import main as main_bp

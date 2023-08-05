@@ -33,8 +33,8 @@
     <div class="poem-stanza__card hidden">
       {% if poem.is_accessible %}
       <p class="stanza-action__links">
-        <a href="/poems/{{poem.id}}/stanzas/{{stanza.id}}/delete">Delete</a>
-        <a href="/poems/{{poem.id}}/stanzas/{{stanza.id}}/edit">Edit</a>
+        <a href="{{ url_for('poems.delete_stanza', poem_id=poem.id, stanza_id=stanza.id) }}">Delete</a>
+        <a href="{{ url_for('poems.edit_stanza', poem_id=poem.id, stanza_id=stanza.id) }}">Edit</a>
       </p>
       {% endif %}
       <p class="stanza-number">{{stanza.index}}</p>
@@ -58,7 +58,7 @@
     </div>
     {% if poem.is_accessible %}
     <hr width="100%" />
-    <a href="/poems/{{poem.id}}/add_stanza" class="add-stanza">
+    <a href="{{ url_for('poems.add_stanza', poem_id=poem.id) }}" class="add-stanza">
         <i class="fa-solid fa-circle-plus"></i>
         <span>Add New</span>
     </a
@@ -68,8 +68,8 @@
 </div>
 {% if poem.is_accessible %}
 <p class="poem-action__links">
-  <a href="/poems/{{poem.id}}/delete">Delete Poem</a>
-  <a href="/poems/{{poem.id}}/edit">Edit Poem</a>
+  <a href="{{ url_for('poems.delete_poem', poem_id=poem.id) }}">Delete Poem</a>
+  <a href="{{ url_for('poems.edit_poem', poem_id=poem.id) }}"">Edit Poem</a>
 </p>
 {% endif %} {% if not current_user.is_anonymous %}
 <div class="add-comment__form-container">{{ wtf.quick_form(form) }}</div>
@@ -100,7 +100,7 @@
           <span class="comment-status">Approved</span>
           {% endif %} {% if comment.user_id == current_user.id %}
           <a
-            href="/poems/{{poem.id}}/comments/{{comment.id}}/delete"
+            href="{{ url_for('poems.delete_comment', poem_id=poem.id, comment_id=comment.id) }}"
             class="delete-btn"
           >
             Delete
@@ -115,6 +115,6 @@
 {% else %}
 <p class="comments-restricted">Log in to comment</p>
 {% endif %}
-<script src="{{url_for('static', filename='js/toggle_more_actions.js')}}"></script>
-<script src="{{ url_for('static', filename='js/stanzas_slider.js') }}"></script>
+<script src="{{ url_for('static', filename='js/poems/poem_actions_menu.js') }}"></script>
+<script src="{{ url_for('static', filename='js/poems/stanzas_slide.js') }}"></script>
 {% endblock main_content %}
