@@ -54,9 +54,9 @@ class BaseModel(db.Model):
         record.save()
     
     @classmethod
-    def join(cls, model, exec=True):
+    def join(cls, model, column, exec=True):
         query = db.session.query(cls).join(
-            model, model.id == cls.id
+            model, eval(f'model.id == cls.{column}')
         )
 
         # execute the query if exec = True
@@ -105,6 +105,11 @@ class BaseModel(db.Model):
     def get_choices(cls):
         """Get all records as WTForms select field choices."""
         pass
+
+    @classmethod
+    def group_by(cls, *select, group_by=None):
+        group_by = group_by or cls.id
+        return db.session.query(*select).group_by(group_by)
 
     @property
     def slug(self):

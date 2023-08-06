@@ -1,6 +1,7 @@
 from flask import (render_template, redirect, request,
                    flash, url_for, current_app)
 from flask_login import login_required, current_user
+from sqlalchemy.sql import func
 from . import poems
 from .. import db
 from .forms import (PoemForm, CategoryForm, StanzaForm,
@@ -56,7 +57,7 @@ class PoemsController:
     def get_poems(self, category, page, order_by='RECENT'):
 
         # query both the Poem and Category tables
-        query = Poem.join(Category, False)
+        query = Poem.join(Category, 'category_id', False)
 
         # filter out unpublished poems not written by user
         query = self.__get_published_or_owned_by(query)
@@ -91,7 +92,10 @@ class PoemsController:
             try:
                 converter = keys[k]
 
-                if converter is bool and value != '':
+                if not value:
+                    continue
+
+                if converter is bool:
                     query_data[k] = True if value == 'True' else False
                 else:
                     query_data[k] = converter(value)
@@ -111,6 +115,7 @@ class PoemsController:
 
         # query by search string
         if query_params.get('q'):
+            print(type(query_params.get('q')), 'search string')
             search_string = query_params.pop('q')
             query = query.filter(
                 Poem.title.ilike(f'%{search_string}%') | Poem.description.ilike(f'%{search_string}%')
@@ -132,3 +137,29 @@ class PoemsController:
         query = self.__get_published_or_owned_by(query)
 
         return query.order_by(*self.__get_ordering_list('A-Z')).all()
+    
+    def create_category(self, form):
+        category_data = {
+            'name': form.name.data,
+        }
+
+        if form.description.data:
+            category_data['description'] = form.description.data
+        
+        if form.validate_on_submit():
+            try:
+                Category.create(**category_data)
+                flash(f'Successfully created category {category_data["name"]}')
+            except Exception as e:
+                print(str(e))
+                flash(f'Failed to create category {category_data["name"]}')
+    
+    def get_categories(self):
+        # get all poems and group them by their categories
+        categories = Category.find_all()
+        # categories = Poem.group_by(
+        #     Poem.category_id, func.count(Poem.category_id).label('no_poems'),
+        #     group_by=Poem.category_id
+        # ).all()
+
+        return [(category.id, category.poems.count()) for category in categories]

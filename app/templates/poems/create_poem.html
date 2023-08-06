@@ -6,6 +6,6 @@
     {{ wtf.quick_form(form) }}
     <div class="create-category-link">
         <span>Category does not exist?</span>
-        <a href="/categories/new" class="embolden">Create a new category</a>
+        <a href="{{url_for('poems.mutate_categories')}}" class="embolden">Create a new category</a>
     </div>
 {% endblock main_content %}

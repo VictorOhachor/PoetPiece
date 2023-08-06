@@ -44,23 +44,46 @@ class SearchPoemsView(MethodView):
         return render_template('poems/search_poems.html', **context)
 
 
-@poems.route('/categories/new', methods=['GET', 'POST'])
-@is_verified_poet
-def create_category():
-    """Add new category."""
+class CategoryMutationView(MethodView):
+    decorators = [is_poet]
 
-    form = CategoryForm()
+    def get(self):
+        """Get the page that displays the categories and the form for creating a new category."""
+        context = {
+            'form': CategoryForm(),
+            'categories': None
+        }
 
-    if form.validate_on_submit():
-        category = Category(name=form.name.data,
-                            description=form.description.data)
-        category.save()
+        # get the category id from the query parameters
+        category_id = controllers.get_args('category_id')['category_id']
 
-        # redirect back to home
-        flash(f'Created a new category ({form.name.data}).', 'info')
-        return redirect(url_for('.index'))
-    return render_template('poems/create_category.html', form=form)
+        if category_id:
+            category = Category.find_by(id=category_id, one=True)
 
+            if category and category.poems.count() == 0:
+                category.delete()
+                flash(f'Successfully deleted category, {category.name}')
+            else:
+                flash('There are poems under this category, hence cannot proceed!', 'error')
+            return redirect(url_for('.mutate_categories'))
+
+        # get categories ids and no of poems
+        result = controllers.get_categories()
+
+        context['categories'] = [{
+            'category': Category.find_by(id=category_id, one=True),
+            'no_poems': no_poems} for category_id, no_poems in result
+        ]
+
+        return render_template('poems/categories.html', **context)
+    
+    def post(self):
+        """Create a new category"""
+        form = CategoryForm()
+        # create category
+        controllers.create_category(form)
+
+        return redirect(request.referrer)
 
 @poems.route('/poems/new', methods=['GET', 'POST'])
 @is_poet
@@ -364,3 +387,4 @@ def complete_poem(poem_id):
 # Add endpoints for the views
 poems.add_url_rule('/', view_func=IndexView.as_view('index'), methods=['GET'])
 poems.add_url_rule('/search', view_func=SearchPoemsView.as_view('search'), methods=['GET', 'POST'])
+poems.add_url_rule('/categories', view_func=CategoryMutationView.as_view('mutate_categories'), methods=['GET', 'POST'])

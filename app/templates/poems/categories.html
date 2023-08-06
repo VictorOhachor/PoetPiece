@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}Add New Category{% endblock title %}
+{% block main_content %}
+    <h1 class='main-content__title'>Poem Categories</h1>
+    <div class="new-category__container">
+        <h3>Add New Category</h3>
+        <div class="new-category__form">{{ wtf.quick_form(form) }}</div>
+    </div>
+    <hr>
+    <section class="categories-container">
+        {% for item in categories %}
+            <article class="category-card">
+                <h5 class="category-title">{{ item['category'].name }}</h5>
+                <p class="category-desc">{% if item['category'].description %} {{ item['category'].description }} {% else %} <em>Empty</em> {% endif %}</p>
+                <div class="category-metadata">
+                    <p>No of Poems: <span class="embolden">{{ item['no_poems'] }}</span></p>
+                    <p class="category-date">{{  item['category'].created_on }}</p>
+                </div>
+                <a href="{{ url_for('poems.mutate_categories', category_id=item['category'].id) }}">
+                    <i class="fa-solid fa-eject fa-beat-fade"></i>
+                </a>
+            </article>
+        {% endfor %}
+    </section>
+{% endblock main_content %}

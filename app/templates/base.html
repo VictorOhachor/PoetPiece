@@ -31,10 +31,7 @@
     {% for category, message in get_flashed_messages(with_categories=true)[:1] %}
     <p
       class="toast-card {{ 'error-toast' if category == 'error' else 'msg-toast' }}"
-    >
-      {% if category == 'error' %} <strong>Error:</strong> {% endif %} {{
-      message }}
-    </p>
+    >{{ message }}</p>
     {% endfor %}
     <header class="app-header">
       <h3 class="app-logo">

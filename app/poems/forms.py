@@ -79,7 +79,7 @@ class CategoryForm(FlaskForm):
                                           'Category name must have only letters, numbers, or underscores')])
     description = TextAreaField('Describe Briefly the New Category',
                                 validators=[Length(0, 255)],
-                                render_kw={'rows': '3'})
+                                render_kw={'rows': '2'})
     submit = SubmitField('Add Category')
 
 
