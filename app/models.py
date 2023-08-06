@@ -1,4 +1,4 @@
-from . import db, login_manager, cache
+from . import db, login_manager
 from flask import current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, current_user
@@ -40,12 +40,27 @@ class BaseModel(db.Model):
         """Save instance to database."""
         db.session.add(self)
         db.session.commit()
+    
+    @staticmethod
+    def save_all(records):
+        """Save all records to database."""
+        db.session.add_all(records)
+        db.session.commit()
 
     @classmethod
     def create(cls, **kwargs):
         """Create a new record in the table."""
         record = cls(**kwargs)
         record.save()
+    
+    @classmethod
+    def join(cls, model, exec=True):
+        query = db.session.query(cls).join(
+            model, model.id == cls.id
+        )
+
+        # execute the query if exec = True
+        return query.all() if exec else query
 
     def delete(self):
         """Remove instance from database."""
@@ -419,7 +434,7 @@ class Reaction(BaseModel):
 @login_manager.user_loader
 def load_user(user_id):
     """Get user data from database."""
-    return User.query.get(user_id)
+    return User.find_by(id=user_id, one=True)
 
 
 # add event listeners

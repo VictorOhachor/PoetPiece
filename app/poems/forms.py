@@ -37,10 +37,10 @@ class FilterPoemForm(FlaskForm):
     ])
     completed = SelectField('Select Poem State:', choices=[
         ('', 'All'), (False, 'In Progress'), (True, 'Completed')
-    ], coerce=bool)
+    ])
     premium = SelectField('Select Poem Type:', choices=[
         ('', 'All'), (False, 'Free'), (True, 'Premium')
-    ], coerce=bool)
+    ])
     filter_poem = SubmitField('Apply Filters')
 
     def __init__(self, *args, **kwargs):

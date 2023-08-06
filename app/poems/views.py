@@ -1,107 +1,47 @@
 from flask import (render_template, redirect, request,
                    flash, url_for, current_app)
+from flask.views import MethodView
 from flask_login import login_required, current_user
 from . import poems
-from .. import db
+from .controllers import PoemsController
 from .forms import (PoemForm, CategoryForm, StanzaForm,
                     CommentForm, FilterPoemForm)
 from ..models import Poet, Poem, Category, Stanza, Comment
-from ..utils import (is_poet, can_manage_poem, _process_search_query,
-                     is_verified_poet)
+from ..utils import is_poet, can_manage_poem, is_verified_poet
+
+# Intitialize the controller for this view
+controllers = PoemsController()
 
 
-@poems.get('/poems')
-def index():
-    """Fetch all the poems from the database and send to user."""
-    # get query params
-    category = request.args.get('category', '', type=str)
-    page = request.args.get('page', 1, type=int)
-    # data to be passed to template
-    context = {
-        'all_category_names': [c.name for c in Category.find_all()
-                               if c.poems.all()],
-        'pagination': None,
-        'poems': None,
-    }
-    # create pagination object from poems
-    query_poems = db.session.query(Poem).join(
-        Category, Category.id == Poem.category_id
-    )
+class IndexView(MethodView):
+    def get(self):
+        """Get all poems from the database, filter them according and paginate them."""
+        context = {}
 
-    if current_user.is_anonymous or not current_user.is_poet:
-        query_poems = query_poems.filter(Poem.published == True)
-    else:
-        query_poems = query_poems.filter(
-            ((Poem.author_id == Poet.find_by(
-                user_id=current_user.id, one=True).id) & (Poem.published == False))
-            | (Poem.published == True)
-        )
+        request_args = controllers.get_args(**{
+            'category': { 'type': str, 'default': '' },
+            'page': { 'type': int, 'default': 1 },
+        })
 
-    if category:
-        query_poems = query_poems.filter(Category.name == category)
+        # get categories
+        context['all_category_names'] = [c.name for c in Category.find_all() if c.poems.all()]
+        # get pagination object
+        context['pagination'] = controllers.get_poems(**request_args)
+        # get the poems returned from the pagination object
+        context['poems'] = context['pagination'].items
 
-    context['pagination'] = query_poems.order_by(
-        Poem.created_at.desc(), Poem.author_id).paginate(
-        page=page, per_page=current_app.config['FLASK_POEMS_PER_PAGE'],
-        error_out=False
-    )
-    # get poems from pagination object and update context
-    context['poems'] = context['pagination'].items
-
-    return render_template('poems/index.html', **context)
+        return render_template('poems/index.html', **context)
 
 
-@poems.route('/search', methods=['GET', 'POST'])
-def search():
-    """Search for poems."""
-    # data to be passed to the template.
-    context = {
-        'form': FilterPoemForm(request.args),
-        'results': None
-    }
-    # call the helper function to properly parse the args
-    query_data = _process_search_query(request.args.to_dict(flat=True))
-    # initialize query
-    db_query = Poem.query
+class SearchPoemsView(MethodView):
+    def get(self):
+        """Search and filter through the poems returned"""
+        context = {
+            'form': FilterPoemForm(request.args),
+            'results': controllers.search(),
+        }
 
-    # search by query string
-    if query_data.get('q'):
-        q = query_data.pop('q')
-        db_query = db_query.filter(
-            Poem.title.ilike(f"%{q}%") | Poem.description.ilike(f"%{q}%")
-        )
-
-    # filter by rating
-    if query_data.get('rating'):
-        ratings = [(0, 1), (1, 3), (3, 5)]
-        rating = query_data.pop('rating')
-
-        for r in ratings:
-            if rating <= r[1]:
-                db_query = db_query.filter(
-                    (Poem.rating >= r[0]) & (Poem.rating <= r[1])
-                )
-                break
-
-    # query the remaining data
-    print(query_data)
-    db_query = db_query.filter_by(**query_data)
-
-    # remove unpublished poems if poet is not current user
-    if current_user.is_authenticated and current_user.is_poet:
-        poet = Poet.find_by(user_id=current_user.id, one=True)
-
-        db_query = db_query.filter(
-            ((Poem.author_id == poet.id) & (Poem.published == False)) |
-            (Poem.published == True)
-        )
-    else:
-        db_query = db_query.filter_by(published=True)
-    # fetch the data
-    context['results'] = db_query.order_by(
-        Poem.title, Poem.created_at.desc()).all()
-
-    return render_template('poems/search_poems.html', **context)
+        return render_template('poems/search_poems.html', **context)
 
 
 @poems.route('/categories/new', methods=['GET', 'POST'])
@@ -419,3 +359,8 @@ def complete_poem(poem_id):
     flash(f'Poem has been marked as {flash_msg_type}.')
 
     return redirect(url_for('.poem', poem_id=poem_id))
+
+
+# Add endpoints for the views
+poems.add_url_rule('/', view_func=IndexView.as_view('index'), methods=['GET'])
+poems.add_url_rule('/search', view_func=SearchPoemsView.as_view('search'), methods=['GET', 'POST'])

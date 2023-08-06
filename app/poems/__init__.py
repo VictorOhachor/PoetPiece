@@ -1,5 +1,5 @@
 from flask import Blueprint
 
-poems = Blueprint('poems', __name__)
+poems = Blueprint('poems', __name__, url_prefix='/poems')
 
 from . import views
