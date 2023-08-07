@@ -16,7 +16,7 @@ def is_poet(func):
             # redirect to different urls based on referrer
             if not kwargs:
                 return redirect(request.referrer or url_for('.index'))
-            return redirect(url_for('poems.poem', **kwargs))
+            return redirect(url_for('poems.poem_by_id', **kwargs))
         return func(**kwargs)
     return wrapper
 

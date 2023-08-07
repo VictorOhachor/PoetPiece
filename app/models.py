@@ -48,10 +48,14 @@ class BaseModel(db.Model):
         db.session.commit()
 
     @classmethod
-    def create(cls, **kwargs):
+    def create(cls, return_=False, **kwargs):
         """Create a new record in the table."""
         record = cls(**kwargs)
+        # save to database
         record.save()
+
+        if return_:
+            return record
     
     @classmethod
     def join(cls, model, column, exec=True):
@@ -212,10 +216,7 @@ class Category(BaseModel):
 
     @classmethod
     def get_id(cls, name):
-        category = cls.query.filter_by(name=name).first()
-
-        if category:
-            return category.id
+        return cls.find_by(name=name, one=True)
 
     @classmethod
     def get_choices(cls):

@@ -40,7 +40,7 @@
 {% endmacro %}
 
 {% macro poem_card_widget(poem, current_user) %}
-<a href="{{url_for('poems.poem', poem_id=poem.id) if current_user.is_authenticated else url_for('poems.poem', slugname=poem.slug)}}">
+<a href="{{url_for('poems.poem_by_id', poem_id=poem.id) if current_user.is_authenticated else url_for('poems.poem_by_slug', slugname=poem.slug)}}">
   <div class="poem-card">
     <h4 class="poem-title">{{poem.title}}</h4>
     <p class="poem-desc">

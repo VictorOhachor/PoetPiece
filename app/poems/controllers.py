@@ -1,7 +1,7 @@
-from flask import (render_template, redirect, request,
-                   flash, url_for, current_app)
+from flask import redirect, request, flash, url_for, current_app
 from flask_login import login_required, current_user
 from sqlalchemy.sql import func
+from sqlalchemy.exc import OperationalError, IntegrityError
 from . import poems
 from .. import db
 from .forms import (PoemForm, CategoryForm, StanzaForm,
@@ -155,11 +155,60 @@ class PoemsController:
                 flash(f'Failed to create category {category_data["name"]}')
     
     def get_categories(self):
-        # get all poems and group them by their categories
         categories = Category.find_all()
-        # categories = Poem.group_by(
-        #     Poem.category_id, func.count(Poem.category_id).label('no_poems'),
-        #     group_by=Poem.category_id
-        # ).all()
-
         return [(category.id, category.poems.count()) for category in categories]
+    
+    def create_poem(self, data: dict):
+        poet = Poet.find_by(user_id=current_user.id, one=True)
+        category = Category.get_id(data.pop('category'))
+
+        data.update({
+            'category_id': category.id,
+            'author_id': poet.id
+        })
+        poem = None
+
+        try:
+            # create poem
+            poem = Poem.create(return_=True, **data)
+            flash('You have successfully started a new poem; what courage!')
+        except (OperationalError, IntegrityError) as e:
+            if isinstance(e, IntegrityError):
+                message = 'Poem with given title already exists'
+            else:
+                message = 'Failed to create poem due to connection error'
+            
+            flash(message, 'error')
+        
+        return poem
+    
+    def get_poem(self, poem_id=None, slugname=None):
+        if slugname is not None:
+            poem = Poem.find_poem_by_slug(slugname)
+        else:
+            poem = Poem.find_by(id=poem_id, one=True)
+        
+        if poem is not None:
+            if current_user.is_anonymous and poem.premium:
+                flash('This poem is only accessible to registered users.')
+                return None
+            
+            if not poem.published:
+                if current_user.is_anonymous or not poem.is_accessible:
+                    flash('This poem is not accessible now. Come back later', 'error')
+                    return None
+        
+        return poem
+    
+    def add_comment_to_poem(self, poem, comment):
+        try:
+            data = {
+                'user_id': current_user.id,
+                'poem_id': poem.id,
+                'comment': comment
+            }
+
+            Comment.create(**data)
+            flash('Your comment has made its mark on the poem 😊')
+        except IntegrityError as e:
+            flash('You have already added this comment', 'error')

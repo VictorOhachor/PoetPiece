@@ -24,7 +24,7 @@ class PoemForm(FlaskForm):
     category = SelectField('Select Poem Category', coerce=str,
                            validators=[DataRequired()])
     premium = BooleanField('Mark as Premium')
-    submit = SubmitField('Create/Update Poem')
+    submit = SubmitField('Post Poem')
 
 
 class FilterPoemForm(FlaskForm):
@@ -67,7 +67,7 @@ class StanzaForm(FlaskForm):
                          default=1)
     content = TextAreaField('Enter the Stanza Content', validators=[
         DataRequired(), Length(1, 3000)], render_kw={'rows': '10'})
-    submit = SubmitField('Add/Update Stanza')
+    submit = SubmitField('Post Stanza')
 
 
 class CategoryForm(FlaskForm):
