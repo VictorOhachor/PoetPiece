@@ -216,7 +216,8 @@ class Category(BaseModel):
 
     @classmethod
     def get_id(cls, name):
-        return cls.find_by(name=name, one=True)
+        category = cls.find_by(name=name, one=True)
+        return category.id if category else None
 
     @classmethod
     def get_choices(cls):

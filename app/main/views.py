@@ -4,6 +4,7 @@ from flask_login import current_user, logout_user, login_required
 from . import main
 from ..models import Poet
 from .forms import LoginForm, SignupForm, PoetForm
+from ..poems.views import PoetView
 from .controllers import MainController
 
 # Create the main controller
@@ -115,14 +116,3 @@ class SurveyView(MethodView):
     def get(self):
         """Handles different types of surveys. COMING SOON!"""
         return render_template('main/survey.html', survey_title='Account Deletion')
-
-
-# Add endpoints for the views
-main.add_url_rule('/', view_func=IndexView.as_view('index'), methods=['GET'])
-main.add_url_rule('/login', view_func=LoginView.as_view('login'), methods=['GET', 'POST'])
-main.add_url_rule('/signup', view_func=SignupView.as_view('signup'), methods=['GET', 'POST'])
-main.add_url_rule('/logout', view_func=LogoutView.as_view('logout'), methods=['GET'])
-main.add_url_rule('/me', view_func=ProfileView.as_view('me'), methods=['GET', 'POST'])
-main.add_url_rule('/become-poet', view_func=BecomePoetView.as_view('become_poet'), methods=['GET', 'POST'])
-main.add_url_rule('/delete-account', view_func=DeleteUserView.as_view('delete_me'), methods=['GET'])
-main.add_url_rule('/take-survey', view_func=LoginView.as_view('handle_survey'), methods=['GET', 'POST'])

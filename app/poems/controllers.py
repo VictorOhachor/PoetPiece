@@ -1,11 +1,7 @@
 from flask import redirect, request, flash, url_for, current_app
-from flask_login import login_required, current_user
-from sqlalchemy.sql import func
+from flask_login import current_user
+from ..utils import can_manage_poem
 from sqlalchemy.exc import OperationalError, IntegrityError
-from . import poems
-from .. import db
-from .forms import (PoemForm, CategoryForm, StanzaForm,
-                    CommentForm, FilterPoemForm)
 from ..models import Poet, Poem, Category, Stanza, Comment, User
 
 
@@ -212,3 +208,80 @@ class PoemsController:
             flash('Your comment has made its mark on the poem 😊')
         except IntegrityError as e:
             flash('You have already added this comment', 'error')
+    
+    def get_poet(self, poem_id=None):
+        poet = None
+        message = ''
+
+        if poem_id is None:
+            poet = Poet.find_by(user_id=current_user.id, one=True)
+
+            if poet is None:
+                message = 'You are not a poet. Go to your profile page to create a poet account'
+        else:
+            poem = Poem.find_by(id=poem_id, one=True)
+
+            if poem is None:
+                message = 'A poem with given id does not exist'
+            else:
+                poet = Poet.find_by(id=poem.author_id, one=True)
+                
+                if poet is None:
+                    message = 'There is no author associated with this poem'
+        
+        if poet:
+            poems = poet.poems.filter(Poem.id != poem_id)
+
+            if poet.user_id != current_user.id:
+                poems = poems.filter_by(published=True)
+            
+            poems = poems.order_by(*self.__get_ordering_list('RECENT')).limit(
+                current_app.config.get('FLASK_POEMS_PER_PAGE', 5)
+            ).all()
+
+            return poet, poems
+        
+        flash(message, 'error')
+        return False
+    
+    def delete_poem(self, poem_id):
+        if not can_manage_poem(poem_id):
+            flash("Don't be a sly; you cannot control what you don't have!", 'error')
+            return False
+        
+        poem = Poem.find_by(id=poem_id, one=True)
+
+        if poem is None:
+            flash('There is no poem with given id', 'error')
+            return False
+        
+        poem.delete()
+        flash(f'"{poem.title}" is gone 🥹; are you sure you really wanted this?')
+        
+        return True
+    
+    def create_stanza(self, poem_id, index, content):
+        stanza = Stanza.find_by(index=index, poem_id=poem_id, one=True)
+
+        if stanza is not None:
+            flash(f'This poem already has stanza {stanza.index}', 'error')
+            return False
+        
+        # create new stanza
+        Stanza.create(index=index, content=content, poem_id=poem_id)
+
+        flash(f'New stanza has been added to this poem')
+        return True
+    
+    def delete_stanza(self, poem_id, stanza_id):
+        stanza = Stanza.find_by(id=stanza_id, poem_id=poem_id, one=True)
+        
+        if not stanza:
+            flash(f'This poem does not have stanza {stanza_id}', 'error')
+            return False
+        
+        # delete stanza from poem
+        stanza.delete()
+
+        flash(f'Stanza {stanza.index} has been removed from this poem')
+        return True

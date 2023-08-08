@@ -6,29 +6,41 @@ const slideNextBtn = document.querySelector('#slide-forward__btn')
 
 const getPrevStanza = () => {
     const stanzaNumber = +stanzaWhatNumber.textContent
-    // Note that stanzaWhatNumber is always 1 + the stanza index
-    // in stanzaCards
-    const prevStanzaNumber = stanzaNumber > 1 ? stanzaNumber - 1 : stanzaNumber
-    // decrement stanzaWhatNumber by 1
-    stanzaWhatNumber.textContent = `${prevStanzaNumber}`
-    // hide the current stanzaCard
-    stanzaCards[stanzaNumber - 1].classList.add('hidden')
+    // Note that stanzaWhatNumber is always 1 + the stanza index in stanzaCards
+    let prevStanzaNumber = 0;
 
-    return stanzaCards[prevStanzaNumber - 1]
+    console.log(stanzaCards);
+
+    if (stanzaCards.length > 0) {
+        prevStanzaNumber = stanzaNumber > 1 ? stanzaNumber - 1 : stanzaNumber;
+
+        // hide the current stanzaCard
+        stanzaCards[stanzaNumber - 1].classList.add('hidden');
+    }
+
+    // decrement stanzaWhatNumber by 1
+    stanzaWhatNumber.textContent = `${prevStanzaNumber}`;
+
+    return stanzaCards.length > 0 ? stanzaCards[prevStanzaNumber - 1] : null;
 }
 
 const getNextStanzaNo = () => {
     const stanzaNumber = +stanzaWhatNumber.textContent
-    // stanzaWhatNumber textContent is always 1 more than the stanza
-    // index in stanzaCards
-    const nextStanzaNumber = stanzaNumber != stanzaCards.length ?
-        stanzaNumber + 1 : stanzaNumber
-    // increment stanzaWhatNumber textContent by 1
-    stanzaWhatNumber.textContent = `${nextStanzaNumber}`
-    // hide the current stanzaCard
-    stanzaCards[stanzaNumber - 1].classList.add('hidden')
+    // stanzaWhatNumber textContent is always 1 more than the stanza index in stanzaCards
+    let nextStanzaNumber = 0;
 
-    return stanzaCards[nextStanzaNumber - 1]
+    if (stanzaCards.length > 0) {
+        nextStanzaNumber = stanzaNumber != stanzaCards.length ? stanzaNumber + 1 : stanzaNumber
+        
+        // increment stanzaWhatNumber textContent by 1
+        stanzaWhatNumber.textContent = `${nextStanzaNumber}`
+        // hide the current stanzaCard
+        stanzaCards[stanzaNumber - 1].classList.add('hidden')
+    
+        return stanzaCards[nextStanzaNumber - 1]
+    }
+
+    return null;
 }
 
 const showStanza = (slideAction) => {
@@ -43,7 +55,10 @@ const showStanza = (slideAction) => {
     
     if (actionFound) {
         const stanzaCard = slideCommands[slideAction]()
-        stanzaCard.classList.remove('hidden')
+
+        if (stanzaCard) {
+            stanzaCard.classList.remove('hidden')
+        }
     }
 }
 

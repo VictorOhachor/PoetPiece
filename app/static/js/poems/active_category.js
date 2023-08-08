@@ -12,10 +12,12 @@ window.addEventListener('load', () => {
             get: (searchParams, prop) => searchParams.get(prop),
         });
 
-        if (location.pathname === categoryName.pathname &&
-            windowParams.category === categoryParams.category
-        ) {
+        console.log(location.pathname, categoryName.pathname)
+        console.log(windowParams.category, categoryParams.category)
+
+        if (windowParams.category === categoryParams.category) {
             categoryName.classList.add('category-name__active');
+            break
         }
     }
 })

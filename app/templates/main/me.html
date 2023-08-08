@@ -7,7 +7,7 @@ My {{ 'Poetic' if current_user.is_poet else 'To-Be-Poetic' }} Profile{% endblock
   {% if not current_user.is_poet %}
   <a href="{{url_for('main.become_poet')}}" class="action-btn">Become a Poet</a>
   {% else %}
-  <a href="{{url_for('poems.view_poet')}}" class="action-btn">Preview Profile</a>
+  <a href="{{url_for('main.preview_profile')}}" class="action-btn">Preview Profile</a>
   {% endif %}
 </div>
 <div class="me-form__container profile-form__container">

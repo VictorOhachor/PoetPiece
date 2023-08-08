@@ -1,5 +1,4 @@
-from flask import (render_template, redirect, request,
-                   flash, url_for, current_app)
+from flask import render_template, redirect, request, flash, url_for
 from flask.views import MethodView
 from flask_login import login_required, current_user
 from . import poems
@@ -144,242 +143,199 @@ class PoemView(MethodView):
         return redirect(url_for('.poem_by_id', poem_id=poem.id))
 
 
-@poems.route('/me/view-as-user')
-@poems.route('/poems/<string:poem_id>/view-poet')
-@login_required
-def view_poet(poem_id=None):
-    """View the profile of the author of a poem."""
-    context = {
-        'poet': None,
-        'other_poems': None
-    }
+class PoetView(MethodView):
+    decorators = [login_required]
 
-    if not poem_id:
-        context['poet'] = Poet.find_by(user_id=current_user.id, one=True)
-        if not context['poet']:
-            flash('This user is no poet!', 'error')
-            return redirect(url_for('main.me'))
-    else:
+    def get(self, poem_id=None):
+        """View the your profile as a poet or the profile of the author of a poem."""
+        result = controllers.get_poet(poem_id)
+
+        if not result:
+            url = request.referrer if request.referrer != request.url else url_for('.index')
+            return redirect(url)
+        
+        context = {'poet': result[0], 'other_poems': result[1]}
+        return render_template('poems/poet.html', **context)
+
+
+class PoemEditView(MethodView):
+    decorators = [is_poet]
+
+    def get(self, poem_id):
+        # get poem by id
         poem = Poem.find_by(id=poem_id, one=True)
-        if not poem:
-            flash('A poem with given id does not exist.', 'error')
-            return redirect(url_for('poems.index'))
+        # get poem category
+        category = Category.find_by(id=poem.category_id, one=True)
 
-        # get poet data from db
-        context['poet'] = Poet.find_by(id=poem.author_id, one=True)
-        if not context['poet']:
-            flash('This poem is no longer owned by a poet. The poet must '
-                  'have deleted their account.', 'error')
-            return redirect(url_for('poems.index'))
+        # initialize form
+        form = PoemForm(category=category.name, obj=poem)
+    
+        return render_template('poems/create_poem.html', form=form, update=True)
+    
+    def post(self, poem_id):
+        form = PoemForm()
 
-    # get other poems written by same poet
-    context['other_poems'] = context['poet'].poems.filter(Poem.id != poem_id)
+        if form.validate_on_submit():
+            try:
+                poem = Poem.find_by(id=poem_id, one=True)
+                form.populate_obj(poem)
 
-    # filter by published when other user aside the poet is viewing page
-    if context['poet'].user_id != current_user.id:
-        context['other_poems'] = context['other_poems'].filter_by(
-            published=True)
+                category_id = Category.get_id(form.category.data)
+                if category_id is None:
+                    flash('This category is not supported!', 'error')
+                else:
+                    poem.category_id = category_id
+                    poem.save()
 
-    context['other_poems'] = context['other_poems'].order_by(
-        Poem.rating.desc(), Poem.updated_at.desc()
-    ).limit(current_app.config['FLASK_POEMS_PER_PAGE']).all()
+                    flash('Poem has been updated successfully')
 
-    return render_template('poems/poet.html', **context)
-
-
-@poems.route('/poems/<string:poem_id>/edit', methods=['GET', 'POST'])
-@is_poet
-def edit_poem(poem_id):
-    """Edit poem (with given id) title and description."""
-    # get poem by id
-    poem = Poem.find_by(id=poem_id, one=True)
-    # get category
-    category = Category.find_by(id=poem.category_id, one=True)
-    # initialize form
-    form = PoemForm(category=category.name, obj=poem)
-
-    if form.validate_on_submit():
-        # update poem
-        form.populate_obj(poem)
-        poem.category_id = Category.get_id(form.category.data)
-        # persist to database
-        poem.save()
-        # redirect to poems
-        flash('Poem has been updated successfully.', 'info')
-        return redirect(url_for('.poem_by_id', poem_id=poem_id))
-    return render_template('poems/create_poem.html', form=form, update=True)
+                return redirect(url_for('.poem_by_id', poem_id=poem.id))
+            except:
+                flash('Something went wrong; try again.', 'error')
+        
+        return redirect(url_for('.edit_poem', poem_id=poem_id))
 
 
-@poems.get('/poems/<string:poem_id>/delete')
-@is_poet
-def delete_poem(poem_id):
-    """ Delete a poem and all the associated stanzas. """
-    if not can_manage_poem(poem_id):
-        flash("Don't be a sly; you cannot remove what you didn't create!", 'error')
+class PoemDeletionView(MethodView):
+    decorators = [is_poet]
+
+    def get(self, poem_id):
+        """Delete a poem and all its associated stanzas."""
+        success = controllers.delete_poem(poem_id)
+
+        if success:
+            return redirect(url_for('.index'))
+        
         return redirect(url_for('.poem_by_id', poem_id=poem_id))
 
-    # get poem
-    poem = Poem.find_by(id=poem_id, one=True)
-    # delete poem
-    poem.delete()
-    # redirect to dashboard home
-    flash('Deletion successfully; what a courage!', 'info')
-    return redirect(url_for('.index'))
 
+class StanzaCreationView(MethodView):
+    decorators = [is_poet]
 
-@poems.route('/poems/<string:poem_id>/add_stanza', methods=['GET', 'POST'])
-@is_poet
-def add_stanza(poem_id):
-    """Add new stanza to poem with given id."""
-    if not can_manage_poem(poem_id):
-        flash('You are not the author of this poem, hence, edit is restricted',
-              'error')
-        return redirect(url_for('.poem_by_id', poem_id=poem_id))
+    def get(self, poem_id):
+        if not can_manage_poem(poem_id):
+            flash('You are unauthorized to create a new Stanza for this poem', 'error')
+            return redirect(url_for('.poem_by_id', poem_id=poem_id))
+        
+        poem = Poem.find_by(id=poem_id, one=True)
+        form = StanzaForm(index=poem.stanzas.count() + 1)
 
-    poem = Poem.find_by(id=poem_id, one=True)
+        return render_template('poems/add_stanza.html', form=form)
+    
+    def post(self, poem_id):
+        form = StanzaForm()
 
-    # create form
-    form = StanzaForm()
-    form.index.data = poem.stanzas.count() + 1
+        if not can_manage_poem(poem_id):
+            flash('You are unauthorized to create a new Stanza for this poem', 'error')
+            return redirect(url_for('.poem_by_id', poem_id=poem_id))
 
-    if form.validate_on_submit():
-        stanza = Stanza.find_by(index=form.index.data, poem_id=poem_id,
-                                one=True)
-
-        if stanza:
-            flash(f'Stanza {stanza.index} already exists in poem.', 'error')
-        else:
-            Stanza.create(
-                index=form.index.data,
-                content=form.content.data,
-                poem_id=poem_id
+        if form.validate_on_submit():
+            controllers.create_stanza(
+                poem_id, form.index.data, form.content.data
             )
 
-            flash(f'Stanza {form.index.data} has been added successfully.',
-                  'info')
+            return redirect(url_for('.poem_by_id', poem_id=poem_id))
+        
+        return redirect(url_for('.add_stanza', poem_id=poem_id))
 
+
+class StanzaDeletionView(MethodView):
+    decorators = [is_poet]
+
+    def get(self, poem_id, stanza_id):
+        if not can_manage_poem(poem_id):
+            flash('You are unauthorized to create a new Stanza for this poem', 'error')
+            return redirect(url_for('.poem_by_id', poem_id=poem_id))
+        
+        controllers.delete_stanza(poem_id, stanza_id)
         return redirect(url_for('.poem_by_id', poem_id=poem_id))
 
-    return render_template('poems/add_stanza.html', form=form)
 
+class StanzaEditView(MethodView):
+    decorators = [is_poet]
 
-@poems.get('/poems/<string:poem_id>/stanzas/<string:stanza_id>/delete')
-@is_poet
-def delete_stanza(poem_id, stanza_id):
-    """Remove a stanza from a poem."""
-    if not can_manage_poem(poem_id):
-        flash('You are not the author of this poem, hence, edit is restricted',
-              'error')
+    def get(self, poem_id, stanza_id):
+        if not can_manage_poem(poem_id):
+            flash('You are unauthorized to create a new Stanza for this poem', 'error')
+            return redirect(url_for('.poem_by_id', poem_id=poem_id))
+        
+        stanza = Stanza.find_by(id=stanza_id, poem_id=poem_id, one=True)
+        if not stanza:
+            flash('No stanza found with given id; create new stanza', 'error')
+            return redirect(url_for('add_stanza', poem_id=poem_id))
+        
+        form = StanzaForm(obj=stanza)
+
+        return render_template('poems/add_stanza.html', form=form, update=True)
+    
+    def post(self, poem_id, stanza_id):
+        if not can_manage_poem(poem_id):
+            flash('You are unauthorized to create a new Stanza for this poem', 'error')
+            return redirect(url_for('.poem_by_id', poem_id=poem_id))
+        
+        form = StanzaForm()
+        stanza = Stanza.find_by(id=stanza_id, poem_id=poem_id, one=True)
+        
+        if not stanza:
+            flash('No stanza found with given id, hence cannot edit.', 'error')
+        else:
+            if form.validate_on_submit():
+                form.populate_obj(stanza)
+                stanza.save()
+
+                flash(f'Successfully updated stanza {stanza.index}')
+        
+        return redirect(url_for('.poem_by_id', poem_id=poem_id))
+    
+
+class CommentDeletionView(MethodView):
+    decorators = [login_required]
+
+    def get(self, poem_id, comment_id):
+        comment = Comment.find_by(id=comment_id, one=True)
+
+        if current_user.id != comment.user_id:
+            flash('You are not authorized to delete this comment', 'error')
+        else:
+            if comment is None:
+                flash('No comment with given id exists', 'error')
+            else:
+                comment.delete()
+                flash(f'You have deleted comment "{comment.comment[:10]}..." from this poem')
+        
         return redirect(url_for('.poem_by_id', poem_id=poem_id))
 
-    stanza = Stanza.find_by(id=stanza_id, poem_id=poem_id, one=True)
 
-    if not stanza:
-        flash(f'Stanza {stanza_id} not found in poem or poem id does '
-              'not exist.', 'error')
-        return redirect(url_for('.index'))
+class PoemPublishView(MethodView):
+    decorators = [is_poet]
 
-    # delete stanza from poem.
-    stanza.delete()
+    def get(self, poem_id):
+        if not can_manage_poem(poem_id):
+            flash('You cannot publish/unpublish a poem that is not yours!', 'error')
+        else:
+            poem = Poem.find_by(id=poem_id, one=True)
+            poem.publish()
 
-    # redirect to the poem page
-    flash(f'Successfully deleted stanza {stanza.index} from poem.', 'info')
-    return redirect(url_for('.poem_by_id', poem_id=poem_id))
-
-
-@poems.route('/poems/<string:poem_id>/stanzas/<string:stanza_id>/edit',
-             methods=['GET', 'POST'])
-@is_poet
-def edit_stanza(poem_id, stanza_id):
-    """Edit stanza of poem with given id."""
-    if not can_manage_poem(poem_id):
-        flash('You are not the author of this poem, hence, edit is restricted',
-              'error')
+            flash('Now the world can see your creative piece; bravo!' if poem.published
+                else 'You have unpublished your creative piece; do you know?')
+        
         return redirect(url_for('.poem_by_id', poem_id=poem_id))
 
-    stanza = Stanza.find_by(id=stanza_id, poem_id=poem_id, one=True)
 
-    if not stanza:
-        flash('Stanza was not found, hence cannot be edited.', 'error')
-        return redirect(url_for('.index'))
+class CompletePoemView(MethodView):
+    decorators = [is_poet]
 
-    # create and populate form
-    form = StanzaForm(obj=stanza)
+    def get(self, poem_id):
+        if not can_manage_poem(poem_id):
+            flash('You are not the author of this poem', 'error')
+        else:
+            poem = Poem.find_by(id=poem_id, one=True)
 
-    if form.validate_on_submit():
-        form.populate_obj(stanza)
-        # save edits
-        stanza.save()
-
-        flash(f'Successfully updated stanza {stanza.index}.', 'info')
+            if not poem:
+                flash('Poem with given id does not exist', 'error')
+            else:
+                poem.completed = not poem.completed
+                poem.save()
+                flash('Poem status has been updated')
+        
         return redirect(url_for('.poem_by_id', poem_id=poem_id))
-
-    return render_template('poems/add_stanza.html', form=form, update=True)
-
-
-@poems.get('/poems/<string:poem_id>/comments/<string:comment_id>/delete')
-@login_required
-def delete_comment(poem_id, comment_id):
-    """Remove a comment from a poem."""
-    comment = Comment.find_by(id=comment_id, one=True)
-
-    if current_user.id != comment.user_id:
-        flash('You are not authorized to delete this comment', 'error')
-    else:
-        comment.delete()
-        flash('Deleted comment successfully', 'info')
-
-    # return user to the poem page
-    return redirect(url_for('.poem_by_id', poem_id=poem_id))
-
-
-@poems.get('/poems/<string:poem_id>/publish')
-@is_poet
-def publish_poem(poem_id):
-    """Publish or unpublish the poem with given id."""
-    if not can_manage_poem(poem_id):
-        flash('You are not the author of this poem, hence, edit is restricted',
-              'error')
-        return redirect(url_for('.poem_by_id', poem_id=poem_id))
-
-    # fetch poem by id
-    poem = Poem.find_by(id=poem_id, one=True)
-    # publish poem
-    poem.publish()
-    published = 'PUBLISHED' if poem.published else 'UNPUBLISHED'
-    # redirect to
-    flash('Successfully published poem for the world to see!' if poem.published
-          else 'Poem has been unpublished')
-
-    return redirect(url_for('.poem_by_id', poem_id=poem_id))
-
-
-@poems.get('/poems/<string:poem_id>/complete')
-@is_poet
-def complete_poem(poem_id):
-    """Publish or unpublish the poem with given id."""
-    if not can_manage_poem(poem_id):
-        flash('You are not the author of this poem, hence, edit is restricted',
-              'error')
-        return redirect(url_for('.poem_by_id', poem_id=poem_id))
-
-    # fetch poem by id
-    poem = Poem.find_by(id=poem_id, one=True)
-
-    # toggle completed attribute and persist to db
-    poem.completed = False if poem.completed else True
-    poem.save()
-    # set flash message
-    flash_msg_type = 'complete' if poem.completed else 'incomplete'
-    flash(f'Poem has been marked as {flash_msg_type}.')
-
-    return redirect(url_for('.poem_by_id', poem_id=poem_id))
-
-
-# Add endpoints for the views
-poems.add_url_rule('/', view_func=IndexView.as_view('index'), methods=['GET'])
-poems.add_url_rule('/search', view_func=SearchPoemsView.as_view('search'), methods=['GET', 'POST'])
-poems.add_url_rule('/categories', view_func=CategoryMutationView.as_view('mutate_categories'), methods=['GET', 'POST'])
-poems.add_url_rule('/new', view_func=PoemCreationView.as_view('create_poem'), methods=['GET', 'POST'])
-poems.add_url_rule('/<string:poem_id>', view_func=PoemView.as_view('poem_by_id'), methods=['GET', 'POST'])
-poems.add_url_rule('/s/<string:slugname>', view_func=PoemView.as_view('poem_by_slug'), methods=['GET', 'POST'])
