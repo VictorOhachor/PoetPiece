@@ -44,6 +44,10 @@ class ResourceCreationView(MethodView):
 
             if success:
                 return redirect(url_for('.index', type=r_type))
+        
+        for error in form.errors.items():
+            flash(error[1][0], 'error')
+            break
 
         return redirect(url_for('.create_resource', type=r_type))
 

@@ -31,10 +31,8 @@ class BodyFieldMixin:
         cls.body = BODY_TYPES.get(body_type)
 
         form = cls(request.form)
-
-        # Set a custom description if it hasn't been set by the user
-        if not form.body.description:
-            form.body.description = 'This field supports markdown'
+        if body_type in ['BRIEF', 'COURSE']:
+            form.body.description = 'Feel free to use Markdown'
 
         return form
 
