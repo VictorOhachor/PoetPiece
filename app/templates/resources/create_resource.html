@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
-{% block title %}Create New Resource{% endblock title %}
+{% block title %}{{ 'Update this' if g.update else 'Create New' }} {{g.r_type|title}} Resource{% endblock title %}
 {% block main_content %}
 <div class="text-center">
-  <h1 class="main-content__title">CREATE A POETIC RESOURCE</h1>
-  <small>Resources can be any of {{", ".join(resources_types)}}</small>
+  <h1 class="main-content__title">What Poetic Thoughts do You Hope to Share?</h1>
+  <small>Resources can be any of <strong>{{", ".join(resources_types)}}</strong>.</small>
 </div>
 <p class="resources-action__links">
   <a href="{{url_for('resources.index', type=r_type)}}" class="action-btn action-btn__hp-2">View Resources</a>
@@ -19,7 +19,7 @@
   {% endfor %}
 </p>
 <div class="create-resource__container">
-  {{ wtf.quick_form(form) }}
+  {{ wtf.quick_form(g.form) }}
 </div>
-<script src="{{url_for('static', filename='js/active_resource_type.js')}}"></script>
+<script src="{{url_for('static', filename='js/resources/active_resource_type.js')}}"></script>
 {% endblock main_content %}

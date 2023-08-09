@@ -12,8 +12,6 @@ def handle_db_connection_error(e):
     # Generate a unique hash for the request data to use as an idempotency key
     data_hash = hash(frozenset(request.form.items()))
 
-    print(data_hash)
-
     if data_hash in failed_posts:
         flash('There was a server timeout, but it has been resolved', 'error')
         return redirect(request.url)
@@ -22,7 +20,8 @@ def handle_db_connection_error(e):
         # Mark the data as failed
         failed_posts[data_hash] = time.time()
 
-    return redirect(url_for(request.referrer))
+    flash('Database connection failed; retrying...', 'error')
+    return redirect(request.referrer)
 
 
 @current_app.errorhandler(404)

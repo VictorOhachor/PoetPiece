@@ -1,8 +1,6 @@
 const resourceTypes = document.querySelectorAll('.resource-types .resource-type')
 
 const makeResourceTypeActive = () => {
-  let exact = false
-
   const queryString = window.location.search
   const params = new URLSearchParams(queryString)
   // get "type" param

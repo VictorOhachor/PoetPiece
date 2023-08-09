@@ -7,7 +7,7 @@ from uuid import uuid4
 import os
 
 
-class ResourceManager:
+class ResourceController:
     """Provide a user-friendly API for managing resources."""
 
     def __init__(self):
@@ -85,39 +85,39 @@ class ResourceManager:
     def create(self, data: dict):
         """Create a resource."""
         r_type = request.args.get('type', 'LINK')
+
         try:
             r_data = self._extract_data(data)
             self.model.create(**r_data)
+            
             flash(f'{r_type} resource successfully created.')
+            return True
         except Exception as e:
             flash(str(e), 'error')
-        finally:
-            return redirect(url_for('resources.create_resource', type=r_type))
+        
+        return False
 
     def find_by_type(self, itype, sort=False):
         """Find resources by numerical resource type."""
         db_query = self.model.query
 
-        if current_user.is_poet:
-            # fetch the poet account
-            poet = Poet.find_by(user_id=current_user.id, one=True)
-            # query db for resources based on type
-            db_query = db_query.filter(
-                (Resource.rtype == itype) & (
-                    (Resource.published == True) | (
-                        (Resource.poet_id == poet.id) & (
-                            Resource.published == False)
-                    )
-                )
-            )
-        else:
-            db_query = db_query.filter_by(published=True)
-        
-        # order by latest
-        db_query = db_query.order_by(Resource.created_at.desc())
+        if itype is not None:
+            if current_user.is_poet:
+                # fetch the poet account
+                poet = Poet.find_by(user_id=current_user.id, one=True)
+                # query db for resources based on type
+                db_query = db_query.filter(
+                    (Resource.rtype == itype) & ((Resource.published == True) | (
+                        (Resource.poet_id == poet.id) & (Resource.published == False))))
+            else:
+                db_query = db_query.filter_by(rtype=itype, published=True)
 
         if sort:
+            # order by title ascending
             db_query = db_query.order_by(Resource.title)
+        else:
+            # order by latest
+            db_query = db_query.order_by(Resource.created_at.desc())
 
         return db_query.all()
 
@@ -140,6 +140,3 @@ class ResourceManager:
             Reaction.create(user_id=current_user.id, reaction_type=vote_type,
                             record_id=resource.id)
         return True
-
-
-manager = ResourceManager()

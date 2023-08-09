@@ -16,7 +16,7 @@ def cleanup_failed_posts():
     with lock:
         current_time = time.time()
         # Remove entries older than CLEANUP_INTERVAL seconds
-        keys_to_remove = [key for key, timestamp in failed_posts 
+        keys_to_remove = [key for key, timestamp in failed_posts.items() 
                           if current_time - timestamp > CLEANUP_INTERVAL]
         for key in keys_to_remove:
             del failed_posts[key]

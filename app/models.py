@@ -132,7 +132,8 @@ class User(UserMixin, BaseModel):
 
     # foreign keys
     poet = db.relationship('Poet', backref='users', uselist=False)
-    comments = db.relationship('Comment', backref='users', lazy='dynamic')
+    comments = db.relationship('Comment', backref='users', lazy='dynamic', 
+                               cascade='all, delete, delete-orphan')
 
     @property
     def last_login(self):
@@ -175,8 +176,10 @@ class Poet(BaseModel):
     bio = db.Column(db.String(3000), nullable=True)
 
     # foreign keys
-    resources = db.relationship('Resource', backref="poets", lazy='dynamic')
-    poems = db.relationship('Poem', backref='poets', lazy='dynamic')
+    resources = db.relationship('Resource', backref="poets", lazy='dynamic',
+                                cascade='all, delete, delete-orphan')
+    poems = db.relationship('Poem', backref='poets', lazy='dynamic',
+                            cascade='all, delete, delete-orphan')
 
     @property
     def became_poet_on(self):
@@ -389,7 +392,8 @@ class Resource(BaseModel):
     @classmethod
     def get_type_value(cls, t):
         """Return the value of the key passed as resource type."""
-        return cls.ResourceTypes.__members__.get(t).value
+        rt = cls.ResourceTypes.__members__.get(t, None)
+        return rt.value if rt is not None else None
 
     @staticmethod
     def on_changed_body(target, value, oldvalue, initiator):

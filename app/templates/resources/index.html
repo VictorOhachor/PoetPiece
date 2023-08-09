@@ -1,72 +1,95 @@
-{% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
-{% block title %}All Poetic Resources{% endblock title %}
-{% block main_content %}
+{% extends "base.html" %} {% import "bootstrap/wtf.html" as wtf %} {% block
+title %}{{'All' if not g.r_type else g.r_type|title}} Poetic Resources{% endblock title %} {% block main_content %}
 <div>
-  <h1 class="main-content__title">Poetic Resources</h1>
+  <h1 class="main-content__title">{{'All' if not g.r_type else g.r_type|title}} Poetic Resources</h1>
   <p class="embolden text-center">
     Want to learn more about poetry? You are at the right place!
   </p>
 </div>
 <p class="resources-action__links">
   {% if current_user.is_poet %}
-  <a href="{{url_for('resources.create_resource', type=r_type)}}" class="action-btn action-btn__hp-2">Create Resource</a>
+  <a
+    href="{{url_for('resources.create_resource', type=g.r_type)}}"
+    class="action-btn action-btn__hp-2"
+    >Create Resource</a
+  >
   {% endif %}
 </p>
-<hr>
+<hr />
 <p class="resource-types">
+  <a
+    class="resource-type"
+    href="{{ url_for('resources.index')}}"
+  >
+    <i class="fa-solid fa-earth-oceania"></i>
+    All
+  </a>
   {% for r_type in resources_types %}
-  <a class="resource-type" id="{{r_type}}" href="{{url_for('resources.index', type=r_type)}}">
+  <a
+    class="resource-type"
+    id="{{r_type}}"
+    href="{{url_for('resources.index', type=r_type)}}"
+  >
     <i class="fa-solid fa-{{types_icons[resources_types.index(r_type)]}}"></i>
     {{r_type|title}}
   </a>
   {% endfor %}
 </p>
-<div id="selected-resource"></div>
 <section class="resources-container">
-  {% if not resources %}
-  <p class="empty-list">
-    No resource available under this section.
-  </p>
-  {% endif %}
-  {% for resource in resources %}
-  <article class="resource-card" data-rtype="{{resources_types[resource.rtype]}}">
+  {% if not g.resources %}
+  <p class="empty-list">No resource available under this section.</p>
+  {% endif %} {% for resource in g.resources %}
+  <article
+    class="resource-card"
+    data-rtype="{{resources_types[resource.rtype]}}"
+  >
     <p class="resource-metadata">
-      <span class="creator">Posted by <strong>{{resource.poets.poet_name}}</strong> on</span>
+      <span class="creator"
+        >Posted by <strong>{{resource.poets.poet_name}}</strong> on</span
+      >
       <span class="created-on">{{resource.created_at.date()}}</span>
     </p>
     <div class="resource-card__top">
-        {% if resource.is_accessible %}
-            <a href="{{url_for('resources.publish_resource', resource_id=resource.id, type=resources_types[resource.rtype])}}" class="publish-btn underline">
-            {{'Publish' if not resource.published else 'Unpublish'}}
-            </a>
+      {% if resource.is_accessible %}
+      <a
+        href="{{url_for('resources.publish_resource', resource_id=resource.id, type=resources_types[resource.rtype])}}"
+        class="publish-btn underline"
+      >
+        {{'Publish' if not resource.published else 'Unpublish'}}
+      </a>
+      {% endif %}
+      <p
+        class="approved-resource resource-{{'approved' if resource.approved else 'unapproved'}}"
+        title="{{'Approved' if resource.approved else 'Not Approved'}}"
+      >
+        {% if resource.approved %}
+        <i class="fa-solid fa-check"></i>
+        {% else %}
+        <i class="fa-solid fa-ban"></i>
         {% endif %}
-        <p class="approved-resource resource-{{'approved' if resource.approved else 'unapproved'}}" title="{{'Approved' if resource.approved else 'Not Approved'}}">
-            {% if resource.approved %}
-            <i class="fa-solid fa-check"></i>
-            {% else %}
-            <i class="fa-solid fa-ban"></i>
-            {% endif %}
-        </p>
+      </p>
     </div>
     {% if resources_types[resource.rtype] == 'LINK' %}
-    <a href="{{resource.body}}" target="_blank" referrerpolicy="no-referrer" class="hidden">
-      <div class="resource-preview">
-        <img src="" alt="">
-        <h4 class="title"></h4>
-        <p class="description"></p>
-      </div>
-    </a>
     <div class="resource-link-summary">
       <h4 class="title">{{resource.title|title}}</h4>
-      <div class="link-resource">
-        {{resource.body_html|safe}}
-      </div>
+      <div class="link-resource">{{resource.body_html|safe}}</div>
     </div>
+    <a
+        href="{{resource.body}}"
+        target="_blank"
+        referrerpolicy="no-referrer"
+        class="hidden"
+    >
+        <div class="resource-preview">
+        <img src="" alt="" />
+        <h4 class="title"></h4>
+        <p class="description"></p>
+        </div>
+    </a>
     {% elif resources_types[resource.rtype] == 'IMAGE' %}
     <div class="image-resource">
       <h4 class="title">{{resource.title}}</h4>
-      <img src="{{resource.body}}" alt="{{resource.title}}">
+      <img src="{{resource.body}}" alt="{{resource.title}}" />
     </div>
     {% else %}
     <div class="resource-content">
@@ -75,35 +98,49 @@
         {{resource.body_html|safe if resource.body_html else resource.body}}
       </div>
       {% if resources_types[resource.rtype] == 'COURSE' %}
-      <a href="" class="view-more__btn action-btn action-btn__hp-2">Learn More</a>
+      <a href="" class="view-more__btn action-btn action-btn__hp-2"
+        >Learn More</a
+      >
       {% endif %}
     </div>
     {% endif %}
     <div class="resource-card__bottom">
       <div class="resource-votes">
-        <a class="upvote {{'has-voted' if resource.has_voted() == 'UPVOTE' else ''}}" href="{{url_for('resources.vote_resource', resource_id=resource.id)}}">
+        <a
+          class="upvote {{'has-voted' if resource.has_voted() == 'UPVOTE' else ''}}"
+          href="{{url_for('resources.vote_resource', resource_id=resource.id)}}"
+        >
           <i class="fa-solid fa-circle-arrow-up"></i>
           <span class="vote-count">{{resource.upvotes}}</span>
         </a>
-        <a class="downvote {{'has-voted' if resource.has_voted() == 'DOWNVOTE' else ''}}" href="{{url_for('resources.vote_resource', resource_id=resource.id, downvote='')}}">
+        <a
+          class="downvote {{'has-voted' if resource.has_voted() == 'DOWNVOTE' else ''}}"
+          href="{{url_for('resources.vote_resource', resource_id=resource.id, downvote='')}}"
+        >
           <i class="fa-solid fa-circle-arrow-down"></i>
           <span class="vote-count">{{resource.downvotes}}</span>
         </a>
       </div>
       {% if resource.is_accessible %}
-        <p class="resource-action__links">
-          <a href="{{url_for('resources.delete_resource', resource_id=resource.id, type=resources_types[resource.rtype])}}" id="delete-resource">
-            <i class="fa-regular fa-trash-can"></i>
-          </a>
-          <a href="{{url_for('resources.update_resource', resource_id=resource.id, type=resources_types[resource.rtype])}}">
-            <i class="fa-solid fa-pen-to-square"></i>
-          </a>
-        </p>
+      <p class="resource-action__links">
+        <a
+          href="{{url_for('resources.delete_resource', resource_id=resource.id, type=resources_types[resource.rtype])}}"
+          id="delete-resource"
+        >
+          <i class="fa-regular fa-trash-can"></i>
+        </a>
+        <a
+          href="{{url_for('resources.update_resource', resource_id=resource.id, type=resources_types[resource.rtype])}}"
+        >
+          <i class="fa-solid fa-pen-to-square"></i>
+        </a>
+      </p>
       {% endif %}
     </div>
   </article>
   {% endfor %}
 </section>
+<div id="selected-resource"></div>
 <script src="{{url_for('static', filename='js/resources/active_resource_type.js')}}"></script>
 <script src="{{url_for('static', filename='js/resources/expand_resource_card.js')}}"></script>
 <script src="{{url_for('static', filename='js/resources/preview_link.js')}}"></script>

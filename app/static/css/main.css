@@ -303,67 +303,67 @@ select option {
 }
 
 .new-category__container .form {
-    margin-top: .3rem;
+  margin-top: 0.3rem;
 }
 
 .new-category__container > h3 {
-    color: var(--text-color-shade-1);
+  color: var(--text-color-shade-1);
 }
 
 .new-category__container {
-    background-color: var(--bg-color-shade-2);
-    padding: 1rem calc(1.5rem - 1vmin) 2rem;
-    border-radius: 20px;
+  background-color: var(--bg-color-shade-2);
+  padding: 1rem calc(1.5rem - 1vmin) 2rem;
+  border-radius: 20px;
 }
 
 .categories-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
 .categories-container .category-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: .5rem;
-    flex-basis: 200px;
-    flex-grow: 1;
-    position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-basis: 200px;
+  flex-grow: 1;
+  position: relative;
 
-    background-color: #fff;
-    border: 1px solid var(--border-color-shade-1);
-    border-radius: 10px;
-    padding: .5rem;
-    font-family: calc(.8rem + .6vmin);
+  background-color: #fff;
+  border: 1px solid var(--border-color-shade-1);
+  border-radius: 10px;
+  padding: 0.5rem;
+  font-family: calc(0.8rem + 0.6vmin);
 }
 
 .category-card .category-desc {
-    color: var(--text-color-shade-1);
-    background-color: var(--bg-secondary-color);
-    padding: .2rem .3rem .3rem;
-    border-radius: 10px;
+  color: var(--text-color-shade-1);
+  background-color: var(--bg-secondary-color);
+  padding: 0.2rem 0.3rem 0.3rem;
+  border-radius: 10px;
 }
 
 .category-card .category-metadata {
-    margin-top: .4rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: .8rem;
-    font-size: calc(.4rem + .5vmin);
+  margin-top: 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  font-size: calc(0.4rem + 0.5vmin);
 }
 
 .category-card > a {
-    position: absolute;
-    top: 5px;
-    right: 10px;
+  position: absolute;
+  top: 5px;
+  right: 10px;
 }
 
 .category-metadata .category-date {
-    color: var(--text-secondary-color);
-    font-weight: 600;
+  color: var(--text-secondary-color);
+  font-weight: 600;
 }
 
 .app-main__content .form-group {
@@ -1439,7 +1439,7 @@ input[type="file"] {
   flex-direction: column;
   gap: 0.2rem;
   justify-content: space-between;
-  padding: .5rem 1rem;
+  padding: 0.5rem 1rem;
   border-radius: 5px;
   position: relative;
   background-color: #fff;
@@ -1447,7 +1447,7 @@ input[type="file"] {
 }
 
 #selected-resource .resource-card {
-  margin-bottom: 0.8rem;
+  margin-top: 1rem;
 }
 
 #selected-resource .resource-card.expanded {
@@ -1468,16 +1468,16 @@ input[type="file"] {
 
 .resource-card .resource-card__top,
 .resource-card .resource-card__bottom {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .resource-card .resource-card__top {
-    border-bottom: 1px solid var(--border-secondary-color);
-    padding-bottom: .5rem;
-    margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border-secondary-color);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .resource-card .resource-action__links {
@@ -1488,7 +1488,7 @@ input[type="file"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: .5rem;
+  gap: 0.5rem;
   font-weight: 700;
 }
 
@@ -1526,7 +1526,7 @@ input[type="file"] {
 
 .resource-card .resource-card__bottom {
   border-top: 1px solid var(--border-secondary-color);
-  padding-top: .5rem;
+  padding-top: 0.5rem;
   margin-top: 1rem;
 }
 
@@ -1590,9 +1590,11 @@ input[type="file"] {
   gap: 0.5rem;
 }
 
-.resource-card .image-resource {
-  overflow: hidden;
+.resource-card .image-resource,
+.resource-card .resource-link-summary,
+.resource-card .resource-content {
   height: 250px;
+  overflow: hidden;
 }
 
 .resource-card .image-resource img {

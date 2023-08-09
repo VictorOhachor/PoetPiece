@@ -1,44 +1,51 @@
 from . import resources
+from flask.views import MethodView
 from flask_login import login_required
-from flask import render_template, url_for, redirect, request, flash
+from flask import render_template, url_for, redirect, request, flash, g
 from .forms import ResourceForm
-from .manager import manager
+from .controllers import ResourceController
 from ..models import Resource
 from ..utils import is_poet
 
-@resources.route('/resources')
-@login_required
-def index():
-    """Get all resources created by all poets."""
-    r_type = request.args.get('type', 'LINK')
-    itype = Resource.get_type_value(r_type)
+controllers = ResourceController()
 
-    context = {
-        'resources': manager.find_by_type(itype, True),
-        'r_type': r_type
-    }
+class IndexView(MethodView):
+    decorators = [login_required]
 
-    return render_template('resources/index.html', **context)
+    def get(self):
+        """Get all resources created by poets by type."""
+        r_type = request.args.get('type')
+        itype = Resource.get_type_value(r_type)
+
+        g.resources = controllers.find_by_type(itype, True)
+        g.r_type = r_type
+
+        return render_template('resources/index.html')
 
 
-@resources.route('/resources/create', methods=['GET', 'POST'])
-@is_poet
-def create_resource():
-    """Create a new resource."""
-    r_type = request.args.get('type', 'LINK')
-    # set body based on resource type from query
-    ResourceForm.set_body()
-    # context to be passed to template
-    context = dict(
-        form=ResourceForm(),
-        r_type=r_type
-    )
+class ResourceCreationView(MethodView):
+    decorators = [is_poet]
 
-    if context['form'].validate_on_submit():
-        form_data = context['form'].data
-        return manager.create(form_data)
+    def get(self):
+        # add the resource type to the context too
+        g.r_type = request.args.get('type', 'LINK')
 
-    return render_template('resources/create_resource.html', **context)
+        # add the form to the global context for the request
+        g.form = ResourceForm.create()
+
+        return render_template('resources/create_resource.html')
+    
+    def post(self):
+        r_type = request.args.get('type', 'LINK')
+        form = ResourceForm.create()
+
+        if form.validate_on_submit():
+            success = controllers.create(form.data)
+
+            if success:
+                return redirect(url_for('.index', type=r_type))
+
+        return redirect(url_for('.create_resource', type=r_type))
 
 
 @resources.route('/resources/update', methods=['GET', 'POST'])
@@ -84,7 +91,7 @@ def delete_resource():
         if not resource:
             flash('Resource with given id was not found', 'error')
         else:
-            manager.delete_img(resource.body)
+            controllers.delete_img(resource.body)
             resource.delete()
             flash(f'{rtype} resource deleted successfully.')
     return redirect(url_for('resources.index', type=rtype))
@@ -99,7 +106,7 @@ def vote_resource(resource_id):
     rtype = Resource.get_type_key(resource.rtype) or 'LINK'
 
     # vote on a resource
-    status = manager.vote(resource_id)
+    status = controllers.vote(resource_id)
 
     if status:
         flash('Your vote has made a difference!')

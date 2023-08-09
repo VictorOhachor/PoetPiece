@@ -4,29 +4,43 @@ from flask import request
 from wtforms import (StringField, SubmitField, FileField,
                      TextAreaField, URLField, SelectField, BooleanField)
 from flask_wtf.file import FileRequired, FileAllowed
-from wtforms.validators import (DataRequired, Length)
-from wtforms import ValidationError
+from wtforms.validators import DataRequired, Length
 from ..models import Resource
+from wtforms.validators import ValidationError
+
+BODY_TYPES = {
+    'LINK': URLField('Enter the Link to the External Resource:',
+                     validators=[DataRequired(), Length(1, 255)]),
+    'IMAGE': FileField('Choose the Image You Want to Upload:',
+                       validators=[FileRequired(), FileAllowed([
+                           'jpeg', 'jpg', 'png', 'gif'],
+                           'Resource must be an image!')]),
+    'BRIEF': TextAreaField('What do You Want to Share with Others?',
+                           validators=[DataRequired(), Length(1, 1800)
+                                       ], render_kw={'rows': '8'}),
+    'COURSE': TextAreaField('Enter Course Description:',
+                            validators=[DataRequired(), Length(1, 1800)
+                                        ], render_kw={'rows': '4'})
+}
 
 
-class ResourceForm(FlaskForm):
+class BodyFieldMixin:
+    @classmethod
+    def create(cls):
+        body_type = request.args.get('type', 'LINK')
+        cls.body = BODY_TYPES.get(body_type)
+
+        form = cls(request.form)
+
+        # Set a custom description if it hasn't been set by the user
+        if not form.body.description:
+            form.body.description = 'This field supports markdown'
+
+        return form
+
+
+class ResourceForm(FlaskForm, BodyFieldMixin):
     """This is the form for creating resources of different types."""
-    body_types = {
-        'LINK': URLField('Enter the Link to the External Resource:',
-                         validators=[DataRequired(), Length(1, 255)]),
-        'IMAGE': FileField('Choose the Image You Want to Upload:',
-                           validators=[FileRequired(), FileAllowed([
-                               'jpeg', 'jpg', 'png', 'gif'],
-                               'Resource must be an image!')]),
-        'BRIEF': TextAreaField('What do You Want to Share with Others?',
-                               description='This field supports markdown',
-                               validators=[DataRequired(), Length(1, 1000)],
-                               render_kw={'rows': '8'}),
-        'COURSE': TextAreaField('Enter Course Description:',
-                                description='This field supports markdown',
-                                validators=[DataRequired(), Length(1, 1000)
-                                            ], render_kw={'rows': '4'})
-    }
 
     # form fields
     title = StringField('Enter a Title for This Resource:', validators=[
@@ -35,16 +49,17 @@ class ResourceForm(FlaskForm):
     rtype = SelectField('Resource Type:', choices=[
         (t, name) for t, name in enumerate(Resource.supported_types())
     ], coerce=int)
-    published = BooleanField('Publish Resource', default=True)
+    published = BooleanField('Publish this resource', default=True)
     submit = SubmitField('Post Resource')
 
     def __init__(self, *args, **kwargs):
+        r_type = request.args.get('type', 'LINK')
+        
         super().__init__(*args, **kwargs)
-
-        self.rtype.data = Resource.supported_types().get(self.body_type).value
+        self.rtype.data = Resource.supported_types().get(r_type).value
         self.rtype.render_kw = {'disabled': True}
-
-    @classmethod
-    def set_body(cls):
-        cls.body_type = request.args.get('type', 'LINK')
-        cls.body = cls.body_types.get(cls.body_type)
+    
+    def validate_title(self, field):
+        resource = Resource.find_by(title=field.data, one=True)
+        if resource:
+            raise ValidationError('A resource with this title already exists.')
