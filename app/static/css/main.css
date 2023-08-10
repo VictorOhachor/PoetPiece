@@ -1603,7 +1603,9 @@ input[type="file"] {
   object-fit: cover;
 }
 
-.resource-card.expanded .image-resource {
+.resource-card.expanded .image-resource,
+.resource-card.expanded .resource-link-summary,
+.resource-card.expanded .resource-content  {
   height: 500px;
   overflow-y: visible;
 }

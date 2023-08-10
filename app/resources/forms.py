@@ -26,11 +26,12 @@ BODY_TYPES = {
 
 class BodyFieldMixin:
     @classmethod
-    def create(cls):
+    def create(cls, resource=None):
         body_type = request.args.get('type', 'LINK')
         cls.body = BODY_TYPES.get(body_type)
 
-        form = cls(request.form)
+        form = cls(obj=resource)
+
         if body_type in ['BRIEF', 'COURSE']:
             form.body.description = 'Feel free to use Markdown'
 
@@ -56,8 +57,3 @@ class ResourceForm(FlaskForm, BodyFieldMixin):
         super().__init__(*args, **kwargs)
         self.rtype.data = Resource.supported_types().get(r_type).value
         self.rtype.render_kw = {'disabled': True}
-    
-    def validate_title(self, field):
-        resource = Resource.find_by(title=field.data, one=True)
-        if resource:
-            raise ValidationError('A resource with this title already exists.')

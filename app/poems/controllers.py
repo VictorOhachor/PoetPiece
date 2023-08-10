@@ -147,7 +147,6 @@ class PoemsController:
                 Category.create(**category_data)
                 flash(f'Successfully created category {category_data["name"]}')
             except Exception as e:
-                print(str(e))
                 flash(f'Failed to create category {category_data["name"]}')
     
     def get_categories(self):

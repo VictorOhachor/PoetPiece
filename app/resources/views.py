@@ -6,6 +6,7 @@ from .forms import ResourceForm
 from .controllers import ResourceController
 from ..models import Resource
 from ..utils import is_poet
+from ..helpers.img_handler import delete_img
 
 controllers = ResourceController()
 
@@ -40,7 +41,7 @@ class ResourceCreationView(MethodView):
         form = ResourceForm.create()
 
         if form.validate_on_submit():
-            success = controllers.create(form.data)
+            success = controllers.create_resource(form.data)
 
             if success:
                 return redirect(url_for('.index', type=r_type))
@@ -52,91 +53,104 @@ class ResourceCreationView(MethodView):
         return redirect(url_for('.create_resource', type=r_type))
 
 
-@resources.route('/resources/update', methods=['GET', 'POST'])
-@is_poet
-def update_resource():
-    """Update an existing resource."""
-    resource_id = request.args.get('resource_id')
-    rtype = request.args.get('type', '')
+class ResourceUpdateView(MethodView):
+    decorators = [is_poet]
 
-    # fetch resource from db
-    resource = Resource.find_by(id=resource_id, one=True)
-    if not resource:
-        flash('No resource with given id.', 'error')
-        return redirect(url_for('.index', type=rtype))
+    def dispatch_request(self, *args, **kwargs):
+        self.resource_id = request.args.get('resource_id')
+        self.r_type = request.args.get('type')
 
-    # set the body of the resource form
-    ResourceForm.set_body()
-    context = dict(
-        form=ResourceForm(obj=resource)
-    )
+        return super().dispatch_request(*args, **kwargs)
 
-    if context['form'].validate_on_submit():
-        context['form'].populate_obj(resource)
-        resource.save()
+    def get(self):
+        assert self.resource_id and self.r_type
         
-        flash(f'{rtype} resource has been updated successfully.')
+        resource = Resource.find_by(id=self.resource_id, one=True)
+
+        if not resource:
+            flash('No resource found with given id', 'error')
+            return redirect(url_for('.index', type=self.r_type))
+        
+        g.form = ResourceForm.create(resource)
+        g.update = True
+
+        return render_template('resources/create_resource.html')
+    
+    def post(self):
+        assert self.resource_id and self.r_type
+        
+        form = ResourceForm.create()
+
+        if form.validate_on_submit():
+            success = controllers.update_resource(
+                self.resource_id, form.data
+            )
+
+            if success:
+                return redirect(url_for('.index', type=self.r_type))
+
+        for error in form.errors.items():
+            flash(error[1][0], 'error')
+            break
+        
+        return redirect(url_for('.update_resource', type=self.r_type,
+                                resource_id=self.resource_id))
+
+
+class ResourceDeletionView(MethodView):
+    decorators = [is_poet]
+
+    def get(self):
+        """Remove an existing resource."""
+        resource_id = request.args.get('resource_id')
+        rtype = request.args.get('type', '') 
+
+        if not resource_id:
+            flash('Resource id was not provided.', 'error')
+        else:
+            success = controllers.delete_resource(resource_id)
+
         return redirect(url_for('.index', type=rtype))
 
-    return render_template('resources/create_resource.html', **context)
 
+class ResourceVoteView(MethodView):
+    decorators = [login_required]
 
-@resources.route('/resources/delete')
-@is_poet
-def delete_resource():
-    """Remove an existing resource."""
-    resource_id = request.args.get('resource_id')
-    rtype = request.args.get('type', '')
-
-    if not resource_id:
-        flash('Resource id was not provided.', 'error')
-    else:
+    def get(self, resource_id):
+        """Upvote or downvote a resource"""
         resource = Resource.find_by(id=resource_id, one=True)
-        if not resource:
-            flash('Resource with given id was not found', 'error')
+        rtype = Resource.get_type_key(resource.rtype) or 'LINK'
+
+        # vote on the resource
+        success = controllers.vote(resource_id)
+
+        if success:
+            flash('Your vote definitely made a significant difference!')
         else:
-            controllers.delete_img(resource.body)
-            resource.delete()
-            flash(f'{rtype} resource deleted successfully.')
-    return redirect(url_for('resources.index', type=rtype))
+            flash('Your vote was not casted as something went wrong', 'error')
+        
+        return redirect(url_for('.index', type=rtype))
+    
 
+class ResourcePublishView(MethodView):
+    decorators = [is_poet]
 
-@resources.route('/resources/<string:resource_id>/vote')
-@login_required
-def vote_resource(resource_id):
-    """Upvote or downvote a resource."""
-    # get the rtype of a resource.
-    resource = Resource.find_by(id=resource_id, one=True)
-    rtype = Resource.get_type_key(resource.rtype) or 'LINK'
+    def get(self):
+        """Publish or unpublish a resource."""
+        resource_id = request.args.get('resource_id')
+        rtype = request.args.get('type', 'LINK')
 
-    # vote on a resource
-    status = controllers.vote(resource_id)
+        try:
+            resource = Resource.find_by(id=resource_id, one=True)
+            if not resource:
+                flash('Resource with given id was not found', 'error')
+            else:
+                resource.published = not resource.published
+                resource.save()
 
-    if status:
-        flash('Your vote has made a difference!')
-    else:
-        flash('Something went wrong. Could not vote.', 'error')
-    return redirect(url_for('.index', type=rtype))
+                flash(
+                    f"Successfully {'P' if resource.published else 'Unp'}ublished resource.")
+        except Exception as e:
+            flash(str(e), 'error')
 
-
-@resources.route('/resources/publish')
-@is_poet
-def publish_resource():
-    """Publish or unpublish a resource."""
-    resource_id = request.args.get('resource_id')
-    rtype = request.args.get('type', 'LINK')
-
-    try:
-        resource = Resource.find_by(id=resource_id, one=True)
-        if not resource:
-            flash('Resource with given id was not found', 'error')
-        else:
-            resource.published = not resource.published
-            resource.save()
-
-            flash(
-                f"Successfully {'P' if resource.published else 'Unp'}ublished resource.")
-    except Exception as e:
-        flash(str(e), 'error')
-    finally:
         return redirect(url_for('.index', type=rtype))

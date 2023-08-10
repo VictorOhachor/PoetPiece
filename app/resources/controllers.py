@@ -1,10 +1,13 @@
 from ..models import Resource, Poet, Reaction
 from flask import flash, redirect, url_for, current_app, request
 from flask_login import current_user
+from .. import db
 from flask_wtf.file import FileStorage
 from werkzeug.utils import secure_filename
 from uuid import uuid4
 import os
+from hashlib import md5
+from ..helpers.img_handler import delete_img
 
 
 class ResourceController:
@@ -28,47 +31,34 @@ class ResourceController:
             return True
         return False
 
-    def _handle_img(self, body):
+    def __save_uploaded_image(self, file_storage, custom_dir='resources'):
         """Handle the image passed to it and return the image path."""
-        if isinstance(body, FileStorage):
-            filename = 'resources/' + f'{uuid4().hex}_' + secure_filename(
-                body.filename)
-            upload_folder = current_app.config['UPLOAD_FOLDER']
+        if not isinstance(file_storage, FileStorage):
+            raise TypeError('Body is not an image!')
+        
+        upload_folder = current_app.config.get('UPLOAD_FOLDER')
+        file_hash = md5(file_storage.read()).hexdigest()
+        filename = f'{file_hash}_{secure_filename(file_storage.filename)}'
 
-            # create directory if it doesn't exist
-            resources_path = os.path.join(upload_folder,
-                                          filename.split('/')[0])
-            if (not os.path.exists(resources_path)):
-                os.makedirs(resources_path, exist_ok=True)
+        # construct the complete path to save the image
+        img_path = os.path.join(upload_folder, custom_dir, filename)
 
-            # construct image path
-            img_path = os.path.join(upload_folder,
-                                    filename)
-            # SAVE image to filesystem
-            body.save(img_path)
+        # create the directory where image will be stored if necessary
+        os.makedirs(os.path.dirname(img_path), exist_ok=True)
 
-            return url_for('static', filename=f'uploads/{filename}')
-        raise TypeError('Body is not an image!')
-    
-    def delete_img(self, filepath: str, dirname='resources'):
-        """Delete an image from the filesystem if it exists."""
-        upload_folder = current_app.config['UPLOAD_FOLDER']
-        # Extract the filename from the file path
-        filename = filepath.rpartition('/')[-1]
-        # Generate an absolute path to the image
-        img_path = os.path.join(upload_folder, f'{dirname}/{filename}')
+        # save the image to the filesystem
+        file_storage.seek(0)
+        file_storage.save(img_path)
 
-        if os.path.exists(img_path):
-            os.remove(img_path)
-            return True
-        return False
+        # Generate and return the URL for the saved image
+        return url_for('static', filename=f'uploads/{custom_dir}/{filename}')
 
     def _extract_data(self, data):
         """Extract resource data from form data."""
         supported_keys = ['rtype', 'title', 'body', 'published']
 
         formatted_data = {
-            key: self._handle_img(data[key])
+            key: self.__save_uploaded_image(data[key])
             if self.is_image_body(key, data) else data[key]
             for key in supported_keys
         }
@@ -77,12 +67,12 @@ class ResourceController:
         poet = Poet.find_by(user_id=current_user.id,
                             one=True)
         if not poet:
-            raise TypeError('You don\'t have poetic privileges!')
+            raise TypeError("You don't have poetic privileges!")
         formatted_data['poet_id'] = poet.id
 
         return formatted_data
 
-    def create(self, data: dict):
+    def create_resource(self, data: dict):
         """Create a resource."""
         r_type = request.args.get('type', 'LINK')
 
@@ -93,6 +83,30 @@ class ResourceController:
             flash(f'{r_type} resource successfully created.')
             return True
         except Exception as e:
+            flash(str(e), 'error')
+        
+        return False
+    
+    def update_resource(self, resource_id: str, data: dict):
+        """Update an existing resource"""
+        try:
+            r_data = self._extract_data(data)
+            resource = Resource.find_by(id=resource_id, one=True)
+
+            # delete the existing image
+            if Resource.get_type_key(resource.rtype) == 'IMAGE':
+                success = delete_img(resource.body)
+                
+                if not success:
+                    raise Exception('Could not delete previously uploaded image')
+
+            Resource.query.filter_by(id=resource_id).update(r_data)
+            db.session.commit()  
+          
+            flash(f'Resource "{r_data["title"][:10]}..." has been updated successfully')
+            return True
+        except Exception as e:
+            db.session.rollback()
             flash(str(e), 'error')
         
         return False
@@ -140,3 +154,26 @@ class ResourceController:
             Reaction.create(user_id=current_user.id, reaction_type=vote_type,
                             record_id=resource.id)
         return True
+    
+    def delete_resource(self, resource_id):
+        resource = Resource.find_by(id=resource_id, one=True)
+        
+        if not resource:
+            flash('Resource with given id was not found', 'error')
+        else:
+            try:
+                # delete the image from the filesystem
+                if Resource.get_type_key(resource.rtype) == 'IMAGE':
+                    success = delete_img(resource.body)
+                    if not success:
+                        raise Exception('Could not delete previously uploaded image')
+
+                # delete the record from the database
+                resource.delete()
+    
+                flash(f'Resource "{resource.title[:10]}..." has been deleted successfully')
+                return True
+            except Exception as e:
+                flash(str(e), 'error')
+        
+        return False
