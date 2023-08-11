@@ -134,20 +134,16 @@ class PoemsController:
 
         return query.order_by(*self.__get_ordering_list('A-Z')).all()
     
-    def create_category(self, form):
-        category_data = {
-            'name': form.name.data,
-        }
+    def create_category(self, data):
+        try:
+            Category.create(**data)
 
-        if form.description.data:
-            category_data['description'] = form.description.data
+            flash(f'Successfully created category {data["name"]}')
+            return True
+        except:
+            flash(f'Failed to create category {data["name"]}')
         
-        if form.validate_on_submit():
-            try:
-                Category.create(**category_data)
-                flash(f'Successfully created category {category_data["name"]}')
-            except Exception as e:
-                flash(f'Failed to create category {category_data["name"]}')
+        return False
     
     def get_categories(self):
         categories = Category.find_all()

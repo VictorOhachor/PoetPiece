@@ -9,6 +9,9 @@
     </div>
     <hr>
     <section class="categories-container">
+        {% if not categories %}
+            <p class="empty-list">No Category Created Yet</p>
+        {% endif %}
         {% for item in categories %}
             <article class="category-card">
                 <h5 class="category-title">{{ item['category'].name }}</h5>

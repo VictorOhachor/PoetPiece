@@ -79,10 +79,20 @@ class CategoryMutationView(MethodView):
     def post(self):
         """Create a new category"""
         form = CategoryForm()
-        # create category
-        controllers.create_category(form)
 
-        return redirect(request.referrer)
+        if form.validate_on_submit():
+            category_data = {
+                'name': form.name.data,
+                'description': form.description.data,
+            }
+
+            # create category
+            controllers.create_category(category_data)
+        
+        for error in form.errors.items():
+            flash(error[1][0], 'error')
+
+        return redirect(url_for('.mutate_categories'))
 
 
 class PoemCreationView(MethodView):
