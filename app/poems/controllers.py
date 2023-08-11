@@ -9,7 +9,7 @@ class PoemsController:
 
     RATINGS = [(0, 1), (1, 3), (3, 5)]
 
-    def get_args(self, *args, **kwargs: dict[str, dict]):
+    def get_args(self, *args, **kwargs):
         query_args = {}
 
         # Get the query parameters from the request
