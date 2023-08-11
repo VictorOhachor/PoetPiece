@@ -66,7 +66,7 @@ class StanzaForm(FlaskForm):
                          validators=[DataRequired(), NumberRange(1, 20)],
                          default=1)
     content = TextAreaField('Enter the Stanza Content', validators=[
-        DataRequired(), Length(1, 3000)], render_kw={'rows': '10'})
+        DataRequired(), Length(1, 3000)], render_kw={'rows': '10', 'spellcheck': True})
     submit = SubmitField('Post Stanza')
 
 
