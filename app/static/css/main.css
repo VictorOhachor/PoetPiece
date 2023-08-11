@@ -119,7 +119,7 @@ select option {
 
   padding: 10px;
   border-radius: 5px;
-  font-size: calc(0.8rem + 1vmin);
+  font-size: calc(0.6rem + 0.8vmin);
   background-color: #fff;
   border: 2px solid;
   font-weight: 500;
