@@ -8,6 +8,7 @@ from enum import Enum
 from markdown import markdown
 import bleach
 from slugify import slugify
+from .helpers.img_handler import delete_img
 
 
 class BaseModel(db.Model):
@@ -403,10 +404,24 @@ class Resource(BaseModel):
             'h1', 'h2', 'h3', 'h4', 'h5', 'p', 'u', 'del',
             's', 'sup', 'sub'
         ]
-        target.body_html = bleach.linkify(bleach.clean(markdown(
-            value, output_format='html'),
-            tags=allowed_tags, strip=True
-        ))
+
+
+        if Resource.get_type_key(target.rtype) == 'IMAGE':
+            if oldvalue and not hasattr(oldvalue, 'NO_VALUE'):
+                # delete the existing image
+                delete_img(oldvalue)
+        else:
+            if value:
+                # parse the value into html and save to body_html
+                target.body_html = bleach.linkify(bleach.clean(markdown(
+                    value, output_format='html'),
+                    tags=allowed_tags, strip=True
+                ))
+    
+    @staticmethod
+    def on_delete_listener(mapper, connection, target):
+        # call the on_change_body to remove any image from filesystem
+        Resource.on_changed_body(target, None, target.body, None)
 
     @property
     def is_accessible(self):
@@ -450,3 +465,4 @@ def load_user(user_id):
 
 # add event listeners
 db.event.listen(Resource.body, 'set', Resource.on_changed_body)
+db.event.listen(Resource, 'before_delete', Resource.on_delete_listener)

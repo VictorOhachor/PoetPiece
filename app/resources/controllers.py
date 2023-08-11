@@ -93,15 +93,13 @@ class ResourceController:
             r_data = self._extract_data(data)
             resource = Resource.find_by(id=resource_id, one=True)
 
-            # delete the existing image
-            if Resource.get_type_key(resource.rtype) == 'IMAGE':
-                success = delete_img(resource.body)
-                
-                if not success:
-                    raise Exception('Could not delete previously uploaded image')
+            # update the resource
+            resource.body = r_data.get('body', resource.body)
+            resource.title = r_data.get('title', resource.title)
+            resource.published = r_data.get('published', resource.published)
 
-            Resource.query.filter_by(id=resource_id).update(r_data)
-            db.session.commit()  
+            # commit the database changes
+            resource.save()
           
             flash(f'Resource "{r_data["title"][:10]}..." has been updated successfully')
             return True
@@ -162,12 +160,6 @@ class ResourceController:
             flash('Resource with given id was not found', 'error')
         else:
             try:
-                # delete the image from the filesystem
-                if Resource.get_type_key(resource.rtype) == 'IMAGE':
-                    success = delete_img(resource.body)
-                    if not success:
-                        raise Exception('Could not delete previously uploaded image')
-
                 # delete the record from the database
                 resource.delete()
     

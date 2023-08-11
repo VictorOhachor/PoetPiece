@@ -125,7 +125,7 @@ title %}{{'All' if not g.r_type else g.r_type|title}} Poetic Resources{% endbloc
       <p class="resource-action__links">
         <a
           href="{{url_for('resources.delete_resource', resource_id=resource.id, type=resources_types[resource.rtype])}}"
-          id="delete-resource"
+          data-action="delete-resource"
         >
           <i class="fa-regular fa-trash-can"></i>
         </a>

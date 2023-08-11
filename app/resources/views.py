@@ -78,7 +78,7 @@ class ResourceUpdateView(MethodView):
     
     def post(self):
         assert self.resource_id and self.r_type
-        
+
         form = ResourceForm.create()
 
         if form.validate_on_submit():
@@ -108,7 +108,7 @@ class ResourceDeletionView(MethodView):
         if not resource_id:
             flash('Resource id was not provided.', 'error')
         else:
-            success = controllers.delete_resource(resource_id)
+            controllers.delete_resource(resource_id)
 
         return redirect(url_for('.index', type=rtype))
 
