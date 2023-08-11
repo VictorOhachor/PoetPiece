@@ -151,10 +151,10 @@ class PoemsController:
     
     def create_poem(self, data: dict):
         poet = Poet.find_by(user_id=current_user.id, one=True)
-        category = Category.get_id(data.pop('category'))
+        category_id = Category.get_id(data.pop('category'))
 
         data.update({
-            'category_id': category.id,
+            'category_id': category_id,
             'author_id': poet.id
         })
         poem = None
