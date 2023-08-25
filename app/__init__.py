@@ -5,7 +5,6 @@ from flask_bootstrap import Bootstrap
 from flask_caching import Cache
 from config import config
 from flask_migrate import Migrate
-from flask_mail import Mail
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 
@@ -32,7 +31,6 @@ def create_app(config_name):
     bootstrap.init_app(app)
     login_manager.init_app(app)
     cache.init_app(app)
-    mail.init_app(app)
     migrate.init_app(app)
 
     # Initialize Sentry
