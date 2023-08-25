@@ -6,7 +6,6 @@ bleach==6.0.0
 blinker==1.6.2
 bs4==0.0.1
 cachelib==0.9.0
-celery==5.3.1
 certifi==2023.7.22
 charset-normalizer==3.2.0
 click==8.1.6
@@ -21,7 +20,6 @@ Flask==2.3.2
 Flask-Bootstrap==3.3.7.1
 Flask-Caching==2.0.2
 Flask-Login==0.6.2
-Flask-Mail==0.9.1
 Flask-Migrate==4.0.4
 Flask-SQLAlchemy==3.0.5
 Flask-WTF==1.1.1
