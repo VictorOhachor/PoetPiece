@@ -12,7 +12,6 @@ bootstrap = Bootstrap()
 db = SQLAlchemy()
 login_manager = LoginManager()
 cache = Cache()
-mail = Mail()
 migrate = Migrate(db=db)
 
 def create_app(config_name):
