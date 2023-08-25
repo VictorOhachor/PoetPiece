@@ -1,9 +1,10 @@
-from flask import flash, redirect, url_for, render_template, request
+from flask import flash, redirect, url_for, render_template, request, current_app
 from flask_login import current_user, login_user
-from .. import db
+from .. import db, mail
 from ..models import User, Poet
 from datetime import timedelta
 from .forms import PoetForm, UpdatePasswordForm, EditProfileForm
+from flask_mail import Message
 
 class MainController:
 
@@ -30,17 +31,23 @@ class MainController:
     
     def create_poet(self):
         """Create a new poet account for a registered user"""
-        form = PoetForm(request.form)
+        form = PoetForm()
         
         # for POST requests
         if form.validate_on_submit():
             poet = Poet(
-                bio=form.data['bio'],
-                gender=form.data['gender'],
-                email=form.data['email'],
+                bio=form.bio.data,
+                gender=form.gender.data,
+                email=form.email.data,
                 user_id=current_user.id,
             )
             poet.save()
+
+            # send confirmation email to new poet
+            # message = Message('Verify your Account', recipients=[form.email.data, 'paul@mailtrap.io'],
+            #                   sender=current_app.config.get('ADMIN_EMAIL', 'poeticman@mailtrap.io'),
+            #                   body='Welcome to PoetPiece once again! Verify your poet account darling :)')
+            # mail.send(message)
 
             flash ('Congratulations on joining the PoetPiece squad!')
             return redirect(url_for('.me'))

@@ -5,11 +5,15 @@ from flask_bootstrap import Bootstrap
 from flask_caching import Cache
 from config import config
 from flask_migrate import Migrate
+from flask_mail import Mail
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
 
 bootstrap = Bootstrap()
 db = SQLAlchemy()
 login_manager = LoginManager()
 cache = Cache()
+mail = Mail()
 migrate = Migrate(db=db)
 
 def create_app(config_name):
@@ -28,7 +32,18 @@ def create_app(config_name):
     bootstrap.init_app(app)
     login_manager.init_app(app)
     cache.init_app(app)
+    mail.init_app(app)
     migrate.init_app(app)
+
+    # Initialize Sentry
+    sentry_sdk.init(
+        dsn="https://9ca092c424c9c6a4e245e08050c62c4e@o4505762974859264.ingest.sentry.io/4505763024142336",
+        integrations=[
+            FlaskIntegration(),
+        ],
+
+        traces_sample_rate=.6
+    )
 
     # Register blueprints
     from .main import main as main_bp
