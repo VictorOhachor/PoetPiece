@@ -1,10 +1,9 @@
 from flask import flash, redirect, url_for, render_template, request, current_app
 from flask_login import current_user, login_user
-from .. import db, mail
+from .. import db
 from ..models import User, Poet
 from datetime import timedelta
 from .forms import PoetForm, UpdatePasswordForm, EditProfileForm
-from flask_mail import Message
 
 class MainController:
 
@@ -42,12 +41,6 @@ class MainController:
                 user_id=current_user.id,
             )
             poet.save()
-
-            # send confirmation email to new poet
-            # message = Message('Verify your Account', recipients=[form.email.data, 'paul@mailtrap.io'],
-            #                   sender=current_app.config.get('ADMIN_EMAIL', 'poeticman@mailtrap.io'),
-            #                   body='Welcome to PoetPiece once again! Verify your poet account darling :)')
-            # mail.send(message)
 
             flash ('Congratulations on joining the PoetPiece squad!')
             return redirect(url_for('.me'))
