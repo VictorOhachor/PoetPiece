@@ -524,7 +524,7 @@ input[type="file"] {
 .app-about .box-2 {
     display: flex;
     gap: .5rem;
-    flex-wrap: wrap;
+    flex-wrap: wrap-reverse;
     margin-bottom: 1rem;
 }
 
