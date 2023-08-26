@@ -1,54 +1,135 @@
 {% extends "base.html" %} {% block title %}Home Page{% endblock %} {% block
 main_content %}
-<div class="app-about">
+<section class="app-about">
   <h2 class="heading">MISSION</h2>
-  <div class="mission-story">
-    <p>
+  <article class="mission-story">
+    <p class="intro">
       My buttocks stayed comfortably in my seat as I recited my new poem. I
       could see her eyes lit with emotions. These emotions appeared so mixed
       that I could barely let go of the gaze. My eyes searched peculiarly,
       analysing every wave of emotion I could perceive.
     </p>
-    <blockquote>
-      <q>With more sleuthing comes more responsibilities</q>
-      <span>&mdash; My mind sang me.</span>
-    </blockquote>
-    <blockquote>
-      <q>What is your name?</q>
-      <span>&mdash; She whispered gracefully.</span>
-    </blockquote>
-    <blockquote>
-      <q>Call Me <strong>A PoetPiece</strong>!</q>
-      <span>&mdash; I replied with a wink.</span>
-    </blockquote>
-    <blockquote>
-      <q>Why do you compose poems?</q>
-      <span>&mdash; She asked again with a welcoming smile.</span>
-    </blockquote>
+    <div class="fictional-chats">
+      <img
+        src="{{ url_for('static', filename='assets/mission_chat.svg') }}"
+        width="40%"
+      />
+      <div class="fictional-chats-container">
+        <div>
+          <blockquote>
+            With more sleuthing comes more responsibilities
+          </blockquote>
+          <span>&mdash; My mind sang me</span>
+        </div>
+        <div>
+          <blockquote>What is your name?</blockquote>
+          <span>&mdash; She whispered</span>
+        </div>
+        <div>
+          <blockquote>Call Me <strong>A PoetPiece</strong>!</blockquote>
+          <span>&mdash; I replied, winking.</span>
+        </div>
+        <div>
+          <blockquote>Why do you compose poems?</blockquote>
+          <span>&mdash; She asked again with a beckoning smile.</span>
+        </div>
+      </div>
+    </div>
+    <div class="box-2">
+      <div class="fictional-chats-container">
+        <div>
+          <blockquote>
+            Which of these reasons were brought to life by my poem?
+          </blockquote>
+          <span>&mdash; I asked with an exquisite cackle.</span>
+        </div>
+        <div>
+          <blockquote>
+            <strong>NONE!</strong>
+          </blockquote>
+          <span>&mdash; She snorted.</span>
+        </div>
+        <div>
+          <blockquote>
+            Don't conclude just yet... Click the button below to access more
+            poems for free
+          </blockquote>
+          <span>&mdash; I said with a taunting smile on my face.</span>
+        </div>
+      </div>
+      <div class="reasons-container">
+        <h3>REASONS</h3>
+        <ul class="reasons-list">
+          <li>Express Emotions and Thoughts</li>
+          <li>Provoke Reflection</li>
+          <li>Tell a Story</li>
+          <li>Provide a New Perspective</li>
+        </ul>
+      </div>
+    </div>
+  </article>
+  <hr />
+  <a href="{{url_for('poems.index')}}" class="join-me"
+    >Explore the Poetic Universe!</a
+  >
+</section>
+<section class="app-features">
+  <h2 class="heading">FEATURES</h2>
+  <div class="features-container">
+    <div class="feature">
+      <img src="{{ url_for('static', filename='assets/feature_1.svg') }}" />
+      <div>
+        <h3>Read Poems</h3>
+        <p>
+          Read poems from different categories. You can also read poems from
+          your favourite poets.
+        </p>
+      </div>
+    </div>
+    <hr>
+    <div class="feature">
+      <div>
+        <h3>Write Poems</h3>
+        <p>
+          Write poems and save them to your account. You can also edit and
+          delete poems.
+        </p>
+      </div>
+      <img src="{{ url_for('static', filename='assets/feature_2.svg') }}" />
+    </div>
+    <hr>
+    <div class="feature">
+      <img src="{{ url_for('static', filename='assets/feature_3.svg') }}" />
+      <div>
+        <h3>Share Poems</h3>
+        <p>
+          Share poems with friends and family. You can also share poems on
+          social media.
+        </p>
+      </div>
+    </div>
+    <hr>
+    <div class="feature">
+      <div>
+        <h3>Manage Poems</h3>
+        <p>
+          Manage poems by adding them to categories. You can also add poems to
+          your favourite list.
+        </p>
+      </div>
+      <img src="{{ url_for('static', filename='assets/feature_4.svg') }}" />
+    </div>
+    <hr>
+    <div class="feature">
+      <img src="{{ url_for('static', filename='assets/feature_5.svg') }}" />
+      <div>
+        <h3>Post your Poetic Thoughts and Feelings</h3>
+        <p>
+          Post your poetic thoughts and feelings on the resources blog. You can
+          also read posts from other poets.
+        </p>
+      </div>
+    </div>
   </div>
-  <h3 class="subheading">REASONS</h3>
-  <p class="reason-to">TO:</p>
-  <ul class="reasons-list">
-    <li>Express Emotions and Thoughts</li>
-    <li>Provoke Reflection</li>
-    <li>Tell a Story</li>
-    <li>Provide a New Perspective</li>
-  </ul>
-  <blockquote>
-    <q>Which of these reasons were brought to life by my poem?</q>
-    <span>&mdash; I asked with an exquisite cackle.</span>
-  </blockquote>
-  <blockquote>
-    <q><strong>NONE!</strong></q>
-  </blockquote>
-  <blockquote>
-    <q
-      >Don't conclude just yet... Click the button below to access more poems for
-      free</q
-    >
-    <span>&mdash; I said with a taunting smile on my face.</span>
-  </blockquote>
-  <hr>
-  <a href="{{url_for('poems.index')}}" class="join-me">Explore the Poetic Universe!</a>
-</div>
+</section>
 {% endblock main_content %}

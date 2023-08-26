@@ -113,9 +113,9 @@ select option {
 
 .toast-card {
   position: fixed;
-  top: 0;
+  bottom: 0;
   right: 0;
-  z-index: 2;
+  z-index: 100;
 
   padding: 10px;
   border-radius: 5px;
@@ -344,6 +344,7 @@ select option {
   background-color: var(--bg-secondary-color);
   padding: 0.2rem 0.3rem 0.3rem;
   border-radius: 10px;
+  flex-grow: 1;
 }
 
 .category-card .category-metadata {
@@ -415,6 +416,7 @@ input[type="file"] {
   width: 100%;
   padding: 0.6rem 1rem;
   align-self: center;
+  border-radius: 10px;
   background-color: var(--bg-color-shade-2);
   font-weight: 500;
   box-shadow: -5px 5px 2px 2px var(--bg-color-shade-1);
@@ -423,11 +425,12 @@ input[type="file"] {
   margin: 1rem 0 0;
 }
 
-.app-about .heading {
+.app-about .heading,
+.app-features .heading {
   color: var(--bg-secondary-color);
-  text-align: end;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid var(--bg-color-shade-2);
+  text-align: center;
+  margin: 1rem;
+  font-weight: 900;
   font-size: calc(2.5rem + 1vmin);
 }
 
@@ -441,12 +444,6 @@ input[type="file"] {
   color: var(--bg-color-shade-1);
 }
 
-.app-about .subheading {
-  font-size: calc(1.5rem + 1vmin);
-  margin: 2rem 0;
-  text-align: center;
-}
-
 .app-about .mission-story {
   display: flex;
   flex-direction: column;
@@ -454,14 +451,91 @@ input[type="file"] {
   gap: 0.5rem;
 }
 
-.app-about .reason-to {
-  font-weight: 700;
-  font-family: "Space Mono", monospace;
-  color: var(--color-error);
+.app-about .mission-story .intro {
+    font-style: italic;
+    background-color: var(--bg-color-shade-2);
+    color: var(--text-color-shade-1);
+    padding: .2rem .5rem;
+    border-radius: 5px;
 }
 
-.app-about > .reasons-list {
+.mission-story .fictional-chats {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.mission-story .fictional-chats > img {
+    margin: auto;
+
+}
+
+.mission-story .fictional-chats-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 1rem;
+    background-color: #fff;
+    max-height: 500px;
+    max-width: 700px;
+    overflow: auto;
+    padding: 1rem;
+    border: 1px solid var(--border-primary-color);
+}
+
+.fictional-chats-container > div {
+    max-width: 50%;
+    display: flex;
+    flex-direction: column;
+}
+
+.fictional-chats-container > div span {
+    text-align: end;
+    font-weight: 500;
+    font-size: .6rem;
+    color: var(--text-primary-color);
+}
+
+.fictional-chats-container blockquote {
+    padding: .3rem .5rem;
+    line-height: 1.5;
+    font-size: 0.8rem;
+    border-radius: 5px;
+    font-family: "Space Mono", monospace;
+}
+
+.fictional-chats-container div:nth-child(odd) {
+    align-self: flex-start;
+}
+
+.fictional-chats-container div:nth-child(even) {
+    align-self: flex-end;
+}
+
+.fictional-chats-container div:nth-child(odd) blockquote {
+    background-color: var(--bg-color-shade-1);
+    color: var(--text-color-shade-2);
+}
+
+.fictional-chats-container > div:nth-child(even) blockquote {
+    background-color: var(--bg-color-shade-2);
+    color: var(--text-color-shade-1);
+}
+
+.app-about .box-2 {
+    display: flex;
+    gap: .5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.box-2 .fictional-chats-container {
+    width: 60%;
+    flex-grow: 1;
+}
+
+.app-about .reasons-list {
   display: flex;
+  flex-direction: column;
   list-style: none;
   gap: 0.5rem;
   flex-wrap: wrap;
@@ -470,11 +544,20 @@ input[type="file"] {
   margin-bottom: 1.2rem;
 }
 
-.app-about > .reasons-list li {
-  background-color: var(--text-primary-color);
-  color: #eee;
+.app-about .reasons-container {
+    flex-grow: 1;
+}
+
+.app-about .reasons-container h3 {
+    color: var(--text-color-shade-2);
+}
+
+.app-about .reasons-list li {
+  background-color: var(--bg-color-shade-1);
+  color: var(--text-primary-color);
   padding: 0.1rem 0.8rem;
   white-space: nowrap;
+  font-size: calc(0.8rem + 0.6vmin);
   overflow-x: hidden;
   text-overflow: ellipsis;
   border-radius: 20px;
@@ -482,24 +565,44 @@ input[type="file"] {
   flex-grow: 1;
 }
 
-.app-about blockquote {
-  background-color: #eee;
-  padding: 0.5rem 1rem;
-  margin: 0.5rem 0;
-  font-size: calc(0.8rem + 1vmin);
-  border: 1px solid var(--border-secondary-color);
-  border-radius: 5px;
-  font-family: "Space Mono", monospace;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
+.app-features {
+    margin: 1rem 0;
+    background-color: #fff;
+    padding: 1rem;
 }
 
-.app-about blockquote > span {
-  text-align: end;
-  align-self: flex-end;
-  font-weight: 700;
-  font-family: "Quicksand", sans-serif;
+.app-features .features-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2.2rem;
+}
+
+.app-features .features-container .feature {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.feature img {
+    width: 50%;
+    flex-grow: 1;
+}
+
+.feature > div {
+    width: 45%;
+    flex-grow: 1;
+    padding: 0 .5rem 0 0;
+}
+
+.features-container hr {
+    background-color: var(--border-secondary-color);
+}
+
+.feature > div h3 {
+    color: var(--text-primary-color);
+    font-size: calc(.8rem + .8vmin);
 }
 
 .app-main__content .create-poem-container {

@@ -6,7 +6,7 @@ function previewLink(url, timeoutMillis = 5000) {
         }, timeoutMillis);
 
         // Fetch the URL
-        fetch(url)
+        fetch(url, { mode: 'cors' })
             .then(response => response.text())
             .then(html => {
                 clearTimeout(timeoutId); // Clear the timeout
